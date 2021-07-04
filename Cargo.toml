@@ -1,5 +1,5 @@
 [package]
-name = "flatter"
+name = "flatterer"
 version = "0.1.0"
 authors = ["David Raznick <kindly@gmail.com>"]
 edition = "2018"
@@ -15,3 +15,7 @@ csv = "1.1"
 clap = "2.33.3"
 serde = {version = "1", features = ["derive"] }
 cached = "0.23"
+
+[profile.release]
+debug = true
+

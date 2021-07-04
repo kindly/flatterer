@@ -1,22 +1,23 @@
+use csv::{ReaderBuilder, WriterBuilder};
+use itertools::Itertools;
+use serde::Serialize;
+use serde_json::{json, Deserializer, Map, Value};
 use std::collections::HashMap;
+use std::error::Error;
+use std::fmt;
+use std::fs::{create_dir_all, remove_dir_all, File};
+use std::io::BufReader;
+use std::io::{self, Write};
+use std::path::PathBuf;
 use yajlish::ndjson_handler::{NdJsonHandler, Selector};
 use yajlish::Parser;
-use std::io::BufReader;
-use std::error::Error;
-use serde_json::{json, Map, Value};
-use std::fs::{File, create_dir_all, remove_dir_all};
-use std::io::{self, Write};
-use std::fmt;
-use itertools::Itertools;
-use csv::{WriterBuilder, ReaderBuilder};
-use std::path::PathBuf;
-use serde::{Serialize};
 
+use std::mem;
 use std::sync::mpsc::{channel, Sender};
 use std::thread;
 
 extern crate clap;
-use clap::{App};
+use clap::App;
 
 #[derive(Clone, Debug)]
 enum PathItem {
@@ -24,22 +25,19 @@ enum PathItem {
     Index(usize),
 }
 
-
 impl fmt::Display for PathItem {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-       match self {
-           PathItem::Key(key) => write!(f, "{}", key),
-           PathItem::Index(index) => write!(f, "{}", index),
-       }
+        match self {
+            PathItem::Key(key) => write!(f, "{}", key),
+            PathItem::Index(index) => write!(f, "{}", index),
+        }
     }
 }
 
-
 pub struct JLWriter {
     buf: Vec<u8>,
-    sender: Sender<Value>
+    buf_sender: Sender<Vec<u8>>,
 }
-
 
 pub struct FlatFiles {
     output_path: PathBuf,
@@ -48,15 +46,13 @@ pub struct FlatFiles {
     row_number: u128,
     table_rows: HashMap<String, Vec<Map<String, Value>>>,
     output_csvs: HashMap<String, csv::Writer<File>>,
-    table_metadata: HashMap<String, TableMetadata>
+    table_metadata: HashMap<String, TableMetadata>,
 }
-
 
 #[derive(Serialize)]
 pub struct TableMetadata {
-//    field_index: u64,
     output_fields: HashMap<String, HashMap<String, String>>,
-    fields: Vec<String> 
+    fields: Vec<String>,
 }
 
 impl FlatFiles {
@@ -106,21 +102,23 @@ impl FlatFiles {
                                 new_full_path.push(PathItem::Index(i));
 
                                 let mut new_one_to_many_full_paths = one_to_many_full_paths.clone();
-                                new_one_to_many_full_paths.push(new_full_path.clone()); 
+                                new_one_to_many_full_paths.push(new_full_path.clone());
 
                                 let mut new_no_index_path = no_index_path.clone();
                                 new_no_index_path.push(key.clone());
 
-                                let mut new_one_to_many_no_index_paths = one_to_many_no_index_paths.clone();
+                                let mut new_one_to_many_no_index_paths =
+                                    one_to_many_no_index_paths.clone();
                                 new_one_to_many_no_index_paths.push(new_no_index_path.clone());
-                                    
-                                self.handle_obj(my_obj,
-                                                true, 
-                                                new_full_path, 
-                                                new_no_index_path,
-                                                new_one_to_many_full_paths,
-                                                new_one_to_many_no_index_paths
-                                                );
+
+                                self.handle_obj(
+                                    my_obj,
+                                    true,
+                                    new_full_path,
+                                    new_no_index_path,
+                                    new_one_to_many_full_paths,
+                                    new_one_to_many_no_index_paths,
+                                );
                             }
                         }
                     } else {
@@ -137,24 +135,25 @@ impl FlatFiles {
                     new_no_index_path.push(key.clone());
 
                     let mut emit_child = false;
-                    if self.emit_obj.iter().any(|emit_path| {emit_path == &new_no_index_path} ) {
+                    if self
+                        .emit_obj
+                        .iter()
+                        .any(|emit_path| emit_path == &new_no_index_path)
+                    {
                         emit_child = true;
                     }
 
                     if let Value::Object(my_value) = my_value {
                         let new_obj = self.handle_obj(
-                            my_value, 
-                            emit_child, 
-                            new_full_path, 
-                            new_no_index_path, 
-                            one_to_many_full_paths.clone(), 
-                            one_to_many_no_index_paths.clone()
-                            );
+                            my_value,
+                            emit_child,
+                            new_full_path,
+                            new_no_index_path,
+                            one_to_many_full_paths.clone(),
+                            one_to_many_no_index_paths.clone(),
+                        );
                         if let Some(mut my_obj) = new_obj {
                             for (new_key, new_value) in my_obj.iter_mut() {
-                                let mut obj_key = key.clone();
-                                obj_key.push('_');
-                                obj_key.push_str(new_key.as_str());
                                 obj.insert(format!("{}_{}", key, new_key), new_value.take());
                             }
                         }
@@ -164,7 +163,12 @@ impl FlatFiles {
             }
         }
         if emit {
-            self.process_obj(obj, no_index_path, one_to_many_full_paths, one_to_many_no_index_paths);
+            self.process_obj(
+                obj,
+                no_index_path,
+                one_to_many_full_paths,
+                one_to_many_no_index_paths,
+            );
             None
         } else {
             Some(obj)
@@ -172,31 +176,42 @@ impl FlatFiles {
     }
 
     fn process_obj(
-        &mut self, 
-        mut obj:  Map<String, Value>, 
+        &mut self,
+        mut obj: Map<String, Value>,
         no_index_path: Vec<String>,
         one_to_many_full_paths: Vec<Vec<PathItem>>,
-        one_to_many_no_index_paths: Vec<Vec<String>>) {
-
-        let mut path_iter = one_to_many_full_paths.iter().zip(one_to_many_no_index_paths).peekable();
+        one_to_many_no_index_paths: Vec<Vec<String>>,
+    ) {
+        let mut path_iter = one_to_many_full_paths
+            .iter()
+            .zip(one_to_many_no_index_paths)
+            .peekable();
 
         if one_to_many_full_paths.len() == 0 {
-            obj.insert(String::from("_link"), Value::String(format!("{}", self.row_number))); 
+            obj.insert(
+                String::from("_link"),
+                Value::String(format!("{}", self.row_number)),
+            );
         }
 
         while let Some((full, no_index)) = path_iter.next() {
             if path_iter.peek().is_some() {
                 obj.insert(
                     format!("_link_{}", no_index.iter().join("_")),
-                    Value::String(format!("{}.{}", self.row_number, full.iter().join(".")))
+                    Value::String(format!("{}.{}", self.row_number, full.iter().join("."))),
                 );
             } else {
-                obj.insert(String::from("_link"),
-                           Value::String(format!("{}.{}", self.row_number, full.iter().join(".")))); 
+                obj.insert(
+                    String::from("_link"),
+                    Value::String(format!("{}.{}", self.row_number, full.iter().join("."))),
+                );
             }
         }
 
-        obj.insert(format!("_link_{}", self.main_table_name), Value::String(format!("{}", self.row_number))); 
+        obj.insert(
+            format!("_link_{}", self.main_table_name),
+            Value::String(format!("{}", self.row_number)),
+        );
 
         let mut table_name = no_index_path.join("_");
 
@@ -212,13 +227,22 @@ impl FlatFiles {
         }
     }
 
-
     fn create_rows(&mut self) -> Result<(), Box<dyn Error>> {
         for (table, rows) in self.table_rows.iter_mut() {
             if !self.output_csvs.contains_key(table) {
-                self.output_csvs.insert(table.clone(), 
-                                        WriterBuilder::new().flexible(true).from_path(self.output_path.join(format!("tmp/{}.csv", table)))?);
-                self.table_metadata.insert(table.clone(), TableMetadata{fields: vec![], output_fields: HashMap::new()});
+                self.output_csvs.insert(
+                    table.clone(),
+                    WriterBuilder::new()
+                        .flexible(true)
+                        .from_path(self.output_path.join(format!("tmp/{}.csv", table)))?,
+                );
+                self.table_metadata.insert(
+                    table.clone(),
+                    TableMetadata {
+                        fields: vec![],
+                        output_fields: HashMap::new(),
+                    },
+                );
             }
 
             let table_metadata = self.table_metadata.get_mut(table).unwrap();
@@ -240,12 +264,21 @@ impl FlatFiles {
                 }
                 writer.write_record(output_row)?;
             }
-
         }
         Ok(())
     }
-}
 
+    fn process_value(&mut self, value: Value) {
+        if let Value::Object(obj) = value {
+            self.handle_obj(obj, true, vec![], vec![], vec![], vec![]);
+            self.row_number += 1;
+        }
+        self.create_rows().unwrap();
+        for val in self.table_rows.values_mut() {
+            val.clear();
+        }
+    }
+}
 
 //fn value_convert(value: Value, mut output_fields: &IndexMap<String, IndexMap<String, String>>) -> String {
 fn value_convert(value: Value) -> String {
@@ -274,10 +307,12 @@ fn value_convert(value: Value) -> String {
 impl Write for JLWriter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         if buf == [b'\n'] {
-            let value = serde_json::from_slice::<Value>(&self.buf)?;
-            self.sender.send(value).unwrap();
+            let mut new_buf = Vec::with_capacity(self.buf.capacity());
 
-            self.buf.clear();
+            mem::swap(&mut self.buf, &mut new_buf);
+
+            self.buf_sender.send(new_buf).unwrap();
+
             Ok(buf.len())
         } else {
             self.buf.extend_from_slice(buf);
@@ -290,25 +325,25 @@ impl Write for JLWriter {
 }
 
 fn main() -> Result<(), ()> {
-
-    let matches = App::new("flatter")
-                      .version("0.1")
-                      .author("David Raznick")
-                      .about("Make JSON flatter")
-                      .args_from_usage(
-                          "<INPUT>             'Sets the input file to use'
+    let matches = App::new("flatterer")
+        .version("0.1")
+        .author("David Raznick")
+        .about("Make JSON flatterer")
+        .args_from_usage(
+            "<INPUT>             'Sets the input file to use'
                            <OUT_DIR>           'Sets the output directory'
                            -p --path=[path]    'key where array lives, leave if array is at root'
                            -j --jl             'Treat input as JSON Lines, path will be ignored'
                            -m --main=[main]    'Table name of top level object'
-                           -f --force          'Delete output directory if it exist'"
-                      ).get_matches();
+                           -f --force          'Delete output directory if it exist'",
+        )
+        .get_matches();
 
     let input = matches.value_of("INPUT").unwrap();
     let input_path = PathBuf::from(input);
     if !input_path.exists() {
         eprintln!("Can not find file {}", input);
-        return Err(())
+        return Err(());
     }
     let mut input = BufReader::new(File::open(input).unwrap());
 
@@ -320,14 +355,16 @@ fn main() -> Result<(), ()> {
             remove_dir_all(&output_path).unwrap();
         } else {
             eprintln!("Directory {} already exists", output_dir);
-            return Ok(())
+            return Ok(());
         }
     }
     let data_path = output_path.join("data");
-    create_dir_all(&data_path).expect(format!("output directory {} can not be", output_dir).as_str());
+    create_dir_all(&data_path)
+        .expect(format!("output directory {} can not be", output_dir).as_str());
 
     let tmp_path = output_path.join("tmp");
-    create_dir_all(&tmp_path).expect(format!("output directory {} can not be", output_dir).as_str());
+    create_dir_all(&tmp_path)
+        .expect(format!("output directory {} can not be", output_dir).as_str());
 
     let mut selectors = vec![];
 
@@ -343,54 +380,64 @@ fn main() -> Result<(), ()> {
         main_table_name = format!("main");
     }
 
-
-    let mut flat_files = FlatFiles { 
+    let mut flat_files = FlatFiles {
         output_path: output_path.clone(),
-        main_table_name, 
-        emit_obj: vec![vec![]], 
-        row_number: 1, 
+        main_table_name,
+        emit_obj: vec![vec![]],
+        row_number: 1,
         table_rows: HashMap::new(),
         output_csvs: HashMap::new(),
-        table_metadata: HashMap::new()
+        table_metadata: HashMap::new(),
     };
 
-    let (sender, receiver) = channel();
+    if !matches.is_present("jl") {
+        let (buf_sender, buf_receiver) = channel();
 
-    thread::spawn(move|| {
-        let mut jl_writer = JLWriter { 
-            buf: vec![], 
-            sender
-        };
+        thread::spawn(move || {
+            let mut jl_writer = JLWriter {
+                buf: vec![],
+                buf_sender,
+            };
 
-        let mut handler = NdJsonHandler::new(&mut jl_writer, selectors);
-        let mut parser = Parser::new(&mut handler);
+            let mut handler = NdJsonHandler::new(&mut jl_writer, selectors);
+            let mut parser = Parser::new(&mut handler);
 
-        parser.parse(&mut input).unwrap();
-    });
+            parser.parse(&mut input).unwrap();
+        });
 
-    for value in receiver.iter() {
-        if let Value::Object(obj) = value {
-            flat_files.handle_obj(obj, true, vec![], vec![], vec![], vec![]);
-            flat_files.row_number += 1;
+        for buf in buf_receiver.iter() {
+            let value = serde_json::from_slice::<Value>(&buf).unwrap();
+            flat_files.process_value(value);
         }
-        flat_files.create_rows().unwrap();
-        for val in flat_files.table_rows.values_mut() {
-            val.clear();
+    } else {
+        let (value_sender, value_receiver) = channel();
+
+        thread::spawn(move || {
+            let stream = Deserializer::from_reader(input).into_iter::<Value>();
+            for value in stream {
+                value_sender.send(value.unwrap()).unwrap();
+            }
+        });
+
+        for value in value_receiver {
+            flat_files.process_value(value);
         }
     }
-
 
     for (table_name, output_csv) in flat_files.output_csvs.drain() {
         let metadata = flat_files.table_metadata.get(&table_name).unwrap();
         let mut input_csv = output_csv.into_inner().unwrap();
         input_csv.flush().unwrap();
 
-        let csv_reader = ReaderBuilder::new().
-            has_headers(false).
-            flexible(true).
-            from_path(tmp_path.join(format!("{}.csv", table_name))).unwrap();
+        let csv_reader = ReaderBuilder::new()
+            .has_headers(false)
+            .flexible(true)
+            .from_path(tmp_path.join(format!("{}.csv", table_name)))
+            .unwrap();
 
-        let mut csv_writer = WriterBuilder::new().from_path(data_path.join(format!("{}.csv", table_name))).unwrap();
+        let mut csv_writer = WriterBuilder::new()
+            .from_path(data_path.join(format!("{}.csv", table_name)))
+            .unwrap();
 
         let field_count = &metadata.fields.len();
 
