@@ -12,10 +12,11 @@ use csv::{WriterBuilder, ReaderBuilder};
 use std::path::PathBuf;
 use serde::{Serialize};
 
+use std::sync::mpsc::{channel, Sender};
+use std::thread;
 
 extern crate clap;
 use clap::{App};
-
 
 #[derive(Clone, Debug)]
 enum PathItem {
@@ -36,7 +37,7 @@ impl fmt::Display for PathItem {
 
 pub struct JLWriter {
     buf: Vec<u8>,
-    flat_files: FlatFiles
+    sender: Sender<Value>
 }
 
 
@@ -57,7 +58,6 @@ pub struct TableMetadata {
     output_fields: HashMap<String, HashMap<String, String>>,
     fields: Vec<String> 
 }
-
 
 impl FlatFiles {
     fn handle_obj(
@@ -152,6 +152,9 @@ impl FlatFiles {
                             );
                         if let Some(mut my_obj) = new_obj {
                             for (new_key, new_value) in my_obj.iter_mut() {
+                                let mut obj_key = key.clone();
+                                obj_key.push('_');
+                                obj_key.push_str(new_key.as_str());
                                 obj.insert(format!("{}_{}", key, new_key), new_value.take());
                             }
                         }
@@ -272,13 +275,9 @@ impl Write for JLWriter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         if buf == [b'\n'] {
             let value = serde_json::from_slice::<Value>(&self.buf)?;
-            if let Value::Object(obj) = value {
-                self.flat_files.handle_obj(obj, true, vec![], vec![], vec![], vec![]);
-                self.flat_files.row_number += 1;
-            }
+            self.sender.send(value).unwrap();
+
             self.buf.clear();
-            self.flat_files.create_rows().unwrap();
-            self.flat_files.table_rows.clear();
             Ok(buf.len())
         } else {
             self.buf.extend_from_slice(buf);
@@ -355,18 +354,31 @@ fn main() -> Result<(), ()> {
         table_metadata: HashMap::new()
     };
 
-    
-    let mut jl_writer = JLWriter { 
-        buf: vec![], 
-        flat_files: flat_files
-    };
+    let (sender, receiver) = channel();
 
-    let mut handler = NdJsonHandler::new(&mut jl_writer, selectors);
-    let mut parser = Parser::new(&mut handler);
+    thread::spawn(move|| {
+        let mut jl_writer = JLWriter { 
+            buf: vec![], 
+            sender
+        };
 
-    parser.parse(&mut input).unwrap();
+        let mut handler = NdJsonHandler::new(&mut jl_writer, selectors);
+        let mut parser = Parser::new(&mut handler);
 
-    flat_files = jl_writer.flat_files;
+        parser.parse(&mut input).unwrap();
+    });
+
+    for value in receiver.iter() {
+        if let Value::Object(obj) = value {
+            flat_files.handle_obj(obj, true, vec![], vec![], vec![], vec![]);
+            flat_files.row_number += 1;
+        }
+        flat_files.create_rows().unwrap();
+        for val in flat_files.table_rows.values_mut() {
+            val.clear();
+        }
+    }
+
 
     for (table_name, output_csv) in flat_files.output_csvs.drain() {
         let metadata = flat_files.table_metadata.get(&table_name).unwrap();

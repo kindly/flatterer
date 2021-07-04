@@ -14,3 +14,4 @@ itertools = "0.10.1"
 csv = "1.1"
 clap = "2.33.3"
 serde = {version = "1", features = ["derive"] }
+cached = "0.23"
