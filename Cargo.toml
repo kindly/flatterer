@@ -7,15 +7,21 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-yajlish = { version = "0.3.2", features = ["ndjson"] } 
-serde_json = "1.0.59"
-tempfile = "3.2.0"
-itertools = "0.10.1"
-csv = "1.1"
-clap = "2.33.3"
+yajlish = { version = "0.3", features = ["ndjson"] } 
+serde_json = "1"
+tempfile = "3"
+itertools = "0.10"
+csv = "1"
+clap = "2"
 serde = {version = "1", features = ["derive"] }
-cached = "0.23"
 
 [profile.release]
 debug = true
 
+[lib]
+name = "flaterer"
+path = "src/lib.rs"
+
+[[bin]]
+name = "flaterer-cli"
+path = "src/main.rs"
