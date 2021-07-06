@@ -14,6 +14,7 @@ itertools = "0.10"
 csv = "1"
 clap = "2"
 serde = {version = "1", features = ["derive"] }
+pyo3 = {version = "0.14.1", features = ["extension-module"] }
 
 [profile.release]
 debug = true
@@ -22,6 +23,10 @@ debug = true
 name = "flaterer"
 path = "src/lib.rs"
 
+crate-type = ["cdylib", "rlib"]
+
 [[bin]]
 name = "flaterer-cli"
 path = "src/main.rs"
+
+
