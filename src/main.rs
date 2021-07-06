@@ -2,39 +2,9 @@ use clap::App;
 use std::path::PathBuf;
 use std::io::BufReader;
 use std::fs:: File;
-use yajlish::ndjson_handler::{NdJsonHandler, Selector};
-use flaterer::FlatFiles;
-use serde_json::{Deserializer, Value};
-use std::sync::mpsc::{channel, Sender};
-use std::thread;
-use yajlish::Parser;
-use std::io::{self, Write};
-use std::mem;
+use yajlish::ndjson_handler::Selector;
+use flaterer::{FlatFiles, flatten_from_jl, flatten};
 
-struct JLWriter {
-    pub buf: Vec<u8>,
-    pub buf_sender: Sender<Vec<u8>>,
-}
-
-impl Write for JLWriter {
-    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        if buf == [b'\n'] {
-            let mut new_buf = Vec::with_capacity(self.buf.capacity());
-
-            mem::swap(&mut self.buf, &mut new_buf);
-
-            self.buf_sender.send(new_buf).unwrap();
-
-            Ok(buf.len())
-        } else {
-            self.buf.extend_from_slice(buf);
-            Ok(buf.len())
-        }
-    }
-    fn flush(&mut self) -> io::Result<()> {
-        Ok(())
-    }
-}
 
 
 fn main() -> Result<(), ()> {
@@ -58,7 +28,7 @@ fn main() -> Result<(), ()> {
         eprintln!("Can not find file {}", input);
         return Ok(());
     }
-    let mut input = BufReader::new(File::open(input).unwrap());
+    let input = BufReader::new(File::open(input).unwrap());
 
     let output_dir = matches.value_of("OUT_DIR").unwrap();
 
@@ -76,47 +46,19 @@ fn main() -> Result<(), ()> {
         main_table_name = format!("main");
     }
 
-    let mut flat_files = FlatFiles::new (
+    let flat_files = FlatFiles::new (
         output_dir.to_string(),
         matches.is_present("force"),
         main_table_name,
         vec![],
     ).unwrap();
 
-    if !matches.is_present("jl") {
-        let (buf_sender, buf_receiver) = channel();
-
-        thread::spawn(move || {
-            let mut jl_writer = JLWriter {
-                buf: vec![],
-                buf_sender,
-            };
-
-            let mut handler = NdJsonHandler::new(&mut jl_writer, selectors);
-            let mut parser = Parser::new(&mut handler);
-
-            parser.parse(&mut input).unwrap();
-        });
-
-        for buf in buf_receiver.iter() {
-            let value = serde_json::from_slice::<Value>(&buf).unwrap();
-            flat_files.process_value(value).unwrap();
-        }
+    if matches.is_present("jl") {
+        flatten_from_jl(input, flat_files)
     } else {
-        let (value_sender, value_receiver) = channel();
-
-        thread::spawn(move || {
-            let stream = Deserializer::from_reader(input).into_iter::<Value>();
-            for value in stream {
-                value_sender.send(value.unwrap()).unwrap();
-            }
-        });
-
-        for value in value_receiver {
-            flat_files.process_value(value).unwrap();
-        }
+        flatten(input, flat_files, selectors)
     }
-    flat_files.write_files().unwrap();
+
 
     Ok(())
 }

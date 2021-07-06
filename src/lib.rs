@@ -1,16 +1,17 @@
 use csv::{ReaderBuilder, WriterBuilder};
 use itertools::Itertools;
 use serde::Serialize;
-use serde_json::{json, Map, Value};
+use serde_json::{json, Map, Value, Deserializer};
 use std::collections::HashMap;
 use std::fmt;
 use std::fs::{create_dir_all, remove_dir_all, File};
 use std::path::PathBuf;
-use std::io::prelude::*;
-use std::io::{ErrorKind, Error as IoError};
+use std::io::{ErrorKind, Error as IoError, Write, Read, self, BufReader};
 use std::error::Error;
+use yajlish::Parser;
+use yajlish::ndjson_handler::{NdJsonHandler, Selector};
 
-use std::sync::mpsc::{channel};
+use std::sync::mpsc::{channel, Sender};
 use std::thread;
 
 use pyo3::prelude::*;
@@ -131,6 +132,30 @@ pub struct TableMetadata {
     output_fields: HashMap<String, HashMap<String, String>>,
     fields: Vec<String>,
 }
+
+struct JLWriter {
+    pub buf: Vec<u8>,
+    pub value_sender: Sender<Value>,
+}
+
+impl Write for JLWriter {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        if buf == [b'\n'] {
+            let value = serde_json::from_slice::<Value>(&self.buf).unwrap();
+            self.value_sender.send(value).unwrap();
+            self.buf.clear();
+
+            Ok(buf.len())
+        } else {
+            self.buf.extend_from_slice(buf);
+            Ok(buf.len())
+        }
+    }
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
 
 impl FlatFiles {
 
@@ -455,3 +480,47 @@ fn value_convert(value: Value) -> String {
 }
 
 
+pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) {
+
+    let (value_sender, value_receiver) = channel();
+
+    let thread = thread::spawn(move || {
+        for value in value_receiver {
+            flat_files.process_value(value).unwrap();
+        }
+    });
+
+    let stream = Deserializer::from_reader(input).into_iter::<Value>();
+    for value in stream {
+        value_sender.send(value.unwrap()).unwrap();
+    }
+    drop(value_sender);
+
+    thread.join().unwrap()
+}
+
+pub fn flatten<R: Read>(mut input: BufReader<R>, mut flat_files: FlatFiles, selectors: Vec<Selector>) {
+
+    let (value_sender, value_receiver) = channel();
+
+    let thread = thread::spawn(move || {
+        for value in value_receiver.iter() {
+            flat_files.process_value(value).unwrap();
+        }
+        flat_files.write_files().unwrap();
+    });
+
+    let mut jl_writer = JLWriter {
+        buf: vec![],
+        value_sender,
+    };
+
+    let mut handler = NdJsonHandler::new(&mut jl_writer, selectors);
+    let mut parser = Parser::new(&mut handler);
+
+    parser.parse(&mut input).unwrap();
+
+    drop(jl_writer);
+
+    thread.join().unwrap()
+}
