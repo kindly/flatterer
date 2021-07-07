@@ -13,7 +13,7 @@ fn main() -> Result<(), ()> {
         .author("David Raznick")
         .about("Make JSON flatterer")
         .args_from_usage(
-            "<INPUT>             'Sets the input file to use'
+                           "<INPUT>             'Sets the input file to use'
                            <OUT_DIR>           'Sets the output directory'
                            -p --path=[path]    'key where array lives, leave if array is at root'
                            -j --jl             'Treat input as JSON Lines, path will be ignored'
@@ -35,8 +35,9 @@ fn main() -> Result<(), ()> {
     let mut selectors = vec![];
 
     if let Some(path) = matches.value_of("path") {
-        selectors.push(Selector::Identifier(path.to_string()))
+        selectors.push(Selector::Identifier(format!("\"{}\"", path.to_string())));
     }
+    println!("{:?}", selectors);
 
     let main_table_name: String;
 
@@ -54,11 +55,10 @@ fn main() -> Result<(), ()> {
     ).unwrap();
 
     if matches.is_present("jl") {
-        flatten_from_jl(input, flat_files)
+        flatten_from_jl(input, flat_files).unwrap();
     } else {
-        flatten(input, flat_files, selectors)
+        flatten(input, flat_files, selectors).unwrap();
     }
-
 
     Ok(())
 }

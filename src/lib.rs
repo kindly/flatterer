@@ -11,7 +11,9 @@ use std::error::Error;
 use yajlish::Parser;
 use yajlish::ndjson_handler::{NdJsonHandler, Selector};
 
-use std::sync::mpsc::{channel, Sender};
+use xlsxwriter::{Workbook};
+
+use std::sync::mpsc::{channel, Sender, Receiver};
 use std::thread;
 
 use pyo3::prelude::*;
@@ -19,16 +21,77 @@ use pyo3::types::PyIterator;
 
 
 #[pymodule]
-fn flaterer_rs(_py: Python, m: &PyModule) -> PyResult<()> {
+fn flaterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
     #[pyfn(m)]
-    fn iterator_flatten(py: Python, mut objs: &PyIterator, output_dir: String, main_table_name: String, force: bool) -> PyResult<()> {
+    fn flatten_rs(_py: Python,
+                  input_file: String,
+                  output_dir: String,
+                  path: String,
+                  main_table_name: String,
+                  emit_path: Vec<Vec<String>>,
+                  json_lines: bool,
+                  force: bool) -> PyResult<()> {
 
         let flat_files_res = FlatFiles::new (
             output_dir.to_string(),
             force,
             main_table_name,
-            vec![],
+            emit_path
+        );
+
+        let mut selectors = vec![];
+
+        if path != "" {
+            selectors.push(Selector::Identifier(format!("\"{}\"", path.to_string())));
+        }
+
+        if flat_files_res.is_err() {
+            let err = flat_files_res.unwrap_err();
+            return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)))
+        }
+
+        let flat_files = flat_files_res.unwrap(); //already checked error
+
+        let file;
+
+        match File::open(input_file) {
+            Ok(input) => {
+                file = BufReader::new(input);
+            }
+            Err(err) => {
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)));
+            }
+        };
+
+        if json_lines {
+            if let Err(err) = flatten_from_jl(file, flat_files) {
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)));
+            }
+
+        } else {
+            if let Err(err) = flatten(file, flat_files, selectors) {
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)));
+            }
+        }
+
+        Ok(())
+
+    }
+
+    #[pyfn(m)]
+    fn iterator_flatten_rs(py: Python,
+                           mut objs: &PyIterator,
+                           output_dir: String,
+                           main_table_name: String,
+                           emit_path: Vec<Vec<String>>,
+                           force: bool) -> PyResult<()> {
+
+        let flat_files_res = FlatFiles::new (
+            output_dir.to_string(),
+            force,
+            main_table_name,
+            emit_path
         );
 
         if flat_files_res.is_err() {
@@ -135,16 +198,14 @@ pub struct TableMetadata {
 
 struct JLWriter {
     pub buf: Vec<u8>,
-    pub value_sender: Sender<Value>,
+    pub buf_sender: Sender<Vec<u8>>,
 }
 
 impl Write for JLWriter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         if buf == [b'\n'] {
-            let value = serde_json::from_slice::<Value>(&self.buf).unwrap();
-            self.value_sender.send(value).unwrap();
+            self.buf_sender.send(self.buf.clone()).unwrap();
             self.buf.clear();
-
             Ok(buf.len())
         } else {
             self.buf.extend_from_slice(buf);
@@ -453,6 +514,39 @@ impl FlatFiles {
         return Ok(())
     }
 
+    pub fn write_xlsx(&mut self) -> Result<(), Box<dyn Error>>{
+ 
+        let tmp_path = self.output_path.join("tmp");
+        let data_path = self.output_path.join("data");
+
+        for (table_name, output_csv) in self.output_csvs.drain() {
+            let metadata = self.table_metadata.get(&table_name).unwrap(); //key known
+            let mut input_csv = output_csv.into_inner()?;
+            input_csv.flush()?;
+
+            let csv_reader = ReaderBuilder::new()
+                .has_headers(false)
+                .flexible(true)
+                .from_path(tmp_path.join(format!("{}.csv", table_name)))?;
+
+            let field_count = &metadata.fields.len();
+
+
+            for row in csv_reader.into_byte_records() {
+                let mut this_row = row?;
+                while &this_row.len() != field_count {
+                    this_row.push_field(b"")
+                }
+            }
+        }
+
+        remove_dir_all(&tmp_path)?;
+
+        let metadata_file = File::create(self.output_path.join("table_metadata.json"))?;
+        serde_json::to_writer_pretty(metadata_file, &self.table_metadata)?;
+        return Ok(())
+    }
+
 }
 
 //fn value_convert(value: Value, mut output_fields: &IndexMap<String, IndexMap<String, String>>) -> String {
@@ -479,48 +573,78 @@ fn value_convert(value: Value) -> String {
     }
 }
 
-
-pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) {
+pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(), String> {
 
     let (value_sender, value_receiver) = channel();
 
-    let thread = thread::spawn(move || {
+    let thread = thread::spawn(move || -> Result<(), csv::Error> {
         for value in value_receiver {
-            flat_files.process_value(value).unwrap();
+            flat_files.process_value(value)?;
         }
+        Ok(())
     });
 
     let stream = Deserializer::from_reader(input).into_iter::<Value>();
-    for value in stream {
-        value_sender.send(value.unwrap()).unwrap();
+    for value_result in stream {
+        match value_result {
+            Ok(value) => {
+                if let Err(error) = value_sender.send(value) {
+                    return Err(format!("{:?}", error))
+                }
+            }
+            Err(error) => { 
+                return Err(format!("{:?}", error))
+            }
+        }
     }
     drop(value_sender);
 
-    thread.join().unwrap()
+    if let Err(error) = thread.join() {
+        return Err(format!("{:?}", error))
+    }
+    Ok(())
 }
 
-pub fn flatten<R: Read>(mut input: BufReader<R>, mut flat_files: FlatFiles, selectors: Vec<Selector>) {
+pub fn flatten<R: Read>(mut input: BufReader<R>, mut flat_files: FlatFiles, selectors: Vec<Selector>) -> Result<(), String> {
 
-    let (value_sender, value_receiver) = channel();
+    let (buf_sender, buf_receiver): (Sender<Vec<u8>>, Receiver<Vec<u8>>) = channel();
 
-    let thread = thread::spawn(move || {
-        for value in value_receiver.iter() {
-            flat_files.process_value(value).unwrap();
+    let thread = thread::spawn(move || -> Result<(), String>{
+        for buf in buf_receiver.iter() {
+            match serde_json::from_slice::<Value>(&buf) {
+                Ok(value) => {
+                    if let Err(error) = flat_files.process_value(value) {
+                        return Err(format!("{:?}", error))
+                    }
+                }
+                Err(error) => {
+                    return Err(format!("{:?}", error))
+                }
+            }
         }
-        flat_files.write_files().unwrap();
+        if let Err(error) = flat_files.write_files() {
+            return Err(format!("{:?}", error))
+        };
+        Ok(())
     });
 
     let mut jl_writer = JLWriter {
         buf: vec![],
-        value_sender,
+        buf_sender,
     };
 
     let mut handler = NdJsonHandler::new(&mut jl_writer, selectors);
     let mut parser = Parser::new(&mut handler);
 
-    parser.parse(&mut input).unwrap();
+    if let Err(error) = parser.parse(&mut input) {
+        return Err(format!("{:?}", error))
+    }
 
     drop(jl_writer);
 
-    thread.join().unwrap()
+    if let Err(error) = thread.join() {
+        return Err(format!("{:?}", error))
+    }
+
+    Ok(())
 }

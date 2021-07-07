@@ -15,6 +15,7 @@ csv = "1"
 clap = "2"
 serde = {version = "1", features = ["derive"] }
 pyo3 = {version = "0.14.1", features = ["extension-module"] }
+xlsxwriter = "0.3.4"
 
 [profile.release]
 debug = true
