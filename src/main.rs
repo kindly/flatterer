@@ -17,6 +17,8 @@ fn main() -> Result<(), ()> {
                            <OUT_DIR>           'Sets the output directory'
                            -p --path=[path]    'key where array lives, leave if array is at root'
                            -j --jl             'Treat input as JSON Lines, path will be ignored'
+                           -c --csv            'Output csv files (defualt but required if xlsx is selected)'
+                           -x --xlsx           'Output xlsx file'
                            -m --main=[main]    'Table name of top level object'
                            -f --force          'Delete output directory if it exist'",
         )
@@ -37,7 +39,6 @@ fn main() -> Result<(), ()> {
     if let Some(path) = matches.value_of("path") {
         selectors.push(Selector::Identifier(format!("\"{}\"", path.to_string())));
     }
-    println!("{:?}", selectors);
 
     let main_table_name: String;
 
@@ -49,6 +50,8 @@ fn main() -> Result<(), ()> {
 
     let flat_files = FlatFiles::new (
         output_dir.to_string(),
+        matches.is_present("csv") || !matches.is_present("xlsx"),
+        matches.is_present("xlsx"),
         matches.is_present("force"),
         main_table_name,
         vec![],

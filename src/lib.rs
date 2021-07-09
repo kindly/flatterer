@@ -10,6 +10,7 @@ use std::io::{ErrorKind, Error as IoError, Write, Read, self, BufReader};
 use std::error::Error;
 use yajlish::Parser;
 use yajlish::ndjson_handler::{NdJsonHandler, Selector};
+use std::convert::TryInto;
 
 use xlsxwriter::{Workbook};
 
@@ -27,6 +28,8 @@ fn flaterer(_py: Python, m: &PyModule) -> PyResult<()> {
     fn flatten_rs(_py: Python,
                   input_file: String,
                   output_dir: String,
+                  csv: bool,
+                  xlsx: bool,
                   path: String,
                   main_table_name: String,
                   emit_path: Vec<Vec<String>>,
@@ -35,6 +38,8 @@ fn flaterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let flat_files_res = FlatFiles::new (
             output_dir.to_string(),
+            csv,
+            xlsx,
             force,
             main_table_name,
             emit_path
@@ -81,6 +86,8 @@ fn flaterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
     #[pyfn(m)]
     fn iterator_flatten_rs(py: Python,
+                           csv: bool,
+                           xlsx: bool,
                            mut objs: &PyIterator,
                            output_dir: String,
                            main_table_name: String,
@@ -89,6 +96,8 @@ fn flaterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let flat_files_res = FlatFiles::new (
             output_dir.to_string(),
+            csv,
+            xlsx,
             force,
             main_table_name,
             emit_path
@@ -182,11 +191,13 @@ impl fmt::Display for PathItem {
 #[derive(Debug)]
 pub struct FlatFiles {
     output_path: PathBuf,
+    csv: bool,
+    xlsx: bool,
     main_table_name: String,
     emit_obj: Vec<Vec<String>>,
     row_number: u128,
     table_rows: HashMap<String, Vec<Map<String, Value>>>,
-    output_csvs: HashMap<String, csv::Writer<File>>,
+    tmp_csvs: HashMap<String, csv::Writer<File>>,
     table_metadata: HashMap<String, TableMetadata>,
 }
 
@@ -222,6 +233,8 @@ impl FlatFiles {
 
     pub fn new (
         output_dir: String,
+        csv: bool,
+        xlsx: bool,
         force: bool,
         main_table_name: String,
         emit_obj: Vec<Vec<String>>,
@@ -235,19 +248,23 @@ impl FlatFiles {
                 return Err(IoError::new(ErrorKind::AlreadyExists, format!("Directory {} already exists", output_dir)))
             }
         }
-        let data_path = output_path.join("data");
-        create_dir_all(&data_path)?;
+        if csv {
+            let csv_path = output_path.join("csv");
+            create_dir_all(&csv_path)?;
+        }
 
         let tmp_path = output_path.join("tmp");
         create_dir_all(&tmp_path)?;
 
         Ok(FlatFiles {
             output_path,
+            csv,
+            xlsx,
             main_table_name,
             emit_obj,
             row_number: 1,
             table_rows: HashMap::new(),
-            output_csvs: HashMap::new(),
+            tmp_csvs: HashMap::new(),
             table_metadata: HashMap::new(),
         })
     }
@@ -425,8 +442,8 @@ impl FlatFiles {
 
     pub fn create_rows(&mut self) -> Result<(), csv::Error> {
         for (table, rows) in self.table_rows.iter_mut() {
-            if !self.output_csvs.contains_key(table) {
-                self.output_csvs.insert(
+            if !self.tmp_csvs.contains_key(table) {
+                self.tmp_csvs.insert(
                     table.clone(),
                     WriterBuilder::new()
                         .flexible(true)
@@ -442,7 +459,7 @@ impl FlatFiles {
             }
 
             let table_metadata = self.table_metadata.get_mut(table).unwrap(); //key known
-            let writer = self.output_csvs.get_mut(table).unwrap(); //key known
+            let writer = self.tmp_csvs.get_mut(table).unwrap(); //key known
 
             for row in rows {
                 let mut output_row = vec![];
@@ -477,22 +494,45 @@ impl FlatFiles {
     }
 
     pub fn write_files(&mut self) -> Result<(), Box<dyn Error>>{
+        for tmp_csv in self.tmp_csvs.values_mut() {
+            tmp_csv.flush()?;
+        }
+
+        if self.csv {
+            self.write_csvs()?;
+        };
+
+        if self.xlsx {
+            self.write_xlsx()?;
+        };
+
+
+        let tmp_path = self.output_path.join("tmp");
+        remove_dir_all(&tmp_path)?;
+
+        let metadata_file = File::create(self.output_path.join("table_metadata.json"))?;
+        serde_json::to_writer_pretty(metadata_file, &self.table_metadata)?;
+
+        Ok(())
+    }
+
+    pub fn write_csvs(&mut self) -> Result<(), Box<dyn Error>>{
  
         let tmp_path = self.output_path.join("tmp");
-        let data_path = self.output_path.join("data");
+        let csv_path = self.output_path.join("csv");
 
-        for (table_name, output_csv) in self.output_csvs.drain() {
-            let metadata = self.table_metadata.get(&table_name).unwrap(); //key known
-            let mut input_csv = output_csv.into_inner()?;
-            input_csv.flush()?;
+        for table_name in self.tmp_csvs.keys() {
+
+            let metadata = self.table_metadata.get(table_name).unwrap(); //key known
 
             let csv_reader = ReaderBuilder::new()
                 .has_headers(false)
                 .flexible(true)
                 .from_path(tmp_path.join(format!("{}.csv", table_name)))?;
 
+
             let mut csv_writer = WriterBuilder::new()
-                .from_path(data_path.join(format!("{}.csv", table_name)))?;
+                .from_path(csv_path.join(format!("{}.csv", table_name)))?;
 
             let field_count = &metadata.fields.len();
 
@@ -501,49 +541,45 @@ impl FlatFiles {
             for row in csv_reader.into_byte_records() {
                 let mut this_row = row?;
                 while &this_row.len() != field_count {
-                    this_row.push_field(b"")
+                    this_row.push_field(b"");
                 }
                 csv_writer.write_byte_record(&this_row)?;
             }
         }
 
-        remove_dir_all(&tmp_path)?;
-
-        let metadata_file = File::create(self.output_path.join("table_metadata.json"))?;
-        serde_json::to_writer_pretty(metadata_file, &self.table_metadata)?;
         return Ok(())
     }
 
     pub fn write_xlsx(&mut self) -> Result<(), Box<dyn Error>>{
  
         let tmp_path = self.output_path.join("tmp");
-        let data_path = self.output_path.join("data");
 
-        for (table_name, output_csv) in self.output_csvs.drain() {
-            let metadata = self.table_metadata.get(&table_name).unwrap(); //key known
-            let mut input_csv = output_csv.into_inner()?;
-            input_csv.flush()?;
+        //let workbook = Workbook::new_opt(&self.output_path.join("output.xlsx").to_string_lossy(), true, Some("/tmp"), true);
+        let workbook = Workbook::new(&self.output_path.join("output.xlsx").to_string_lossy());
+
+        for table_name in self.tmp_csvs.keys() {
+            let mut worksheet = workbook.add_worksheet(Some(&table_name))?;
+            let metadata = self.table_metadata.get(table_name).unwrap(); //key known
 
             let csv_reader = ReaderBuilder::new()
                 .has_headers(false)
                 .flexible(true)
                 .from_path(tmp_path.join(format!("{}.csv", table_name)))?;
 
-            let field_count = &metadata.fields.len();
+            for (num, field) in metadata.fields.iter().enumerate() {
+                worksheet.write_string(0, num.try_into()?, &field, None)?
+            }
 
 
-            for row in csv_reader.into_byte_records() {
-                let mut this_row = row?;
-                while &this_row.len() != field_count {
-                    this_row.push_field(b"")
+            for (row_num, row) in csv_reader.into_records().enumerate() {
+                let this_row = row?;
+                for (col_num, cell) in this_row.iter().enumerate() {
+                    worksheet.write_string((row_num + 1).try_into()?, col_num.try_into()?, cell, None)?
                 }
             }
         }
+        workbook.close()?;
 
-        remove_dir_all(&tmp_path)?;
-
-        let metadata_file = File::create(self.output_path.join("table_metadata.json"))?;
-        serde_json::to_writer_pretty(metadata_file, &self.table_metadata)?;
         return Ok(())
     }
 
@@ -577,10 +613,15 @@ pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(
 
     let (value_sender, value_receiver) = channel();
 
-    let thread = thread::spawn(move || -> Result<(), csv::Error> {
+    let thread = thread::spawn(move || -> Result<(), String> {
         for value in value_receiver {
-            flat_files.process_value(value)?;
+            if let Err(error) = flat_files.process_value(value) {
+                return Err(format!("{:?}", error))
+            }
         }
+        if let Err(error) = flat_files.write_files() {
+            return Err(format!("{:?}", error))
+        };
         Ok(())
     });
 
@@ -599,9 +640,17 @@ pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(
     }
     drop(value_sender);
 
-    if let Err(error) = thread.join() {
-        return Err(format!("{:?}", error))
+    match thread.join() {
+        Ok(result) => {
+            if let Err(err) = result {
+                return Err(format!("{:?}", err))
+            }
+        }
+        Err(err) => {
+            return Err(format!("{:?}", err))
+        }
     }
+
     Ok(())
 }
 
@@ -642,8 +691,15 @@ pub fn flatten<R: Read>(mut input: BufReader<R>, mut flat_files: FlatFiles, sele
 
     drop(jl_writer);
 
-    if let Err(error) = thread.join() {
-        return Err(format!("{:?}", error))
+    match thread.join() {
+        Ok(result) => {
+            if let Err(err) = result {
+                return Err(format!("{:?}", err))
+            }
+        }
+        Err(err) => {
+            return Err(format!("{:?}", err))
+        }
     }
 
     Ok(())
