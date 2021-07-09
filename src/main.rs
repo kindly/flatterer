@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use std::io::BufReader;
 use std::fs:: File;
 use yajlish::ndjson_handler::Selector;
-use flaterer::{FlatFiles, flatten_from_jl, flatten};
+use flatterer::{FlatFiles, flatten_from_jl, flatten};
 
 
 

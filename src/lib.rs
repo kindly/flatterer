@@ -2,7 +2,7 @@ use csv::{ReaderBuilder, WriterBuilder};
 use itertools::Itertools;
 use serde::Serialize;
 use serde_json::{json, Map, Value, Deserializer};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt;
 use std::fs::{create_dir_all, remove_dir_all, File};
 use std::path::PathBuf;
@@ -12,9 +12,10 @@ use yajlish::Parser;
 use yajlish::ndjson_handler::{NdJsonHandler, Selector};
 use std::convert::TryInto;
 
+use crossbeam_channel::{bounded, Sender, Receiver};
+
 use xlsxwriter::{Workbook};
 
-use std::sync::mpsc::{channel, Sender, Receiver};
 use std::thread;
 
 use pyo3::prelude::*;
@@ -22,7 +23,7 @@ use pyo3::types::PyIterator;
 
 
 #[pymodule]
-fn flaterer(_py: Python, m: &PyModule) -> PyResult<()> {
+fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
     #[pyfn(m)]
     fn flatten_rs(_py: Python,
@@ -110,7 +111,7 @@ fn flaterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let mut flat_files = flat_files_res.unwrap(); //already checked error
 
-        let (sender, receiver) = channel();
+        let (sender, receiver) = bounded(1000);
 
         let handler = thread::spawn(move || -> PyResult<()> {
             for value in receiver {
@@ -600,18 +601,18 @@ fn value_convert(value: Value) -> String {
         Value::Bool(bool) => {
             format!("{}", bool)
         }
-        Value::Array(arr) => {
-            format!("{}", Value::Array(arr))
+        Value::Array(_) => {
+            format!("{}", value)
         }
-        Value::Object(obj) => {
-            format!("{}", Value::Object(obj))
+        Value::Object(_) => {
+            format!("{}", value)
         }
     }
 }
 
 pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(), String> {
 
-    let (value_sender, value_receiver) = channel();
+    let (value_sender, value_receiver) = bounded(1000);
 
     let thread = thread::spawn(move || -> Result<(), String> {
         for value in value_receiver {
@@ -656,7 +657,7 @@ pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(
 
 pub fn flatten<R: Read>(mut input: BufReader<R>, mut flat_files: FlatFiles, selectors: Vec<Selector>) -> Result<(), String> {
 
-    let (buf_sender, buf_receiver): (Sender<Vec<u8>>, Receiver<Vec<u8>>) = channel();
+    let (buf_sender, buf_receiver): (Sender<Vec<u8>>, Receiver<Vec<u8>>) = bounded(1000);
 
     let thread = thread::spawn(move || -> Result<(), String>{
         for buf in buf_receiver.iter() {

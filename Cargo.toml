@@ -17,18 +17,19 @@ serde = {version = "1", features = ["derive"] }
 pyo3 = {version = "0.14.1", features = ["extension-module"] }
 #xlsxwriter = {path = "../xlsxwriter-rs/libxlsxwriter"}
 xlsxwriter = "0.3.4"
+crossbeam-channel="0.5.1"
 
 [profile.release]
 debug = true
 
 [lib]
-name = "flaterer"
+name = "flatterer"
 path = "src/lib.rs"
 
 crate-type = ["cdylib", "rlib"]
 
 [[bin]]
-name = "flaterer-cli"
+name = "flatterer-cli"
 path = "src/main.rs"
 
 
