@@ -2,7 +2,7 @@ use csv::{ReaderBuilder, WriterBuilder};
 use itertools::Itertools;
 use serde::Serialize;
 use serde_json::{json, Map, Value, Deserializer};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::fmt;
 use std::fs::{create_dir_all, remove_dir_all, File};
 use std::path::PathBuf;
@@ -279,103 +279,115 @@ impl FlatFiles {
         one_to_many_full_paths: Vec<Vec<PathItem>>,
         one_to_many_no_index_paths: Vec<Vec<String>>,
     ) -> Option<Map<String, Value>> {
-        let keys: Vec<_> = obj.keys().cloned().collect();
-        for key in keys {
-            let value = obj.get(&key).unwrap(); //key known
-
-            match value {
-                Value::Array(arr) => {
-                    let mut str_count = 0;
-                    let mut obj_count = 0;
-                    let arr_length = arr.len();
-                    for array_value in arr {
-                        if array_value.is_object() {
-                            obj_count += 1
-                        };
-                        if array_value.is_string() {
-                            str_count += 1
-                        };
-                    }
-                    if str_count == arr_length {
-                        let keys: Vec<String> = arr
-                            .iter()
-                            .map(|val| (val.as_str().unwrap().to_string())) //value known as str
-                            .collect();
-                        let new_value = json!(keys.join(","));
-                        obj.insert(key, new_value);
-                    } else if arr_length == 0 {
-                        obj.remove(&key);
-                    } else if obj_count == arr_length {
-                        let mut removed_array = obj.remove(&key).unwrap(); //key known
-                        let my_array = removed_array.as_array_mut().unwrap(); //key known as array
-                        for (i, array_value) in my_array.iter_mut().enumerate() {
-                            let my_value = array_value.take();
-                            if let Value::Object(my_obj) = my_value {
-                                let mut new_full_path = full_path.clone();
-                                new_full_path.push(PathItem::Key(key.clone()));
-                                new_full_path.push(PathItem::Index(i));
-
-                                let mut new_one_to_many_full_paths = one_to_many_full_paths.clone();
-                                new_one_to_many_full_paths.push(new_full_path.clone());
-
-                                let mut new_no_index_path = no_index_path.clone();
-                                new_no_index_path.push(key.clone());
-
-                                let mut new_one_to_many_no_index_paths =
-                                    one_to_many_no_index_paths.clone();
-                                new_one_to_many_no_index_paths.push(new_no_index_path.clone());
-
-                                self.handle_obj(
-                                    my_obj,
-                                    true,
-                                    new_full_path,
-                                    new_no_index_path,
-                                    new_one_to_many_full_paths,
-                                    new_one_to_many_no_index_paths,
-                                );
-                            }
-                        }
-                    } else {
-                        let json_value = json!(format!("{}", value));
-                        obj.insert(key, json_value);
-                    }
+        let mut to_insert: Vec<(String, Value)> = vec![];
+        let mut to_delete: Vec<String> = vec![];
+        for (key, value) in obj.iter_mut() {
+            if let Some(arr) = value.as_array() {
+                let mut str_count = 0;
+                let mut obj_count = 0;
+                let arr_length = arr.len();
+                for array_value in arr {
+                    if array_value.is_object() {
+                        obj_count += 1
+                    };
+                    if array_value.is_string() {
+                        str_count += 1
+                    };
                 }
-                Value::Object(_) => {
-                    let my_value = obj.remove(&key).unwrap(); //key known
-
-                    let mut new_full_path = full_path.clone();
-                    new_full_path.push(PathItem::Key(key.clone()));
-                    let mut new_no_index_path = no_index_path.clone();
-                    new_no_index_path.push(key.clone());
-
-                    let mut emit_child = false;
-                    if self
-                        .emit_obj
+                if str_count == arr_length {
+                    let keys: Vec<String> = arr
                         .iter()
-                        .any(|emit_path| emit_path == &new_no_index_path)
-                    {
-                        emit_child = true;
-                    }
+                        .map(|val| (val.as_str().unwrap().to_string())) //value known as str
+                        .collect();
+                    let new_value = json!(keys.join(","));
+                    to_insert.push((key.clone(), new_value))
+                } else if arr_length == 0 {
+                    to_delete.push(key.clone());
+                } else if obj_count == arr_length {
+                    let mut removed_array = value.take(); // obj.remove(&key).unwrap(); //key known
+                    let my_array = removed_array.as_array_mut().unwrap(); //key known as array
+                    for (i, array_value) in my_array.iter_mut().enumerate() {
+                        let my_value = array_value.take();
+                        if let Value::Object(my_obj) = my_value {
+                            let mut new_full_path = full_path.clone();
+                            new_full_path.push(PathItem::Key(key.clone()));
+                            new_full_path.push(PathItem::Index(i));
 
-                    if let Value::Object(my_value) = my_value {
-                        let new_obj = self.handle_obj(
-                            my_value,
-                            emit_child,
-                            new_full_path,
-                            new_no_index_path,
-                            one_to_many_full_paths.clone(),
-                            one_to_many_no_index_paths.clone(),
-                        );
-                        if let Some(mut my_obj) = new_obj {
-                            for (new_key, new_value) in my_obj.iter_mut() {
-                                obj.insert(format!("{}_{}", key, new_key), new_value.take());
-                            }
+                            let mut new_one_to_many_full_paths = one_to_many_full_paths.clone();
+                            new_one_to_many_full_paths.push(new_full_path.clone());
+
+                            let mut new_no_index_path = no_index_path.clone();
+                            new_no_index_path.push(key.clone());
+
+                            let mut new_one_to_many_no_index_paths =
+                                one_to_many_no_index_paths.clone();
+                            new_one_to_many_no_index_paths.push(new_no_index_path.clone());
+
+                            self.handle_obj(
+                                my_obj,
+                                true,
+                                new_full_path,
+                                new_no_index_path,
+                                new_one_to_many_full_paths,
+                                new_one_to_many_no_index_paths,
+                            );
+                        }
+                    }
+                } else {
+                    let json_value = json!(format!("{}", value));
+                    to_insert.push((key.clone(), json_value));
+                }
+
+            }
+
+            if value.is_object() {
+
+                let my_value = value.take();
+                //obj.remove(&key).unwrap(); //key known
+
+                let mut new_full_path = full_path.clone();
+                new_full_path.push(PathItem::Key(key.clone()));
+                let mut new_no_index_path = no_index_path.clone();
+                new_no_index_path.push(key.clone());
+
+                let mut emit_child = false;
+                if self
+                    .emit_obj
+                    .iter()
+                    .any(|emit_path| emit_path == &new_no_index_path)
+                {
+                    emit_child = true;
+                }
+                if let Value::Object(my_value) = my_value {
+                    let new_obj = self.handle_obj(
+                        my_value,
+                        emit_child,
+                        new_full_path,
+                        new_no_index_path,
+                        one_to_many_full_paths.clone(),
+                        one_to_many_no_index_paths.clone(),
+                    );
+                    if let Some(mut my_obj) = new_obj {
+                        for (new_key, new_value) in my_obj.iter_mut() {
+                            let mut object_key = String::with_capacity(100);
+                            object_key.push_str(key);
+                            object_key.push_str("_");
+                            object_key.push_str(new_key);
+
+                            to_insert.push((object_key, new_value.take()));
                         }
                     }
                 }
-                _ => {}
             }
         }
+        for key in to_delete {
+            obj.remove(&key);
+        }
+        for (key, value) in to_insert {
+            obj.insert(key, value);
+        }
+
+
         if emit {
             self.process_obj(
                 obj,
@@ -590,16 +602,16 @@ impl FlatFiles {
 fn value_convert(value: Value) -> String {
     match value {
         Value::String(val) => {
-            format!("{}", val)
+            val
         }
         Value::Null => {
             format!("")
         }
         Value::Number(num) => {
-            format!("{}", num)
+            num.to_string()
         }
         Value::Bool(bool) => {
-            format!("{}", bool)
+            bool.to_string()
         }
         Value::Array(_) => {
             format!("{}", value)
