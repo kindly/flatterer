@@ -416,27 +416,27 @@ impl FlatFiles {
         if one_to_many_full_paths.len() == 0 {
             obj.insert(
                 String::from("_link"),
-                Value::String(format!("{}", self.row_number)),
+                Value::String(self.row_number.to_string()),
             );
         }
 
         while let Some((full, no_index)) = path_iter.next() {
             if path_iter.peek().is_some() {
                 obj.insert(
-                    format!("_link_{}", no_index.iter().join("_")),
-                    Value::String(format!("{}.{}", self.row_number, full.iter().join("."))),
+                    ["_link_".to_string(), no_index.iter().join("_")].concat(),
+                    Value::String([self.row_number.to_string(), ".".to_string(), full.iter().join(".")].concat()),
                 );
             } else {
                 obj.insert(
                     String::from("_link"),
-                    Value::String(format!("{}.{}", self.row_number, full.iter().join("."))),
+                    Value::String([self.row_number.to_string(), ".".to_string(), full.iter().join(".")].concat()),
                 );
             }
         }
 
         obj.insert(
-            format!("_link_{}", self.main_table_name),
-            Value::String(format!("{}", self.row_number)),
+            ["_link_", &self.main_table_name].concat(),
+            Value::String(self.row_number.to_string()),
         );
 
         let mut table_name = no_index_path.join("_");
@@ -605,7 +605,7 @@ fn value_convert(value: Value) -> String {
             val
         }
         Value::Null => {
-            format!("")
+            "".to_string()
         }
         Value::Number(num) => {
             num.to_string()
