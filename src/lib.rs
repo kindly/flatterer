@@ -11,6 +11,8 @@ use std::error::Error;
 use yajlish::Parser;
 use yajlish::ndjson_handler::{NdJsonHandler, Selector};
 use std::convert::TryInto;
+use smallvec::{SmallVec, smallvec};
+use regex::Regex;
 
 use crossbeam_channel::{bounded, Sender, Receiver};
 
@@ -197,6 +199,7 @@ pub struct FlatFiles {
     main_table_name: String,
     emit_obj: Vec<Vec<String>>,
     row_number: u128,
+    date_regexp: Regex,
     table_rows: HashMap<String, Vec<Map<String, Value>>>,
     tmp_csvs: HashMap<String, csv::Writer<File>>,
     table_metadata: HashMap<String, TableMetadata>,
@@ -264,6 +267,7 @@ impl FlatFiles {
             main_table_name,
             emit_obj,
             row_number: 1,
+            date_regexp: Regex::new(r"^([1-3]\d{3})-(\d{2})-(\d{2})([T ](\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)((-(\d{2}):(\d{2})|Z)?))?$").unwrap(),
             table_rows: HashMap::new(),
             tmp_csvs: HashMap::new(),
             table_metadata: HashMap::new(),
@@ -304,6 +308,7 @@ impl FlatFiles {
                 } else if arr_length == 0 {
                     to_delete.push(key.clone());
                 } else if obj_count == arr_length {
+                    to_delete.push(key.clone());
                     let mut removed_array = value.take(); // obj.remove(&key).unwrap(); //key known
                     let my_array = removed_array.as_array_mut().unwrap(); //key known as array
                     for (i, array_value) in my_array.iter_mut().enumerate() {
@@ -343,6 +348,7 @@ impl FlatFiles {
             if value.is_object() {
 
                 let my_value = value.take();
+                to_delete.push(key.clone());
                 //obj.remove(&key).unwrap(); //key known
 
                 let mut new_full_path = full_path.clone();
@@ -475,20 +481,25 @@ impl FlatFiles {
             let writer = self.tmp_csvs.get_mut(table).unwrap(); //key known
 
             for row in rows {
-                let mut output_row = vec![];
+                let mut output_row: SmallVec<[String; 30]> = smallvec![];
                 for field in table_metadata.fields.iter() {
-                    if let Some(value) = row.remove(field) {
-                        //output_row.push(value_convert(value, &table_metadata.output_fields));
-                        output_row.push(value_convert(value));
+                    if let Some(value) = row.get_mut(field) {
+                        let mut field_metadata = table_metadata.output_fields.get_mut(field).unwrap(); //known to exist
+                        output_row.push(value_convert(value.take(), &mut field_metadata, &self.date_regexp));
+                        //output_row.push(value_convert(value.take()));
                     } else {
-                        output_row.push(format!(""));
+                        output_row.push("".to_string());
                     }
                 }
                 for (key, value) in row {
-                    table_metadata.fields.push(key.clone());
-                    output_row.push(value_convert(value.take()));
+                    if !table_metadata.fields.contains(key) {
+                        table_metadata.fields.push(key.clone());
+                        let mut field_metadata = HashMap::with_capacity(30);
+                        output_row.push(value_convert(value.take(), &mut field_metadata, &self.date_regexp));
+                        table_metadata.output_fields.insert(key.clone(), field_metadata);
+                    }
                 }
-                writer.write_record(output_row)?;
+                writer.write_record(&output_row)?;
             }
         }
         Ok(())
@@ -598,25 +609,49 @@ impl FlatFiles {
 
 }
 
-//fn value_convert(value: Value, mut output_fields: &IndexMap<String, IndexMap<String, String>>) -> String {
-fn value_convert(value: Value) -> String {
+
+fn value_convert(value: Value, output_fields: &mut HashMap<String, String>, date_re: &Regex) -> String {
+    let value_type = output_fields.get("type");
+
     match value {
         Value::String(val) => {
+            if value_type != Some(&"text".to_string()) {
+                if date_re.is_match(&val) {
+                    output_fields.insert("type".to_string(), "date".to_string());
+                } else {
+                    output_fields.insert("type".to_string(), "text".to_string());
+                }
+            }
             val
         }
         Value::Null => {
+            if value_type != Some(&"text".to_string()) {
+                output_fields.insert("type".to_string(), "null".to_string());
+            }
             "".to_string()
         }
         Value::Number(num) => {
+            if value_type != Some(&"text".to_string()) {
+                output_fields.insert("type".to_string(), "number".to_string());
+            }
             num.to_string()
         }
         Value::Bool(bool) => {
+            if value_type != Some(&"text".to_string()) {
+                output_fields.insert("type".to_string(), "boolean".to_string());
+            }
             bool.to_string()
         }
         Value::Array(_) => {
+            if value_type != Some(&"text".to_string()) {
+                output_fields.insert("type".to_string(), "text".to_string());
+            }
             format!("{}", value)
         }
         Value::Object(_) => {
+            if value_type != Some(&"text".to_string()) {
+                output_fields.insert("type".to_string(), "text".to_string());
+            }
             format!("{}", value)
         }
     }

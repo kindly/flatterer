@@ -18,6 +18,8 @@ pyo3 = {version = "0.14.1", features = ["extension-module"] }
 #xlsxwriter = {path = "../xlsxwriter-rs/libxlsxwriter"}
 xlsxwriter = "0.3.4"
 crossbeam-channel="0.5.1"
+smallvec="1.6.1"
+regex="1"
 
 [profile.release]
 debug = true
