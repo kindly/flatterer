@@ -578,8 +578,7 @@ impl FlatFiles {
  
         let tmp_path = self.output_path.join("tmp");
 
-        //let workbook = Workbook::new_opt(&self.output_path.join("output.xlsx").to_string_lossy(), true, Some("/tmp"), true);
-        let workbook = Workbook::new(&self.output_path.join("output.xlsx").to_string_lossy());
+        let workbook = Workbook::new_with_options(&self.output_path.join("output.xlsx").to_string_lossy(), true, Some(&tmp_path.to_string_lossy()), false);
 
         for table_name in self.tmp_csvs.keys() {
             let mut worksheet = workbook.add_worksheet(Some(&table_name))?;
