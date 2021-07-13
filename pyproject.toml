@@ -1,0 +1,7 @@
+[project]
+name="flatterer"
+dependencies = ["ojson", "ijson"]
+
+[build-system]
+requires = ["maturin>=0.11,<0.12"]
+build-backend = "maturin"

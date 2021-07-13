@@ -89,10 +89,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
     #[pyfn(m)]
     fn iterator_flatten_rs(py: Python,
-                           csv: bool,
-                           xlsx: bool,
                            mut objs: &PyIterator,
                            output_dir: String,
+                           csv: bool,
+                           xlsx: bool,
                            main_table_name: String,
                            emit_path: Vec<Vec<String>>,
                            force: bool) -> PyResult<()> {
