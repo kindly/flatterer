@@ -1,5 +1,5 @@
 use csv::{ReaderBuilder, WriterBuilder};
-use itertools::Itertools;
+use itertools::{Itertools, izip};
 use serde::Serialize;
 use serde_json::{json, Map, Value, Deserializer};
 use std::collections::HashMap;
@@ -207,8 +207,9 @@ pub struct FlatFiles {
 
 #[derive(Serialize, Debug)]
 pub struct TableMetadata {
-    output_fields: HashMap<String, HashMap<String, String>>,
+    field_type: Vec<String>,
     fields: Vec<String>,
+    field_counts: Vec<u32>,
 }
 
 struct JLWriter {
@@ -349,7 +350,6 @@ impl FlatFiles {
 
                 let my_value = value.take();
                 to_delete.push(key.clone());
-                //obj.remove(&key).unwrap(); //key known
 
                 let mut new_full_path = full_path.clone();
                 new_full_path.push(PathItem::Key(key.clone()));
@@ -472,7 +472,8 @@ impl FlatFiles {
                     table.clone(),
                     TableMetadata {
                         fields: vec![],
-                        output_fields: HashMap::new(),
+                        field_counts: vec![],
+                        field_type: vec![],
                     },
                 );
             }
@@ -482,11 +483,10 @@ impl FlatFiles {
 
             for row in rows {
                 let mut output_row: SmallVec<[String; 30]> = smallvec![];
-                for field in table_metadata.fields.iter() {
+                for (num, field) in table_metadata.fields.iter().enumerate() {
                     if let Some(value) = row.get_mut(field) {
-                        let mut field_metadata = table_metadata.output_fields.get_mut(field).unwrap(); //known to exist
-                        output_row.push(value_convert(value.take(), &mut field_metadata, &self.date_regexp));
-                        //output_row.push(value_convert(value.take()));
+                        table_metadata.field_counts[num] += 1;
+                        output_row.push(value_convert(value.take(), &mut table_metadata.field_type, num, &self.date_regexp));
                     } else {
                         output_row.push("".to_string());
                     }
@@ -494,9 +494,9 @@ impl FlatFiles {
                 for (key, value) in row {
                     if !table_metadata.fields.contains(key) {
                         table_metadata.fields.push(key.clone());
-                        let mut field_metadata = HashMap::with_capacity(30);
-                        output_row.push(value_convert(value.take(), &mut field_metadata, &self.date_regexp));
-                        table_metadata.output_fields.insert(key.clone(), field_metadata);
+                        table_metadata.field_counts.push(1);
+                        table_metadata.field_type.push("".to_string());
+                        output_row.push(value_convert(value.take(), &mut table_metadata.field_type, table_metadata.fields.len() - 1, &self.date_regexp));
                     }
                 }
                 writer.write_record(&output_row)?;
@@ -534,8 +534,43 @@ impl FlatFiles {
         let tmp_path = self.output_path.join("tmp");
         remove_dir_all(&tmp_path)?;
 
-        let metadata_file = File::create(self.output_path.join("table_metadata.json"))?;
-        serde_json::to_writer_pretty(metadata_file, &self.table_metadata)?;
+        let metadata_file = File::create(self.output_path.join("data_package.json"))?;
+
+        let mut resources = vec![];
+
+        for (table_name, metadata) in &self.table_metadata {
+            let mut fields = vec![];
+
+            for (field, field_type, count) in izip!(&metadata.fields, &metadata.field_type, &metadata.field_counts) {
+                let field = json!({
+                    "name": field,
+                    "type": field_type,
+                    "count": count,
+                });
+                fields.push(field);
+            };
+
+            let mut resource = json!({
+                "profile": "tabular-data-resource",
+                "name": table_name,
+                "schema": {
+                    "fields": fields,
+                    "primaryKey": "_link"
+                }
+            });
+            if self.csv {
+                resource.as_object_mut().unwrap().insert("path".to_string(), Value::String(format!("csv/{}.csv", table_name)));
+            }
+
+            resources.push(resource)
+        }
+
+        let data_package = json!({
+            "profile": "tabular-data-package",
+            "resources": resources
+        });
+
+        serde_json::to_writer_pretty(metadata_file, &data_package)?;
 
         Ok(())
     }
@@ -597,7 +632,15 @@ impl FlatFiles {
             for (row_num, row) in csv_reader.into_records().enumerate() {
                 let this_row = row?;
                 for (col_num, cell) in this_row.iter().enumerate() {
-                    worksheet.write_string((row_num + 1).try_into()?, col_num.try_into()?, cell, None)?
+                    if metadata.field_type[col_num] == "number" {
+                        if let Ok(number) = cell.parse::<f64>() {
+                            worksheet.write_number((row_num + 1).try_into()?, col_num.try_into()?, number, None)?;
+                        } else {
+                            worksheet.write_string((row_num + 1).try_into()?, col_num.try_into()?, cell, None)?;
+                        };
+                    } else {
+                        worksheet.write_string((row_num + 1).try_into()?, col_num.try_into()?, cell, None)?;
+                    }
                 }
             }
         }
@@ -609,47 +652,48 @@ impl FlatFiles {
 }
 
 
-fn value_convert(value: Value, output_fields: &mut HashMap<String, String>, date_re: &Regex) -> String {
-    let value_type = output_fields.get("type");
+fn value_convert(value: Value, field_type: &mut Vec<String>, num: usize, date_re: &Regex) -> String {
+    //let value_type = output_fields.get("type");
+    let value_type = &field_type[num];
 
     match value {
         Value::String(val) => {
-            if value_type != Some(&"text".to_string()) {
+            if value_type != &"text".to_string() {
                 if date_re.is_match(&val) {
-                    output_fields.insert("type".to_string(), "date".to_string());
+                    field_type[num] = "date".to_string();
                 } else {
-                    output_fields.insert("type".to_string(), "text".to_string());
+                    field_type[num] = "text".to_string();
                 }
             }
             val
         }
         Value::Null => {
-            if value_type != Some(&"text".to_string()) {
-                output_fields.insert("type".to_string(), "null".to_string());
+            if value_type == &"".to_string() {
+                field_type[num] = "null".to_string();
             }
             "".to_string()
         }
-        Value::Number(num) => {
-            if value_type != Some(&"text".to_string()) {
-                output_fields.insert("type".to_string(), "number".to_string());
+        Value::Number(number) => {
+            if value_type != &"text".to_string() {
+                field_type[num] = "number".to_string();
             }
-            num.to_string()
+            number.to_string()
         }
         Value::Bool(bool) => {
-            if value_type != Some(&"text".to_string()) {
-                output_fields.insert("type".to_string(), "boolean".to_string());
+            if value_type != &"text".to_string() {
+                field_type[num] = "boolean".to_string();
             }
             bool.to_string()
         }
         Value::Array(_) => {
-            if value_type != Some(&"text".to_string()) {
-                output_fields.insert("type".to_string(), "text".to_string());
+            if value_type != &"text".to_string() {
+                field_type[num] = "text".to_string();
             }
             format!("{}", value)
         }
         Value::Object(_) => {
-            if value_type != Some(&"text".to_string()) {
-                output_fields.insert("type".to_string(), "text".to_string());
+            if value_type != &"text".to_string() {
+                field_type[num] = "text".to_string();
             }
             format!("{}", value)
         }
