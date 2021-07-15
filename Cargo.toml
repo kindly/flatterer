@@ -15,7 +15,6 @@ csv = "1"
 clap = "2"
 serde = {version = "1", features = ["derive"] }
 pyo3 = {version = "0.14.1", features = ["extension-module"] }
-#xlsxwriter = {path = "../xlsxwriter-rs/libxlsxwriter"}
 xlsxwriter = "0.3.5"
 crossbeam-channel="0.5.1"
 smallvec="1.6.1"

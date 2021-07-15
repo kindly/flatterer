@@ -1,51 +1,47 @@
-use csv::{ReaderBuilder, WriterBuilder};
-use itertools::{Itertools, izip};
-use serde::Serialize;
-use serde_json::{json, Map, Value, Deserializer};
 use std::collections::HashMap;
+use std::convert::TryInto;
+use std::error::Error;
 use std::fmt;
 use std::fs::{create_dir_all, remove_dir_all, File};
+use std::io::{self, BufReader, Error as IoError, ErrorKind, Read, Write};
 use std::path::PathBuf;
-use std::io::{ErrorKind, Error as IoError, Write, Read, self, BufReader};
-use std::error::Error;
-use yajlish::Parser;
-use yajlish::ndjson_handler::{NdJsonHandler, Selector};
-use std::convert::TryInto;
-use smallvec::{SmallVec, smallvec};
-use regex::Regex;
-
-use crossbeam_channel::{bounded, Sender, Receiver};
-
-use xlsxwriter::{Workbook};
-
 use std::thread;
 
+use crossbeam_channel::{bounded, Receiver, Sender};
+use csv::{ReaderBuilder, WriterBuilder};
+use itertools::{izip, Itertools};
 use pyo3::prelude::*;
 use pyo3::types::PyIterator;
-
+use regex::Regex;
+use serde::Serialize;
+use serde_json::{json, Deserializer, Map, Value};
+use smallvec::{smallvec, SmallVec};
+use xlsxwriter::Workbook;
+use yajlish::ndjson_handler::{NdJsonHandler, Selector};
+use yajlish::Parser;
 
 #[pymodule]
 fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
-
     #[pyfn(m)]
-    fn flatten_rs(_py: Python,
-                  input_file: String,
-                  output_dir: String,
-                  csv: bool,
-                  xlsx: bool,
-                  path: String,
-                  main_table_name: String,
-                  emit_path: Vec<Vec<String>>,
-                  json_lines: bool,
-                  force: bool) -> PyResult<()> {
-
-        let flat_files_res = FlatFiles::new (
+    fn flatten_rs(
+        _py: Python,
+        input_file: String,
+        output_dir: String,
+        csv: bool,
+        xlsx: bool,
+        path: String,
+        main_table_name: String,
+        emit_path: Vec<Vec<String>>,
+        json_lines: bool,
+        force: bool,
+    ) -> PyResult<()> {
+        let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
             csv,
             xlsx,
             force,
             main_table_name,
-            emit_path
+            emit_path,
         );
 
         let mut selectors = vec![];
@@ -56,7 +52,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         if flat_files_res.is_err() {
             let err = flat_files_res.unwrap_err();
-            return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)))
+            return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                "{:?}",
+                err
+            )));
         }
 
         let flat_files = flat_files_res.unwrap(); //already checked error
@@ -68,47 +67,58 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
                 file = BufReader::new(input);
             }
             Err(err) => {
-                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)));
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                    "{:?}",
+                    err
+                )));
             }
         };
 
         if json_lines {
             if let Err(err) = flatten_from_jl(file, flat_files) {
-                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)));
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                    "{:?}",
+                    err
+                )));
             }
-
         } else {
             if let Err(err) = flatten(file, flat_files, selectors) {
-                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)));
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                    "{:?}",
+                    err
+                )));
             }
         }
 
         Ok(())
-
     }
 
     #[pyfn(m)]
-    fn iterator_flatten_rs(py: Python,
-                           mut objs: &PyIterator,
-                           output_dir: String,
-                           csv: bool,
-                           xlsx: bool,
-                           main_table_name: String,
-                           emit_path: Vec<Vec<String>>,
-                           force: bool) -> PyResult<()> {
-
-        let flat_files_res = FlatFiles::new (
+    fn iterator_flatten_rs(
+        py: Python,
+        mut objs: &PyIterator,
+        output_dir: String,
+        csv: bool,
+        xlsx: bool,
+        main_table_name: String,
+        emit_path: Vec<Vec<String>>,
+        force: bool,
+    ) -> PyResult<()> {
+        let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
             csv,
             xlsx,
             force,
             main_table_name,
-            emit_path
+            emit_path,
         );
 
         if flat_files_res.is_err() {
             let err = flat_files_res.unwrap_err();
-            return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)))
+            return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                "{:?}",
+                err
+            )));
         }
 
         let mut flat_files = flat_files_res.unwrap(); //already checked error
@@ -118,12 +128,24 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         let handler = thread::spawn(move || -> PyResult<()> {
             for value in receiver {
                 if let Err(err) = flat_files.process_value(value) {
-                    return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)))
+                    return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                        "{:?}",
+                        err
+                    )));
+                }
+                if let Err(err) = flat_files.create_rows() {
+                    return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                        "{:?}",
+                        err
+                    )));
                 }
             }
 
             if let Err(err) = flat_files.write_files() {
-                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)))
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                    "{:?}",
+                    err
+                )));
             }
             Ok(())
         });
@@ -131,10 +153,14 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         let mut gilpool;
 
         loop {
-            unsafe {gilpool = py.new_pool();}
+            unsafe {
+                gilpool = py.new_pool();
+            }
 
             let obj = objs.next();
-            if obj.is_none() { break }
+            if obj.is_none() {
+                break;
+            }
 
             let result = obj.unwrap(); //checked for none
 
@@ -143,11 +169,17 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             match serde_json::from_slice::<Value>(&json_bytes) {
                 Ok(value) => {
                     if let Err(err) = sender.send(value) {
-                        return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)))
+                        return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                            "{:?}",
+                            err
+                        )));
                     }
                 }
                 Err(err) => {
-                    return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)))
+                    return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                        "{:?}",
+                        err
+                    )))
                 }
             }
 
@@ -159,11 +191,17 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         match handler.join() {
             Ok(result) => {
                 if let Err(err) = result {
-                    return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)))
+                    return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                        "{:?}",
+                        err
+                    )));
                 }
             }
             Err(err) => {
-                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!("{:?}", err)))
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                    "{:?}",
+                    err
+                )))
             }
         }
         Ok(())
@@ -171,9 +209,6 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
     Ok(())
 }
-
-
-
 
 #[derive(Clone, Debug)]
 pub enum PathItem {
@@ -189,7 +224,6 @@ impl fmt::Display for PathItem {
         }
     }
 }
-
 
 #[derive(Debug)]
 pub struct FlatFiles {
@@ -233,24 +267,24 @@ impl Write for JLWriter {
     }
 }
 
-
 impl FlatFiles {
-
-    pub fn new (
+    pub fn new(
         output_dir: String,
         csv: bool,
         xlsx: bool,
         force: bool,
         main_table_name: String,
         emit_obj: Vec<Vec<String>>,
-        ) ->  Result<FlatFiles, IoError> {
-
+    ) -> Result<FlatFiles, IoError> {
         let output_path = PathBuf::from(output_dir.clone());
         if output_path.is_dir() {
             if force {
                 remove_dir_all(&output_path)?;
             } else {
-                return Err(IoError::new(ErrorKind::AlreadyExists, format!("Directory {} already exists", output_dir)))
+                return Err(IoError::new(
+                    ErrorKind::AlreadyExists,
+                    format!("Directory {} already exists", output_dir),
+                ));
             }
         }
         if csv {
@@ -343,11 +377,9 @@ impl FlatFiles {
                     let json_value = json!(format!("{}", value));
                     to_insert.push((key.clone(), json_value));
                 }
-
             }
 
             if value.is_object() {
-
                 let my_value = value.take();
                 to_delete.push(key.clone());
 
@@ -393,7 +425,6 @@ impl FlatFiles {
             obj.insert(key, value);
         }
 
-
         if emit {
             self.process_obj(
                 obj,
@@ -430,12 +461,26 @@ impl FlatFiles {
             if path_iter.peek().is_some() {
                 obj.insert(
                     ["_link_".to_string(), no_index.iter().join("_")].concat(),
-                    Value::String([self.row_number.to_string(), ".".to_string(), full.iter().join(".")].concat()),
+                    Value::String(
+                        [
+                            self.row_number.to_string(),
+                            ".".to_string(),
+                            full.iter().join("."),
+                        ]
+                        .concat(),
+                    ),
                 );
             } else {
                 obj.insert(
                     String::from("_link"),
-                    Value::String([self.row_number.to_string(), ".".to_string(), full.iter().join(".")].concat()),
+                    Value::String(
+                        [
+                            self.row_number.to_string(),
+                            ".".to_string(),
+                            full.iter().join("."),
+                        ]
+                        .concat(),
+                    ),
                 );
             }
         }
@@ -486,7 +531,12 @@ impl FlatFiles {
                 for (num, field) in table_metadata.fields.iter().enumerate() {
                     if let Some(value) = row.get_mut(field) {
                         table_metadata.field_counts[num] += 1;
-                        output_row.push(value_convert(value.take(), &mut table_metadata.field_type, num, &self.date_regexp));
+                        output_row.push(value_convert(
+                            value.take(),
+                            &mut table_metadata.field_type,
+                            num,
+                            &self.date_regexp,
+                        ));
                     } else {
                         output_row.push("".to_string());
                     }
@@ -496,11 +546,19 @@ impl FlatFiles {
                         table_metadata.fields.push(key.clone());
                         table_metadata.field_counts.push(1);
                         table_metadata.field_type.push("".to_string());
-                        output_row.push(value_convert(value.take(), &mut table_metadata.field_type, table_metadata.fields.len() - 1, &self.date_regexp));
+                        output_row.push(value_convert(
+                            value.take(),
+                            &mut table_metadata.field_type,
+                            table_metadata.fields.len() - 1,
+                            &self.date_regexp,
+                        ));
                     }
                 }
                 writer.write_record(&output_row)?;
             }
+        }
+        for val in self.table_rows.values_mut() {
+            val.clear();
         }
         Ok(())
     }
@@ -510,14 +568,10 @@ impl FlatFiles {
             self.handle_obj(obj, true, vec![], vec![], vec![], vec![]);
             self.row_number += 1;
         }
-        self.create_rows()?;
-        for val in self.table_rows.values_mut() {
-            val.clear();
-        }
-        return Ok(())
+        return Ok(());
     }
 
-    pub fn write_files(&mut self) -> Result<(), Box<dyn Error>>{
+    pub fn write_files(&mut self) -> Result<(), Box<dyn Error>> {
         for tmp_csv in self.tmp_csvs.values_mut() {
             tmp_csv.flush()?;
         }
@@ -530,7 +584,6 @@ impl FlatFiles {
             self.write_xlsx()?;
         };
 
-
         let tmp_path = self.output_path.join("tmp");
         remove_dir_all(&tmp_path)?;
 
@@ -541,14 +594,18 @@ impl FlatFiles {
         for (table_name, metadata) in &self.table_metadata {
             let mut fields = vec![];
 
-            for (field, field_type, count) in izip!(&metadata.fields, &metadata.field_type, &metadata.field_counts) {
+            for (field, field_type, count) in izip!(
+                &metadata.fields,
+                &metadata.field_type,
+                &metadata.field_counts
+            ) {
                 let field = json!({
                     "name": field,
                     "type": field_type,
                     "count": count,
                 });
                 fields.push(field);
-            };
+            }
 
             let mut resource = json!({
                 "profile": "tabular-data-resource",
@@ -559,7 +616,10 @@ impl FlatFiles {
                 }
             });
             if self.csv {
-                resource.as_object_mut().unwrap().insert("path".to_string(), Value::String(format!("csv/{}.csv", table_name)));
+                resource.as_object_mut().unwrap().insert(
+                    "path".to_string(),
+                    Value::String(format!("csv/{}.csv", table_name)),
+                );
             }
 
             resources.push(resource)
@@ -575,13 +635,11 @@ impl FlatFiles {
         Ok(())
     }
 
-    pub fn write_csvs(&mut self) -> Result<(), Box<dyn Error>>{
- 
+    pub fn write_csvs(&mut self) -> Result<(), Box<dyn Error>> {
         let tmp_path = self.output_path.join("tmp");
         let csv_path = self.output_path.join("csv");
 
         for table_name in self.tmp_csvs.keys() {
-
             let metadata = self.table_metadata.get(table_name).unwrap(); //key known
 
             let csv_reader = ReaderBuilder::new()
@@ -589,9 +647,8 @@ impl FlatFiles {
                 .flexible(true)
                 .from_path(tmp_path.join(format!("{}.csv", table_name)))?;
 
-
-            let mut csv_writer = WriterBuilder::new()
-                .from_path(csv_path.join(format!("{}.csv", table_name)))?;
+            let mut csv_writer =
+                WriterBuilder::new().from_path(csv_path.join(format!("{}.csv", table_name)))?;
 
             let field_count = &metadata.fields.len();
 
@@ -606,14 +663,18 @@ impl FlatFiles {
             }
         }
 
-        return Ok(())
+        return Ok(());
     }
 
-    pub fn write_xlsx(&mut self) -> Result<(), Box<dyn Error>>{
- 
+    pub fn write_xlsx(&mut self) -> Result<(), Box<dyn Error>> {
         let tmp_path = self.output_path.join("tmp");
 
-        let workbook = Workbook::new_with_options(&self.output_path.join("output.xlsx").to_string_lossy(), true, Some(&tmp_path.to_string_lossy()), false);
+        let workbook = Workbook::new_with_options(
+            &self.output_path.join("output.xlsx").to_string_lossy(),
+            true,
+            Some(&tmp_path.to_string_lossy()),
+            false,
+        );
 
         for table_name in self.tmp_csvs.keys() {
             let mut worksheet = workbook.add_worksheet(Some(&table_name))?;
@@ -628,31 +689,48 @@ impl FlatFiles {
                 worksheet.write_string(0, num.try_into()?, &field, None)?
             }
 
-
             for (row_num, row) in csv_reader.into_records().enumerate() {
                 let this_row = row?;
                 for (col_num, cell) in this_row.iter().enumerate() {
                     if metadata.field_type[col_num] == "number" {
                         if let Ok(number) = cell.parse::<f64>() {
-                            worksheet.write_number((row_num + 1).try_into()?, col_num.try_into()?, number, None)?;
+                            worksheet.write_number(
+                                (row_num + 1).try_into()?,
+                                col_num.try_into()?,
+                                number,
+                                None,
+                            )?;
                         } else {
-                            worksheet.write_string((row_num + 1).try_into()?, col_num.try_into()?, cell, None)?;
+                            worksheet.write_string(
+                                (row_num + 1).try_into()?,
+                                col_num.try_into()?,
+                                cell,
+                                None,
+                            )?;
                         };
                     } else {
-                        worksheet.write_string((row_num + 1).try_into()?, col_num.try_into()?, cell, None)?;
+                        worksheet.write_string(
+                            (row_num + 1).try_into()?,
+                            col_num.try_into()?,
+                            cell,
+                            None,
+                        )?;
                     }
                 }
             }
         }
         workbook.close()?;
 
-        return Ok(())
+        return Ok(());
     }
-
 }
 
-
-fn value_convert(value: Value, field_type: &mut Vec<String>, num: usize, date_re: &Regex) -> String {
+fn value_convert(
+    value: Value,
+    field_type: &mut Vec<String>,
+    num: usize,
+    date_re: &Regex,
+) -> String {
     //let value_type = output_fields.get("type");
     let value_type = &field_type[num];
 
@@ -701,17 +779,19 @@ fn value_convert(value: Value, field_type: &mut Vec<String>, num: usize, date_re
 }
 
 pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(), String> {
-
     let (value_sender, value_receiver) = bounded(1000);
 
     let thread = thread::spawn(move || -> Result<(), String> {
         for value in value_receiver {
             if let Err(error) = flat_files.process_value(value) {
-                return Err(format!("{:?}", error))
+                return Err(format!("{:?}", error));
+            }
+            if let Err(error) = flat_files.create_rows() {
+                return Err(format!("{:?}", error));
             }
         }
         if let Err(error) = flat_files.write_files() {
-            return Err(format!("{:?}", error))
+            return Err(format!("{:?}", error));
         };
         Ok(())
     });
@@ -721,12 +801,10 @@ pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(
         match value_result {
             Ok(value) => {
                 if let Err(error) = value_sender.send(value) {
-                    return Err(format!("{:?}", error))
+                    return Err(format!("{:?}", error));
                 }
             }
-            Err(error) => { 
-                return Err(format!("{:?}", error))
-            }
+            Err(error) => return Err(format!("{:?}", error)),
         }
     }
     drop(value_sender);
@@ -734,36 +812,41 @@ pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(
     match thread.join() {
         Ok(result) => {
             if let Err(err) = result {
-                return Err(format!("{:?}", err))
+                return Err(format!("{:?}", err));
             }
         }
-        Err(err) => {
-            return Err(format!("{:?}", err))
-        }
+        Err(err) => return Err(format!("{:?}", err)),
     }
 
     Ok(())
 }
 
-pub fn flatten<R: Read>(mut input: BufReader<R>, mut flat_files: FlatFiles, selectors: Vec<Selector>) -> Result<(), String> {
-
+pub fn flatten<R: Read>(
+    mut input: BufReader<R>,
+    mut flat_files: FlatFiles,
+    selectors: Vec<Selector>,
+) -> Result<(), String> {
     let (buf_sender, buf_receiver): (Sender<Vec<u8>>, Receiver<Vec<u8>>) = bounded(1000);
 
-    let thread = thread::spawn(move || -> Result<(), String>{
+    let thread = thread::spawn(move || -> Result<(), String> {
         for buf in buf_receiver.iter() {
             match serde_json::from_slice::<Value>(&buf) {
                 Ok(value) => {
                     if let Err(error) = flat_files.process_value(value) {
-                        return Err(format!("{:?}", error))
+                        return Err(format!("{:?}", error));
+                    }
+                    if let Err(error) = flat_files.create_rows() {
+                        return Err(format!("{:?}", error));
                     }
                 }
-                Err(error) => {
-                    return Err(format!("{:?}", error))
-                }
+                Err(error) => return Err(format!("{:?}", error)),
             }
         }
+        if let Err(error) = flat_files.create_rows() {
+            return Err(format!("{:?}", error));
+        }
         if let Err(error) = flat_files.write_files() {
-            return Err(format!("{:?}", error))
+            return Err(format!("{:?}", error));
         };
         Ok(())
     });
@@ -777,7 +860,7 @@ pub fn flatten<R: Read>(mut input: BufReader<R>, mut flat_files: FlatFiles, sele
     let mut parser = Parser::new(&mut handler);
 
     if let Err(error) = parser.parse(&mut input) {
-        return Err(format!("{:?}", error))
+        return Err(format!("{:?}", error));
     }
 
     drop(jl_writer);
@@ -785,13 +868,114 @@ pub fn flatten<R: Read>(mut input: BufReader<R>, mut flat_files: FlatFiles, sele
     match thread.join() {
         Ok(result) => {
             if let Err(err) = result {
-                return Err(format!("{:?}", err))
+                return Err(format!("{:?}", err));
             }
         }
-        Err(err) => {
-            return Err(format!("{:?}", err))
-        }
+        Err(err) => return Err(format!("{:?}", err)),
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempfile::TempDir;
+
+    #[test]
+    fn check_nesting() {
+        let myjson = json!({
+            "a": "a",
+            "c": ["a", "b", "c"],
+            "d": {"da": "da", "db": "2005-01-01"},
+            "e": [{"ea": 1, "eb": "eb2"},
+                  {"ea": 2, "eb": "eb2"}],
+        });
+
+        let tmp_dir = TempDir::new().unwrap();
+
+        let mut flat_files = FlatFiles::new(
+            tmp_dir.path().join("output").to_string_lossy().into_owned(),
+            true,
+            true,
+            true,
+            "main".to_string(),
+            vec![],
+        )
+        .unwrap();
+
+        flat_files.process_value(myjson.clone()).unwrap();
+
+        let expected_table_rows = json!({
+          "e": [
+            {
+              "_link": "1.e.0",
+              "_link_main": "1",
+              "ea": 1,
+              "eb": "eb2"
+            },
+            {
+              "_link": "1.e.1",
+              "_link_main": "1",
+              "ea": 2,
+              "eb": "eb2"
+            }
+          ],
+          "main": [
+            {
+              "_link": "1",
+              "_link_main": "1",
+              "a": "a",
+              "c": "a,b,c",
+              "d_da": "da",
+              "d_db": "2005-01-01"
+            }
+          ]
+        });
+
+        assert!(expected_table_rows == serde_json::to_value(&flat_files.table_rows).unwrap());
+
+        flat_files.create_rows().unwrap();
+
+        let expected_metadata = json!({
+          "main": {
+            "field_type": ["text","text","text","text","text","date"],
+            "fields": ["_link","_link_main","a","c","d_da","d_db"],
+            "field_counts": [1,1,1,1,1,1]
+          },
+          "e": {
+            "field_type": ["text","text","number","text"],
+            "fields": ["_link","_link_main","ea","eb"],
+            "field_counts": [2,2,2,2]
+          }
+        });
+
+        //println!("{}", serde_json::to_string_pretty(&flat_files.table_metadata).unwrap());
+        assert!(
+            json!({"e": [],"main": []}) == serde_json::to_value(&flat_files.table_rows).unwrap()
+        );
+        assert!(expected_metadata == serde_json::to_value(&flat_files.table_metadata).unwrap());
+
+        flat_files.process_value(myjson.clone()).unwrap();
+        flat_files.create_rows().unwrap();
+
+        let expected_metadata = json!({
+          "main": {
+            "field_type": ["text","text","text","text","text","date"],
+            "fields": ["_link","_link_main","a","c","d_da","d_db"],
+            "field_counts": [2,2,2,2,2,2]
+          },
+          "e": {
+            "field_type": ["text","text","number","text"],
+            "fields": ["_link","_link_main","ea","eb"],
+            "field_counts": [4,4,4,4]
+          }
+        });
+
+        //println!("{}", serde_json::to_string_pretty(&flat_files.table_metadata).unwrap());
+        assert!(
+            json!({"e": [],"main": []}) == serde_json::to_value(&flat_files.table_rows).unwrap()
+        );
+        assert!(expected_metadata == serde_json::to_value(&flat_files.table_metadata).unwrap());
+    }
 }
