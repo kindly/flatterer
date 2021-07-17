@@ -8,12 +8,12 @@ use std::path::PathBuf;
 use std::thread;
 
 use crossbeam_channel::{bounded, Receiver, Sender};
-use csv::{ReaderBuilder, WriterBuilder};
+use csv::{ReaderBuilder, WriterBuilder, Writer, Reader};
 use itertools::{izip, Itertools};
 use pyo3::prelude::*;
 use pyo3::types::PyIterator;
 use regex::Regex;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use serde_json::{json, Deserializer, Map, Value};
 use smallvec::{smallvec, SmallVec};
 use xlsxwriter::Workbook;
@@ -34,6 +34,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         emit_path: Vec<Vec<String>>,
         json_lines: bool,
         force: bool,
+        fields: String,
+        only_fields: bool,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
@@ -58,7 +60,16 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             )));
         }
 
-        let flat_files = flat_files_res.unwrap(); //already checked error
+        let mut flat_files = flat_files_res.unwrap(); //already checked error
+
+        if fields != "" {
+            if let Err(err) = flat_files.use_fields_csv(fields, only_fields) {
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                    "{:?}",
+                    err
+                )));
+            }
+        }
 
         let file;
 
@@ -103,6 +114,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         main_table_name: String,
         emit_path: Vec<Vec<String>>,
         force: bool,
+        fields: String,
+        only_fields: bool,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
@@ -122,6 +135,15 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         }
 
         let mut flat_files = flat_files_res.unwrap(); //already checked error
+
+        if fields != "" {
+            if let Err(err) = flat_files.use_fields_csv(fields, only_fields) {
+                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                    "{:?}",
+                    err
+                )));
+            }
+        }
 
         let (sender, receiver) = bounded(1000);
 
@@ -237,6 +259,7 @@ pub struct FlatFiles {
     table_rows: HashMap<String, Vec<Map<String, Value>>>,
     tmp_csvs: HashMap<String, csv::Writer<File>>,
     table_metadata: HashMap<String, TableMetadata>,
+    only_fields: bool,
 }
 
 #[derive(Serialize, Debug)]
@@ -244,6 +267,15 @@ pub struct TableMetadata {
     field_type: Vec<String>,
     fields: Vec<String>,
     field_counts: Vec<u32>,
+    rows: u32,
+}
+
+#[derive(Debug, Deserialize)]
+struct FieldsRecord {
+    table_name: String,
+    field_name: String,
+    field_type: String,
+    count: String
 }
 
 struct JLWriter {
@@ -306,6 +338,7 @@ impl FlatFiles {
             table_rows: HashMap::new(),
             tmp_csvs: HashMap::new(),
             table_metadata: HashMap::new(),
+            only_fields: false,
         })
     }
 
@@ -513,12 +546,16 @@ impl FlatFiles {
                         .flexible(true)
                         .from_path(self.output_path.join(format!("tmp/{}.csv", table)))?,
                 );
+            }
+
+            if !self.table_metadata.contains_key(table) {
                 self.table_metadata.insert(
                     table.clone(),
                     TableMetadata {
                         fields: vec![],
                         field_counts: vec![],
                         field_type: vec![],
+                        rows: 0,
                     },
                 );
             }
@@ -542,7 +579,7 @@ impl FlatFiles {
                     }
                 }
                 for (key, value) in row {
-                    if !table_metadata.fields.contains(key) {
+                    if !table_metadata.fields.contains(key) && !self.only_fields {
                         table_metadata.fields.push(key.clone());
                         table_metadata.field_counts.push(1);
                         table_metadata.field_type.push("".to_string());
@@ -554,7 +591,11 @@ impl FlatFiles {
                         ));
                     }
                 }
-                writer.write_record(&output_row)?;
+                if output_row.len() > 0 {
+                    table_metadata.rows += 1;
+                    writer.write_record(&output_row)?;
+                }
+
             }
         }
         for val in self.table_rows.values_mut() {
@@ -568,6 +609,36 @@ impl FlatFiles {
             self.handle_obj(obj, true, vec![], vec![], vec![], vec![]);
             self.row_number += 1;
         }
+        return Ok(());
+    }
+
+    pub fn use_fields_csv(&mut self, filepath: String, only_fields: bool) -> Result<(), csv::Error> {
+        let mut fields_reader = Reader::from_path(filepath)?;
+
+        if only_fields {
+            self.only_fields = true;
+        }
+
+        for row in fields_reader.deserialize() {
+            let row: FieldsRecord = row?;
+
+            if !self.table_metadata.contains_key(&row.table_name) {
+                self.table_metadata.insert(
+                    row.table_name.clone(),
+                    TableMetadata {
+                        fields: vec![],
+                        field_counts: vec![],
+                        field_type: vec![],
+                        rows: 0
+                    },
+                );
+            }
+            let table_metadata = self.table_metadata.get_mut(&row.table_name).unwrap(); //key known
+            table_metadata.fields.push(row.field_name);
+            table_metadata.field_counts.push(0);
+            table_metadata.field_type.push(row.field_type);
+        };
+
         return Ok(());
     }
 
@@ -593,6 +664,9 @@ impl FlatFiles {
 
         for (table_name, metadata) in &self.table_metadata {
             let mut fields = vec![];
+            if metadata.rows == 0 {
+                continue
+            }
 
             for (field, field_type, count) in izip!(
                 &metadata.fields,
@@ -625,6 +699,19 @@ impl FlatFiles {
             resources.push(resource)
         }
 
+        let mut fields_writer = Writer::from_path(self.output_path.join("fields.csv"))?;
+
+        fields_writer.write_record(["table_name", "field_name", "field_type", "count"])?;
+        for (table_name, metadata) in &self.table_metadata {
+            for (field, field_type, count) in izip!(
+                &metadata.fields,
+                &metadata.field_type,
+                &metadata.field_counts
+            ) {
+                fields_writer.write_record([table_name, field, field_type, &count.to_string()])?;
+            }
+        }
+
         let data_package = json!({
             "profile": "tabular-data-package",
             "resources": resources
@@ -641,6 +728,9 @@ impl FlatFiles {
 
         for table_name in self.tmp_csvs.keys() {
             let metadata = self.table_metadata.get(table_name).unwrap(); //key known
+            if metadata.rows == 0 {
+                continue;
+            }
 
             let csv_reader = ReaderBuilder::new()
                 .has_headers(false)
@@ -663,7 +753,7 @@ impl FlatFiles {
             }
         }
 
-        return Ok(());
+        Ok(())
     }
 
     pub fn write_xlsx(&mut self) -> Result<(), Box<dyn Error>> {
@@ -677,8 +767,11 @@ impl FlatFiles {
         );
 
         for table_name in self.tmp_csvs.keys() {
-            let mut worksheet = workbook.add_worksheet(Some(&table_name))?;
             let metadata = self.table_metadata.get(table_name).unwrap(); //key known
+            if metadata.rows == 0 {
+                continue;
+            }
+            let mut worksheet = workbook.add_worksheet(Some(&table_name))?;
 
             let csv_reader = ReaderBuilder::new()
                 .has_headers(false)
