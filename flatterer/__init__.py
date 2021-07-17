@@ -90,4 +90,4 @@ def cli(
             json_lines=json_lines,
             force=force,
             fields=fields,
-            only_fields=fields)
+            only_fields=only_fields)
