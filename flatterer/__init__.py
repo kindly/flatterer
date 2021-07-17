@@ -64,7 +64,7 @@ def iterator_flatten(
               help='Is file a jsonlines file. Will ignore path if so')
 @click.option('--force', is_flag=True, default=False,
               help='Delete output directory if it exists, then run command')
-@click.option('--fields', '-f', default=None, help='fields file to use')
+@click.option('--fields', '-f', default="", help='fields file to use')
 @click.option('--only-fields', '-o', is_flag=True, default=False)
 @click.argument('input_file')
 @click.argument('output_directory')
