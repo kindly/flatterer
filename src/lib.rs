@@ -5,7 +5,7 @@ use std::fmt;
 use std::fs::{create_dir_all, remove_dir_all, File};
 use std::io::{self, BufReader, Error as IoError, ErrorKind, Read, Write};
 use std::path::PathBuf;
-use std::thread;
+use std::{thread, panic};
 
 use crossbeam_channel::{bounded, Receiver, Sender};
 use csv::{ReaderBuilder, WriterBuilder, Writer, Reader};
@@ -149,12 +149,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let handler = thread::spawn(move || -> PyResult<()> {
             for value in receiver {
-                if let Err(err) = flat_files.process_value(value) {
-                    return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
-                        "{:?}",
-                        err
-                    )));
-                }
+                flat_files.process_value(value);
                 if let Err(err) = flat_files.create_rows() {
                     return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                         "{:?}",
@@ -351,8 +346,8 @@ impl FlatFiles {
         one_to_many_full_paths: Vec<Vec<PathItem>>,
         one_to_many_no_index_paths: Vec<Vec<String>>,
     ) -> Option<Map<String, Value>> {
-        let mut to_insert: Vec<(String, Value)> = vec![];
-        let mut to_delete: Vec<String> = vec![];
+        let mut to_insert: SmallVec<[(String, Value); 30]> = smallvec![];
+        let mut to_delete: SmallVec<[String; 30]> = smallvec![];
         for (key, value) in obj.iter_mut() {
             if let Some(arr) = value.as_array() {
                 let mut str_count = 0;
@@ -537,7 +532,7 @@ impl FlatFiles {
         }
     }
 
-    pub fn create_rows(&mut self) -> Result<(), csv::Error> {
+    pub fn create_rows(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
         for (table, rows) in self.table_rows.iter_mut() {
             if !self.tmp_csvs.contains_key(table) {
                 self.tmp_csvs.insert(
@@ -604,12 +599,11 @@ impl FlatFiles {
         Ok(())
     }
 
-    pub fn process_value(&mut self, value: Value) -> Result<(), csv::Error> {
+    pub fn process_value(&mut self, value: Value) {
         if let Value::Object(obj) = value {
             self.handle_obj(obj, true, vec![], vec![], vec![], vec![]);
             self.row_number += 1;
         }
-        return Ok(());
     }
 
     pub fn use_fields_csv(&mut self, filepath: String, only_fields: bool) -> Result<(), csv::Error> {
@@ -642,7 +636,7 @@ impl FlatFiles {
         return Ok(());
     }
 
-    pub fn write_files(&mut self) -> Result<(), Box<dyn Error>> {
+    pub fn write_files(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
         for tmp_csv in self.tmp_csvs.values_mut() {
             tmp_csv.flush()?;
         }
@@ -722,7 +716,7 @@ impl FlatFiles {
         Ok(())
     }
 
-    pub fn write_csvs(&mut self) -> Result<(), Box<dyn Error>> {
+    pub fn write_csvs(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
         let tmp_path = self.output_path.join("tmp");
         let csv_path = self.output_path.join("csv");
 
@@ -756,7 +750,7 @@ impl FlatFiles {
         Ok(())
     }
 
-    pub fn write_xlsx(&mut self) -> Result<(), Box<dyn Error>> {
+    pub fn write_xlsx(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
         let tmp_path = self.output_path.join("tmp");
 
         let workbook = Workbook::new_with_options(
@@ -871,44 +865,33 @@ fn value_convert(
     }
 }
 
-pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(), String> {
+pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(), Box<dyn Error>> {
     let (value_sender, value_receiver) = bounded(1000);
 
-    let thread = thread::spawn(move || -> Result<(), String> {
+    let thread = thread::spawn(move || -> Result<(), Box<dyn Error + Sync + Send>> {
         for value in value_receiver {
-            if let Err(error) = flat_files.process_value(value) {
-                return Err(format!("{:?}", error));
-            }
-            if let Err(error) = flat_files.create_rows() {
-                return Err(format!("{:?}", error));
-            }
+            flat_files.process_value(value);
+            flat_files.create_rows()? 
         }
-        if let Err(error) = flat_files.write_files() {
-            return Err(format!("{:?}", error));
-        };
+
+        flat_files.write_files()?;
         Ok(())
     });
 
     let stream = Deserializer::from_reader(input).into_iter::<Value>();
     for value_result in stream {
-        match value_result {
-            Ok(value) => {
-                if let Err(error) = value_sender.send(value) {
-                    return Err(format!("{:?}", error));
-                }
-            }
-            Err(error) => return Err(format!("{:?}", error)),
-        }
+        let value = value_result?;
+        value_sender.send(value)?;
     }
     drop(value_sender);
 
     match thread.join() {
         Ok(result) => {
             if let Err(err) = result {
-                return Err(format!("{:?}", err));
+                return Err(err)
             }
         }
-        Err(err) => return Err(format!("{:?}", err)),
+        Err(err) => panic::resume_unwind(err)
     }
 
     Ok(())
@@ -918,29 +901,17 @@ pub fn flatten<R: Read>(
     mut input: BufReader<R>,
     mut flat_files: FlatFiles,
     selectors: Vec<Selector>,
-) -> Result<(), String> {
+) -> Result<(), Box<dyn Error>> {
     let (buf_sender, buf_receiver): (Sender<Vec<u8>>, Receiver<Vec<u8>>) = bounded(1000);
 
-    let thread = thread::spawn(move || -> Result<(), String> {
+    let thread = thread::spawn(move || -> Result<(), Box<dyn Error + Sync + Send>> {
         for buf in buf_receiver.iter() {
-            match serde_json::from_slice::<Value>(&buf) {
-                Ok(value) => {
-                    if let Err(error) = flat_files.process_value(value) {
-                        return Err(format!("{:?}", error));
-                    }
-                    if let Err(error) = flat_files.create_rows() {
-                        return Err(format!("{:?}", error));
-                    }
-                }
-                Err(error) => return Err(format!("{:?}", error)),
-            }
+            let value = serde_json::from_slice::<Value>(&buf)?;
+            flat_files.process_value(value);
+            flat_files.create_rows()?;
         }
-        if let Err(error) = flat_files.create_rows() {
-            return Err(format!("{:?}", error));
-        }
-        if let Err(error) = flat_files.write_files() {
-            return Err(format!("{:?}", error));
-        };
+
+        flat_files.write_files()?;
         Ok(())
     });
 
@@ -952,19 +923,17 @@ pub fn flatten<R: Read>(
     let mut handler = NdJsonHandler::new(&mut jl_writer, selectors);
     let mut parser = Parser::new(&mut handler);
 
-    if let Err(error) = parser.parse(&mut input) {
-        return Err(format!("{:?}", error));
-    }
+    parser.parse(&mut input)?;
 
     drop(jl_writer);
 
     match thread.join() {
         Ok(result) => {
             if let Err(err) = result {
-                return Err(format!("{:?}", err));
+                return Err(err)
             }
         }
-        Err(err) => return Err(format!("{:?}", err)),
+        Err(err) => panic::resume_unwind(err)
     }
 
     Ok(())
@@ -997,7 +966,7 @@ mod tests {
         )
         .unwrap();
 
-        flat_files.process_value(myjson.clone()).unwrap();
+        flat_files.process_value(myjson.clone());
 
         let expected_table_rows = json!({
           "e": [
@@ -1049,7 +1018,7 @@ mod tests {
         );
         assert!(expected_metadata == serde_json::to_value(&flat_files.table_metadata).unwrap());
 
-        flat_files.process_value(myjson.clone()).unwrap();
+        flat_files.process_value(myjson.clone());
         flat_files.create_rows().unwrap();
 
         let expected_metadata = json!({
