@@ -270,7 +270,6 @@ struct FieldsRecord {
     table_name: String,
     field_name: String,
     field_type: String,
-    count: String
 }
 
 struct JLWriter {

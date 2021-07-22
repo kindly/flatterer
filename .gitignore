@@ -3,3 +3,4 @@ test.json
 .ve
 __pycache__
 flatterer/*.so
+_build
