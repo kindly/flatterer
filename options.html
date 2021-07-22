@@ -1,0 +1,506 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Development" href="development.html" /><link rel="prev" title="Flatterer. Making JSON flatterer" href="index.html" />
+
+    <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
+        <title>Option Reference - flatterer 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
+    
+
+
+<style>
+  :root {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+
+  /* For allowing end-user-specific overrides */
+  .override-light {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  .override-dark {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+</style><link media="(prefers-color-scheme: dark)" rel="stylesheet" href="_static/pygments_dark.css"></head>
+  <body dir="">
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z"/>
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="10" y1="12" x2="20" y2="12" />
+      <line x1="6" y1="18" x2="20" y2="18" />
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">flatterer 0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">flatterer 0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html">
+  <input class="sidebar-search" placeholder=Search name="q">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Option Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <main class="main">
+    <div class="content">
+      <article role="main">
+        <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        </label>
+        <section class="tex2jax_ignore mathjax_ignore" id="option-reference">
+<h1>Option Reference<a class="headerlink" href="#option-reference" title="Permalink to this headline">¶</a></h1>
+<section id="help-small-cli-only-small">
+<h2>Help <small> (CLI Only) </small><a class="headerlink" href="#help-small-cli-only-small" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer --help
+</pre></div>
+</div>
+<p>output looks like</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Usage: flatterer <span class="o">[</span>OPTIONS<span class="o">]</span> INPUT_FILE OUTPUT_DIRECTORY
+
+Options:
+  --csv / --nocsv             Output CSV files, default <span class="nb">true</span>
+  --xlsx / --noxlsx           Output XLSX file, default <span class="nb">false</span>
+  -m, --main-table-name TEXT  Name of main table, defaults to name of the file
+                              without the extension
+  -p, --path TEXT             Key name of where json array starts, default top
+                              level array
+  -j, --json-lines            Is file a jsonlines file, default <span class="nb">false</span>
+  --force                     Delete output directory <span class="k">if</span> it exists, <span class="k">then</span> run
+                              command, default False
+  -f, --fields TEXT           fields file to use
+  -o, --only-fields
+  --help                      Show this message and exit.
+</pre></div>
+</div>
+</section>
+<section id="csv">
+<h2>CSV<a class="headerlink" href="#csv" title="Permalink to this headline">¶</a></h2>
+<p>Output CSV files in output directory <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/csv/</span></code>.
+Defaults to True</p>
+<section id="cli-usage">
+<h3>CLI Usage<a class="headerlink" href="#cli-usage" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer --nocsv INPUT_FILE OUTPUT_DIRECTORY
+</pre></div>
+</div>
+</section>
+<section id="python-usage">
+<h3>Python Usage<a class="headerlink" href="#python-usage" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>import flatterer
+
+flatterer.flatten<span class="o">(</span><span class="s1">'inputfile.json'</span>, <span class="s1">'ouput_dir'</span>, <span class="nv">csv</span><span class="o">=</span>False<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="xlsx">
+<h2>XLSX<a class="headerlink" href="#xlsx" title="Permalink to this headline">¶</a></h2>
+<p>Output XLSX file in output directory <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/output.xlsx</span></code>. Defaults to False</p>
+<section id="id1">
+<h3>CLI Usage<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Main table name set to <code class="docutils literal notranslate"><span class="pre">games</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer --xlsx INPUT_FILE OUTPUT_DIRECTORY
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>Python Usage<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>import flatterer
+
+flatterer.flatten<span class="o">(</span><span class="s1">'inputfile.json'</span>, <span class="s1">'ouput_dir'</span>, <span class="nv">xlsx</span><span class="o">=</span>True<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="main-table-name">
+<h2>Main Table Name<a class="headerlink" href="#main-table-name" title="Permalink to this headline">¶</a></h2>
+<p>Name of the table that represents data at the root of the JSON object.</p>
+<p>For CSV will create <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/csv/&lt;main_table_name&gt;.csv</span></code> and for XLSX will be the first tab name.</p>
+<p>For CLI defaults to name of input file without the file ending and for python defaults to <code class="docutils literal notranslate"><span class="pre">main</span></code>.</p>
+<section id="id3">
+<h3>CLI Usage<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer -m games INPUT_FILE OUTPUT_DIRECTORY
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>Python Usage<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.json'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">main_table_name</span><span class="o">=</span><span class="s1">'games'</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="path-to-json-array">
+<h2>Path to JSON Array<a class="headerlink" href="#path-to-json-array" title="Permalink to this headline">¶</a></h2>
+<p>Name of the object key where array of objects exists. Defaults to analysing the top level array.</p>
+<p>Will not work with <a class="reference internal" href="#json-lines"><span class="std std-doc">JSON Lines</span></a> option.</p>
+<p>By default will work with:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">"id"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">"title"</span><span class="p">:</span> <span class="s2">"A Game"</span><span class="p">,</span>
+    <span class="nt">"releaseDate"</span><span class="p">:</span> <span class="s2">"2015-01-01"</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">"id"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nt">"title"</span><span class="p">:</span> <span class="s2">"B Game"</span><span class="p">,</span>
+    <span class="nt">"releaseDate"</span><span class="p">:</span> <span class="s2">"2016-01-01"</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>If set to <code class="docutils literal notranslate"><span class="pre">games</span></code> will work with JSON like:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{"games": [
+    {
+      "id": 1,
+      "title": "A Game",
+      "releaseDate": "2015-01-01"
+    },
+    {
+      "id": 2,
+      "title": "B Game",
+      "releaseDate": "2016-01-01"
+]}
+</pre></div>
+</div>
+<section id="id5">
+<h3>CLI Usage<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY -p games
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>Python Usage<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.json'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">'games'</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="json-lines">
+<h2>JSON Lines<a class="headerlink" href="#json-lines" title="Permalink to this headline">¶</a></h2>
+<p>Make flatterer accept new-line-delimeted JSON as well as any stream supported by <a class="reference external" href="https://docs.serde.rs/serde_json/struct.StreamDeserializer.html">serde_json</a>. eg:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nt">"title"</span><span class="p">:</span> <span class="s2">"A Game"</span><span class="p">,</span>  <span class="nt">"releaseDate"</span><span class="p">:</span> <span class="s2">"2015-01-01"</span><span class="p">}</span>
+<span class="p">{</span><span class="nt">"id"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="nt">"title"</span><span class="p">:</span> <span class="s2">"B Game"</span><span class="p">,</span>  <span class="nt">"releaseDate"</span><span class="p">:</span> <span class="s2">"2016-01-01"</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>OR</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">"id"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="nt">"title"</span><span class="p">:</span> <span class="s2">"A Game"</span><span class="p">,</span>
+  <span class="nt">"releaseDate"</span><span class="p">:</span> <span class="s2">"2015-01-01"</span>
+<span class="p">}</span>
+<span class="p">{</span>
+  <span class="nt">"id"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nt">"title"</span><span class="p">:</span> <span class="s2">"B Game"</span><span class="p">,</span>
+  <span class="nt">"releaseDate"</span><span class="p">:</span> <span class="s2">"2016-01-01"</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Will not work with <a class="reference internal" href="#path-to-json-array"><span class="std std-doc">Path to JSON Array</span></a> option.</p>
+<section id="id7">
+<h3>CLI Usage<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --json-lines
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>Python Usage<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">json_lines</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="force">
+<h2>Force<a class="headerlink" href="#force" title="Permalink to this headline">¶</a></h2>
+<p>Delete the output folder if it exists before processing.</p>
+<section id="id9">
+<h3>CLI Usage<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --force
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h3>Python Usage<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="fields-file">
+<h2>Fields File<a class="headerlink" href="#fields-file" title="Permalink to this headline">¶</a></h2>
+<p>Path to fields csv file.  The CSV file needs the following headers:</p>
+<ul class="simple">
+<li><p>table_name</p></li>
+<li><p>field_name</p></li>
+<li><p>field_type</p></li>
+</ul>
+<p>For example:</p>
+<div class="table-wrapper"><table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>table_name</p></th>
+<th class="head"><p>field_name</p></th>
+<th class="head"><p>field_type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>main</p></td>
+<td><p>_link</p></td>
+<td><p>text</p></td>
+</tr>
+<tr class="row-odd"><td><p>main</p></td>
+<td><p>_link_main</p></td>
+<td><p>text</p></td>
+</tr>
+<tr class="row-even"><td><p>main</p></td>
+<td><p>statementID</p></td>
+<td><p>text</p></td>
+</tr>
+<tr class="row-odd"><td><p>main</p></td>
+<td><p>statemenftID</p></td>
+<td><p>text</p></td>
+</tr>
+<tr class="row-even"><td><p>main</p></td>
+<td><p>publicationDetails_license</p></td>
+<td><p>text</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>It can have additional header in the file but they will not be used.</p>
+<p>Field order in the output will the same as the row order in the CSV file.</p>
+<p>Table and fields names need to match up with the eventual structure of output. The easiest make sure of this is to edit the <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> that is in an output directory.<br/>
+You can generate just the fields.csv file by <a class="reference internal" href="#csv"><span class="std std-doc">not outputting the CSV files</span></a>.</p>
+<p>By default if there are fields in the data that are not in the <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> they will be added to the output after the defined fields.  Use <a class="reference internal" href="#only-fields"><span class="std std-doc">Only Fields</span></a> to change this behaviour.</p>
+<section id="id11">
+<h3>CLI Usage<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --fields fields.csv
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h3>Python Usage<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="s1">'fields.csv'</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="only-fields">
+<h2>Only Fields<a class="headerlink" href="#only-fields" title="Permalink to this headline">¶</a></h2>
+<p>Only fields in the fields.csv file will be in the output.</p>
+<section id="id13">
+<h3>CLI Usage<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --fields fields.csv --only-fields
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h3>Python Usage<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="s1">'fields.csv'</span><span class="p">,</span> <span class="n">only_fields</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+      </article>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="development.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Development</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
+        </div>
+
+        <div class="related-information">
+              Copyright &#169; 2021, David Raznick
+            |
+            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+              and
+              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            |
+            <a class="muted-link" href="_sources/options.md.txt"
+               rel="nofollow">
+              Show Source
+            </a>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Option Reference</a><ul>
+<li><a class="reference internal" href="#help-small-cli-only-small">Help <small> (CLI Only) </small></a></li>
+<li><a class="reference internal" href="#csv">CSV</a><ul>
+<li><a class="reference internal" href="#cli-usage">CLI Usage</a></li>
+<li><a class="reference internal" href="#python-usage">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#xlsx">XLSX</a><ul>
+<li><a class="reference internal" href="#id1">CLI Usage</a></li>
+<li><a class="reference internal" href="#id2">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#main-table-name">Main Table Name</a><ul>
+<li><a class="reference internal" href="#id3">CLI Usage</a></li>
+<li><a class="reference internal" href="#id4">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#path-to-json-array">Path to JSON Array</a><ul>
+<li><a class="reference internal" href="#id5">CLI Usage</a></li>
+<li><a class="reference internal" href="#id6">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#json-lines">JSON Lines</a><ul>
+<li><a class="reference internal" href="#id7">CLI Usage</a></li>
+<li><a class="reference internal" href="#id8">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#force">Force</a><ul>
+<li><a class="reference internal" href="#id9">CLI Usage</a></li>
+<li><a class="reference internal" href="#id10">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fields-file">Fields File</a><ul>
+<li><a class="reference internal" href="#id11">CLI Usage</a></li>
+<li><a class="reference internal" href="#id12">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#only-fields">Only Fields</a><ul>
+<li><a class="reference internal" href="#id13">CLI Usage</a></li>
+<li><a class="reference internal" href="#id14">Python Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </main>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/main.js"></script>
+    </body>
+</html>

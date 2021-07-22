@@ -1,0 +1,417 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Option Reference" href="options.html" />
+
+    <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
+        <title>Home - flatterer 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
+    
+
+
+<style>
+  :root {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+
+  /* For allowing end-user-specific overrides */
+  .override-light {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  .override-dark {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+</style><link media="(prefers-color-scheme: dark)" rel="stylesheet" href="_static/pygments_dark.css"></head>
+  <body dir="">
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z"/>
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="10" y1="12" x2="20" y2="12" />
+      <line x1="6" y1="18" x2="20" y2="18" />
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="#"><div class="brand">flatterer 0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+  
+  
+  <span class="sidebar-brand-text">flatterer 0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html">
+  <input class="sidebar-search" placeholder=Search name="q">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <main class="main">
+    <div class="content">
+      <article role="main">
+        <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        </label>
+        <section class="tex2jax_ignore mathjax_ignore" id="flatterer-small-small-small-making-json-flatterer-small-small-small">
+<h1>Flatterer. <small><small><small>Making JSON flatterer</small></small></small><a class="headerlink" href="#flatterer-small-small-small-making-json-flatterer-small-small-small" title="Permalink to this headline">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>An opinionated JSON to CSV/XLSX converter which tries to make a useful relational output for data analysis.</p>
+<p>It aims to be fast and memory efficient.</p>
+<section id="install">
+<h3>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install flatterer
+</pre></div>
+</div>
+<p>flatterer requires Python 3.6 or greater and on non linux platforms rust/cargo with clang/llvm toolchain.</p>
+</section>
+<section id="example-json">
+<h3>Example JSON<a class="headerlink" href="#example-json" title="Permalink to this headline">¶</a></h3>
+<p>Say you have a JSON data like this named <code class="docutils literal notranslate"><span class="pre">games.json</span></code>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">"id"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">"title"</span><span class="p">:</span> <span class="s2">"A Game"</span><span class="p">,</span>
+    <span class="nt">"releaseDate"</span><span class="p">:</span> <span class="s2">"2015-01-01"</span><span class="p">,</span>
+    <span class="nt">"platforms"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"Xbox"</span><span class="p">},</span>
+      <span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"Playstation"</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">"rating"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"code"</span><span class="p">:</span> <span class="s2">"E"</span><span class="p">,</span>
+      <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"Everyone"</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">"id"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nt">"title"</span><span class="p">:</span> <span class="s2">"B Game"</span><span class="p">,</span>
+    <span class="nt">"releaseDate"</span><span class="p">:</span> <span class="s2">"2016-01-01"</span><span class="p">,</span>
+    <span class="nt">"platforms"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"PC"</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">"rating"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"code"</span><span class="p">:</span> <span class="s2">"E"</span><span class="p">,</span>
+      <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"Everyone"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="running-flatterer">
+<h3>Running Flatterer<a class="headerlink" href="#running-flatterer" title="Permalink to this headline">¶</a></h3>
+<p>Run the above file with flatterer.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer games.json games_dir
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="options.html#option-reference"><span class="std std-doc">Option Reference</span></a> for details of additional command line options.</p>
+</section>
+<section id="output-files">
+<h3>Output Files<a class="headerlink" href="#output-files" title="Permalink to this headline">¶</a></h3>
+<p>By running the above you will get the following files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tree games_dir
+
+games_dir/
+├── csv
+│   ├── games.csv
+│   └── platforms.csv
+├── data_package.json
+└── fields.csv
+</pre></div>
+</div>
+<section id="main-table">
+<h4>Main Table<a class="headerlink" href="#main-table" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">games.csv</span></code> contains:</p>
+<div class="table-wrapper"><table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>_link</p></th>
+<th class="head"><p>_link_games</p></th>
+<th class="head"><p>id</p></th>
+<th class="head"><p>rating_code</p></th>
+<th class="head"><p>rating_name</p></th>
+<th class="head"><p>releaseDate</p></th>
+<th class="head"><p>title</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>E</p></td>
+<td><p>Everyone</p></td>
+<td><p>2015-01-01</p></td>
+<td><p>A Game</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>E</p></td>
+<td><p>Everyone</p></td>
+<td><p>2016-01-01</p></td>
+<td><p>B Game</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>Special columns <code class="docutils literal notranslate"><span class="pre">_link</span></code> and <code class="docutils literal notranslate"><span class="pre">_link_games</span></code> are generated. <code class="docutils literal notranslate"><span class="pre">_link</span></code> is the primary key there unique per game.</p>
+<p>Also the <code class="docutils literal notranslate"><span class="pre">rating</span></code> sub-object is promoted to this table it has a one-to-one relationship with <code class="docutils literal notranslate"><span class="pre">games</span></code>.
+Sub-object properties are separated by ‘_’.</p>
+</section>
+<section id="one-to-many-table">
+<h4>One To Many Table<a class="headerlink" href="#one-to-many-table" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">platforms</span></code> is an array so is a one-to-many with games therefore needs its own table:</p>
+<p><code class="docutils literal notranslate"><span class="pre">platforms.csv</span></code> contains:</p>
+<div class="table-wrapper"><table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>_link</p></th>
+<th class="head"><p>_link_games</p></th>
+<th class="head"><p>name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1.platforms.0</p></td>
+<td><p>1</p></td>
+<td><p>Xbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.platforms.1</p></td>
+<td><p>1</p></td>
+<td><p>Playstation</p></td>
+</tr>
+<tr class="row-even"><td><p>2.platforms.0</p></td>
+<td><p>2</p></td>
+<td><p>PC</p></td>
+</tr>
+</tbody>
+</table></div>
+</section>
+<section id="link-fields">
+<h4>Link Fields<a class="headerlink" href="#link-fields" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">_link</span></code> is the primary key for the <code class="docutils literal notranslate"><span class="pre">platforms</span></code> table too.  Every table contains a <code class="docutils literal notranslate"><span class="pre">_link_games</span></code> field to easily join to the main <code class="docutils literal notranslate"><span class="pre">games</span></code> table.</p>
+<p>If there was a sub-array of <code class="docutils literal notranslate"><span class="pre">platforms</span></code> then that would have <code class="docutils literal notranslate"><span class="pre">_link</span></code>,  <code class="docutils literal notranslate"><span class="pre">_link_games</span></code> and  <code class="docutils literal notranslate"><span class="pre">_link_platforms</span></code> fields.</p>
+<p>To generalize this the <code class="docutils literal notranslate"><span class="pre">_link_&lt;table_name&gt;</span></code> fields joins to the <code class="docutils literal notranslate"><span class="pre">_link</span></code> field of <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;</span></code> i.e the <code class="docutils literal notranslate"><span class="pre">_link_&lt;table_name&gt;</span></code> are the foreign keys refrencing <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;._link</span></code>.</p>
+</section>
+<section id="fields-csv">
+<h4>Fields CSV<a class="headerlink" href="#fields-csv" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> contains some metadata about the output tables:</p>
+<div class="table-wrapper"><table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>table_name</p></th>
+<th class="head"><p>field_name</p></th>
+<th class="head"><p>field_type</p></th>
+<th class="head"><p>count</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>platforms</p></td>
+<td><p>_link</p></td>
+<td><p>text</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>platforms</p></td>
+<td><p>_link_games</p></td>
+<td><p>text</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>platforms</p></td>
+<td><p>name</p></td>
+<td><p>text</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>games</p></td>
+<td><p>_link</p></td>
+<td><p>text</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>games</p></td>
+<td><p>_link_games</p></td>
+<td><p>text</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>games</p></td>
+<td><p>id</p></td>
+<td><p>number</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>games</p></td>
+<td><p>rating_code</p></td>
+<td><p>text</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>games</p></td>
+<td><p>rating_name</p></td>
+<td><p>text</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>games</p></td>
+<td><p>releaseDate</p></td>
+<td><p>date</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>games</p></td>
+<td><p>title</p></td>
+<td><p>text</p></td>
+<td><p>2</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>The <code class="docutils literal notranslate"><span class="pre">field_type</span></code> column contains a type guess useful for inserting into a database.  After editing this file then you can rerun the transform:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer games.json new_games_dir -f myfields.csv --only-fields
+</pre></div>
+</div>
+<p>This can be useful for rearranging the field order or if you want to remove some fields the <code class="docutils literal notranslate"><span class="pre">--only-fields</span></code> flag will only include the fields in the edited file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">data_package.json</span></code> contains metadata in the <a class="reference external" href="https://specs.frictionlessdata.io/tabular-data-package/#language">Tabular Datapackge Spec</a></p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+</section>
+</section>
+
+      </article>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="options.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Option Reference</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          
+        </div>
+
+        <div class="related-information">
+              Copyright &#169; 2021, David Raznick
+            |
+            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+              and
+              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            |
+            <a class="muted-link" href="_sources/index.md.txt"
+               rel="nofollow">
+              Show Source
+            </a>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Flatterer. <small><small><small>Making JSON flatterer</small></small></small></a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#install">Install</a></li>
+<li><a class="reference internal" href="#example-json">Example JSON</a></li>
+<li><a class="reference internal" href="#running-flatterer">Running Flatterer</a></li>
+<li><a class="reference internal" href="#output-files">Output Files</a><ul>
+<li><a class="reference internal" href="#main-table">Main Table</a></li>
+<li><a class="reference internal" href="#one-to-many-table">One To Many Table</a></li>
+<li><a class="reference internal" href="#link-fields">Link Fields</a></li>
+<li><a class="reference internal" href="#fields-csv">Fields CSV</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </main>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/main.js"></script>
+    </body>
+</html>
