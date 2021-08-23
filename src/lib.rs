@@ -764,7 +764,9 @@ impl FlatFiles {
             if metadata.rows == 0 {
                 continue;
             }
-            let mut worksheet = workbook.add_worksheet(Some(&table_name))?;
+            let mut new_table_name = table_name.clone();
+            new_table_name.truncate(31);
+            let mut worksheet = workbook.add_worksheet(Some(&new_table_name))?;
 
             let csv_reader = ReaderBuilder::new()
                 .has_headers(false)

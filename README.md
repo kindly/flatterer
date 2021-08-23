@@ -130,7 +130,7 @@ To generalize this the `_link_<table_name>` fields joins to the `_link` field of
 |games      |releaseDate|date    |2    |
 |games      |title     |text     |2    |
 
-The `field_type` column contains a type guess useful for inserting into a database.  After editing this file then you can rerun the transform:
+The `field_type` column contains a type guess useful for inserting into a database.  After editing this file you can rerun the transform:
 
 ```bash
 flatterer games.json new_games_dir -f myfields.csv --only-fields
