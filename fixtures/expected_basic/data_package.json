@@ -1,0 +1,100 @@
+{
+  "profile": "tabular-data-package",
+  "resources": [
+    {
+      "name": "developer",
+      "path": "csv/developer.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "count": 2,
+            "name": "_link",
+            "type": "text"
+          },
+          {
+            "count": 2,
+            "name": "_link_main",
+            "type": "text"
+          },
+          {
+            "count": 2,
+            "name": "name",
+            "type": "text"
+          }
+        ],
+        "primaryKey": "_link"
+      }
+    },
+    {
+      "name": "main",
+      "path": "csv/main.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "count": 2,
+            "name": "_link",
+            "type": "text"
+          },
+          {
+            "count": 2,
+            "name": "_link_main",
+            "type": "text"
+          },
+          {
+            "count": 2,
+            "name": "id",
+            "type": "number"
+          },
+          {
+            "count": 2,
+            "name": "rating_code",
+            "type": "text"
+          },
+          {
+            "count": 2,
+            "name": "rating_name",
+            "type": "text"
+          },
+          {
+            "count": 2,
+            "name": "releaseDate",
+            "type": "date"
+          },
+          {
+            "count": 2,
+            "name": "title",
+            "type": "text"
+          }
+        ],
+        "primaryKey": "_link"
+      }
+    },
+    {
+      "name": "platforms",
+      "path": "csv/platforms.csv",
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "count": 3,
+            "name": "_link",
+            "type": "text"
+          },
+          {
+            "count": 3,
+            "name": "_link_main",
+            "type": "text"
+          },
+          {
+            "count": 3,
+            "name": "name",
+            "type": "text"
+          }
+        ],
+        "primaryKey": "_link"
+      }
+    }
+  ]
+}

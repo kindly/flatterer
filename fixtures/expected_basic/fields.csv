@@ -1,0 +1,14 @@
+table_name,field_name,field_type,count
+developer,_link,text,2
+developer,_link_main,text,2
+developer,name,text,2
+main,_link,text,2
+main,_link_main,text,2
+main,id,number,2
+main,rating_code,text,2
+main,rating_name,text,2
+main,releaseDate,date,2
+main,title,text,2
+platforms,_link,text,3
+platforms,_link_main,text,3
+platforms,name,text,3

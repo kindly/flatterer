@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "title": "A Game",
+    "releaseDate": "2015-01-01",
+    "developer": [
+      {"name":"deva"},
+    ],
+    "platforms": [
+      {"name":"PC"}
+    ],
+    "rating": {
+      "code": "E",
+      "name": "Everyone"
+    }
+  },
+  {
+    "id": 2,
+    "title": "B Game",
+    "releaseDate": "2016-01-01",
+    "developer": [
+      {"name":"devb"},
+    ],
+    "platforms": [
+      {"name":"Xbox"},
+      {"name":"Playstation"}
+    ],
+    "rating": {
+      "code": "E",
+      "name": "Everyone"
+    }
+  }
+]

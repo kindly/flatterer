@@ -33,10 +33,11 @@ def flatten(
     json_lines=False,
     force=False,
     fields='',
-    only_fields=False
+    only_fields=False,
+    inline_one_to_one=False
 ):
     flatten_rs(input, output_dir, csv, xlsx,
-               path, main_table_name, emit_path, json_lines, force, fields, only_fields)
+               path, main_table_name, emit_path, json_lines, force, fields, only_fields, inline_one_to_one)
 
 
 def iterator_flatten(
@@ -48,11 +49,12 @@ def iterator_flatten(
     emit_path=[],
     force=False,
     fields='',
-    only_fields=False
+    only_fields=False,
+    inline_one_to_one=False
 ):
 
     iterator_flatten_rs(bytes_generator(iterator), output_dir, csv, xlsx,
-                        main_table_name, emit_path, force, fields, only_fields)
+                        main_table_name, emit_path, force, fields, only_fields, inline_one_to_one)
 
 
 @click.command()
@@ -67,6 +69,8 @@ def iterator_flatten(
               help='Delete output directory if it exists, then run command, default False')
 @click.option('--fields', '-f', default="", help='fields.csv file to use')
 @click.option('--only-fields', '-o', is_flag=True, default=False, help='Only output fields in fields.csv file')
+@click.option('--inline-one-to-one', '-i', is_flag=True, default=False,
+              help='If array only has single item for all objects treat as one-to-one')
 @click.argument('input_file')
 @click.argument('output_directory')
 def cli(
@@ -79,7 +83,8 @@ def cli(
     json_lines=False,
     force=False,
     fields="",
-    only_fields=False
+    only_fields=False,
+    inline_one_to_one=False
 ):
 
     if not main_table_name:
@@ -94,4 +99,5 @@ def cli(
             json_lines=json_lines,
             force=force,
             fields=fields,
-            only_fields=only_fields)
+            only_fields=only_fields,
+            inline_one_to_one=inline_one_to_one)

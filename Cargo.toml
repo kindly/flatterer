@@ -1,8 +1,8 @@
 [package]
 name = "flatterer"
-version = "0.2.2"
+version = "0.3.0"
 authors = ["David Raznick <kindly@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -14,9 +14,9 @@ itertools = "0.10"
 csv = "1"
 clap = "2"
 serde = {version = "1", features = ["derive"] }
-pyo3 = {version = "0.14.1", features = ["extension-module"] }
-xlsxwriter = "0.3.5"
-crossbeam-channel="0.5.1"
+pyo3 = {version = "0.14", features = ["extension-module"] }
+xlsxwriter = "0.3"
+crossbeam-channel="0.5"
 smallvec="1.6.1"
 regex="1"
 
@@ -32,5 +32,4 @@ crate-type = ["cdylib", "rlib"]
 [[bin]]
 name = "flatterer-cli"
 path = "src/main.rs"
-
 

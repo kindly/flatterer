@@ -13,16 +13,17 @@ fn main() -> Result<(), ()> {
         .author("David Raznick")
         .about("Make JSON flatterer")
         .args_from_usage(
-                           "<INPUT>            'Sets the input file to use'
-                           <OUT_DIR>           'Sets the output directory'
-                           -p --path=[path]    'key where array lives, leave if array is at root'
-                           -j --jl             'Treat input as JSON Lines, path will be ignored'
-                           -c --csv            'Output csv files (defualt but required if xlsx is selected)'
-                           -x --xlsx           'Output xlsx file'
-                           -f --fields=[file]  'fields.csv file to determine order of fields.'
-                           -o --only-fields    'use only fields in csv file and no others'
-                           -m --main=[main]    'Table name of top level object'
-                           --force             'Delete output directory if it exist'",
+                           "<INPUT>               'Sets the input file to use'
+                           <OUT_DIR>              'Sets the output directory'
+                           -p --path=[path]       'key where array lives, leave if array is at root'
+                           -j --jl                'Treat input as JSON Lines, path will be ignored'
+                           -c --csv               'Output csv files (defualt but required if xlsx is selected)'
+                           -x --xlsx              'Output xlsx file'
+                           -i --inline-one-to-one 'If array always has only one element treat relationship as one-to-one'
+                           -f --fields=[file]     'fields.csv file to determine order of fields.'
+                           -o --only-fields       'use only fields in csv file and no others'
+                           -m --main=[main]       'Table name of top level object'
+                           --force                'Delete output directory if it exist'",
         )
         .get_matches();
 
@@ -57,6 +58,7 @@ fn main() -> Result<(), ()> {
         matches.is_present("force"),
         main_table_name,
         vec![],
+        matches.is_present("inline-one-to-one"),
     ).unwrap();
 
     if let Some(fields) = matches.value_of("fields") {
