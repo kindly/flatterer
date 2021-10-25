@@ -145,8 +145,10 @@ Options:
   -j, --json-lines            Is file a jsonlines file, default <span class="nb">false</span>
   --force                     Delete output directory <span class="k">if</span> it exists, <span class="k">then</span> run
                               command, default False
-  -f, --fields TEXT           fields file to use
-  -o, --only-fields
+  -f, --fields TEXT           fields.csv file to use
+  -o, --only-fields           Only output fields in fields.csv file
+  -i, --inline-one-to-one     If array only has single item <span class="k">for</span> all objects
+                              treat as one-to-one
   --help                      Show this message and exit.
 </pre></div>
 </div>
@@ -381,9 +383,28 @@ You can generate just the fields.csv file by <a class="reference internal" href=
 </section>
 <section id="id14">
 <h3>Python Usage<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', fields='fields.csv', only_fields=True)
+
+## Inline One To One
+
+When an key has an array of objects as its value, but that array only ever has single items in it, then treat it these single item as if they are a sub-object (not sub array).  
+Without this set any array of objects will be treated like a one-to-many relationship and therefore have a new table associated with it.  With this set and if all arrays under a particular key only have one item in it, the child table will not be created and the values will appear in the parent table.  
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
+</pre></div>
+</div>
+</section>
+<section id="id15">
+<h3>Python Usage<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
-<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="s1">'fields.csv'</span><span class="p">,</span> <span class="n">only_fields</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">inline_one_to_one</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
 </pre></div>
 </div>
 </section>
@@ -484,6 +505,7 @@ You can generate just the fields.csv file by <a class="reference internal" href=
 <li><a class="reference internal" href="#only-fields">Only Fields</a><ul>
 <li><a class="reference internal" href="#id13">CLI Usage</a></li>
 <li><a class="reference internal" href="#id14">Python Usage</a></li>
+<li><a class="reference internal" href="#id15">Python Usage</a></li>
 </ul>
 </li>
 </ul>

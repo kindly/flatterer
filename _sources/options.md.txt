@@ -21,8 +21,10 @@ Options:
   -j, --json-lines            Is file a jsonlines file, default false
   --force                     Delete output directory if it exists, then run
                               command, default False
-  -f, --fields TEXT           fields file to use
-  -o, --only-fields
+  -f, --fields TEXT           fields.csv file to use
+  -o, --only-fields           Only output fields in fields.csv file
+  -i, --inline-one-to-one     If array only has single item for all objects
+                              treat as one-to-one
   --help                      Show this message and exit.
 ```
 
@@ -266,4 +268,23 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --fields fields.csv --only-fields
 import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', fields='fields.csv', only_fields=True)
+
+## Inline One To One
+
+When an key has an array of objects as its value, but that array only ever has single items in it, then treat it these single item as if they are a sub-object (not sub array).  
+Without this set any array of objects will be treated like a one-to-many relationship and therefore have a new table associated with it.  With this set and if all arrays under a particular key only have one item in it, the child table will not be created and the values will appear in the parent table.  
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', inline_one_to_one=True)
+
 ```
