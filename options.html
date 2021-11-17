@@ -149,6 +149,7 @@ Options:
   -o, --only-fields           Only output fields in fields.csv file
   -i, --inline-one-to-one     If array only has single item <span class="k">for</span> all objects
                               treat as one-to-one
+  -s, --schema TEXT           JSONSchema file or URL to determine field order
   --help                      Show this message and exit.
 </pre></div>
 </div>
@@ -409,6 +410,29 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
 </div>
 </section>
 </section>
+<section id="schema">
+<h2>Schema<a class="headerlink" href="#schema" title="Permalink to this headline">¶</a></h2>
+<p>Supply a JSONSchema file to help determine field ordering of the output.  If the schema supplied starts with <code class="docutils literal notranslate"><span class="pre">http</span></code> will try and download the schema from a remote server, otherwise it is assumed to be a file-system path.</p>
+<section id="id16">
+<h3>CLI Usage<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<p>For remote url:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --schema https://example.com/schema.json
+</pre></div>
+</div>
+<p>For local file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --schema schema.json
+</pre></div>
+</div>
+</section>
+<section id="id17">
+<h3>Python Usage<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s1">'https://example.com/schema.json'</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 
       </article>
@@ -506,6 +530,11 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
 <li><a class="reference internal" href="#id13">CLI Usage</a></li>
 <li><a class="reference internal" href="#id14">Python Usage</a></li>
 <li><a class="reference internal" href="#id15">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#schema">Schema</a><ul>
+<li><a class="reference internal" href="#id16">CLI Usage</a></li>
+<li><a class="reference internal" href="#id17">Python Usage</a></li>
 </ul>
 </li>
 </ul>
