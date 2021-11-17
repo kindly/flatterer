@@ -1,3 +1,5 @@
+mod schema_order;
+
 use std::collections::HashMap;
 use std::convert::TryInto;
 use std::error::Error;
@@ -9,7 +11,7 @@ use std::{panic, thread};
 
 use crossbeam_channel::{bounded, Receiver, Sender};
 use csv::{ByteRecord, Reader, ReaderBuilder, Writer, WriterBuilder};
-use itertools::{izip, Itertools};
+use itertools::Itertools;
 use pyo3::prelude::*;
 use pyo3::types::PyIterator;
 use regex::Regex;
@@ -37,6 +39,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         fields: String,
         only_fields: bool,
         inline_one_to_one: bool,
+        schema: String,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
@@ -46,6 +49,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             main_table_name,
             emit_path,
             inline_one_to_one,
+            schema
         );
 
         let mut selectors = vec![];
@@ -119,6 +123,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         fields: String,
         only_fields: bool,
         inline_one_to_one: bool,
+        schema: String
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
@@ -128,6 +133,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             main_table_name,
             emit_path,
             inline_one_to_one,
+            schema
         );
 
         if flat_files_res.is_err() {
@@ -262,6 +268,7 @@ pub struct FlatFiles {
     inline_one_to_one: bool,
     one_to_many_arrays: Vec<Vec<String>>,
     one_to_one_arrays: Vec<Vec<String>>,
+    schema: String 
 }
 
 #[derive(Serialize, Debug)]
@@ -272,6 +279,7 @@ pub struct TableMetadata {
     rows: u32,
     ignore: bool,
     ignore_fields: Vec<bool>,
+    order: Vec<usize>
 }
 
 #[derive(Debug, Deserialize)]
@@ -311,6 +319,7 @@ impl FlatFiles {
         main_table_name: String,
         emit_obj: Vec<Vec<String>>,
         inline_one_to_one: bool,
+        schema: String
     ) -> Result<FlatFiles, IoError> {
         let output_path = PathBuf::from(output_dir.clone());
         if output_path.is_dir() {
@@ -346,6 +355,7 @@ impl FlatFiles {
             inline_one_to_one,
             one_to_many_arrays: Vec::new(),
             one_to_one_arrays: Vec::new(),
+            schema
         })
     }
 
@@ -597,6 +607,7 @@ impl FlatFiles {
                         rows: 0,
                         ignore: false,
                         ignore_fields: vec![],
+                        order: vec![],
                     },
                 );
             }
@@ -676,6 +687,7 @@ impl FlatFiles {
                         rows: 0,
                         ignore: false,
                         ignore_fields: vec![],
+                        order: vec![]
                     },
                 );
             }
@@ -688,6 +700,7 @@ impl FlatFiles {
 
         return Ok(());
     }
+
 
     pub fn mark_ignore(&mut self) {
         let one_to_many_table_names = self
@@ -723,8 +736,53 @@ impl FlatFiles {
         }
     }
 
+    pub fn determine_order(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+
+        let order_map;
+
+        if &self.schema != "" {
+            order_map = schema_order::schema_order(&self.schema)?
+        } else {
+            order_map = HashMap::new()
+        }
+
+        for (table_name, metadata) in self.table_metadata.iter_mut() {
+            let table_name_with_underscore = if table_name == &self.main_table_name {
+                "".to_string()
+            } else {
+                format!("{}_", table_name)
+            };
+
+            let mut fields_to_order: Vec<(usize, usize)> = vec![];
+
+            for (num, field) in metadata.fields.iter().enumerate() {
+                let full_path = format!("{}{}", table_name_with_underscore, field);
+
+                let schema_order: usize;
+
+                if field.starts_with("_link") {
+                    schema_order = 0
+                } else if let Some(order) = order_map.get(&full_path) {
+                    schema_order = order.clone()
+                } else {
+                    schema_order = usize::MAX;
+                }
+                fields_to_order.push((schema_order, num))
+            }
+
+            fields_to_order.sort();
+
+            for (_, field_order) in fields_to_order.iter() {
+                metadata.order.push(field_order.clone());
+            }
+        }
+        Ok(())
+
+    }
+
     pub fn write_files(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
         self.mark_ignore();
+        self.determine_order()?;
 
         for tmp_csv in self.tmp_csvs.values_mut() {
             tmp_csv.flush()?;
@@ -751,21 +809,18 @@ impl FlatFiles {
             if metadata.rows == 0 || metadata.ignore {
                 continue;
             }
+            let table_order = metadata.order.clone();
 
-            for (field, field_type, count, ignore) in izip!(
-                &metadata.fields,
-                &metadata.field_type,
-                &metadata.field_counts,
-                &metadata.ignore_fields
-            ) {
-                let field = json!({
-                    "name": field,
-                    "type": field_type,
-                    "count": count,
-                });
-                if !ignore {
-                    fields.push(field);
+            for order in table_order {
+                if metadata.ignore_fields[order] {
+                    continue
                 }
+                let field = json!({
+                    "name": metadata.fields[order],
+                    "type": metadata.field_type[order],
+                    "count": metadata.field_counts[order],
+                });
+                fields.push(field);
             }
 
             let mut resource = json!({
@@ -794,20 +849,17 @@ impl FlatFiles {
             if metadata.rows == 0 || metadata.ignore {
                 continue;
             }
-            for (field, field_type, count, ignore) in izip!(
-                &metadata.fields,
-                &metadata.field_type,
-                &metadata.field_counts,
-                &metadata.ignore_fields
-            ) {
-                if !ignore {
-                    fields_writer.write_record([
-                        table_name,
-                        field,
-                        field_type,
-                        &count.to_string(),
-                    ])?;
+            let table_order = metadata.order.clone();
+            for order in table_order {
+                if metadata.ignore_fields[order] {
+                    continue
                 }
+                fields_writer.write_record([
+                    table_name,
+                    &metadata.fields[order],
+                    &metadata.field_type[order],
+                    &metadata.field_counts[order].to_string(),
+                ])?;
             }
         }
 
@@ -839,13 +891,13 @@ impl FlatFiles {
             let mut csv_writer =
                 WriterBuilder::new().from_path(csv_path.join(format!("{}.csv", table_name)))?;
 
-            let field_count = &metadata.fields.len();
-
             let mut non_ignored_fields = vec![];
 
-            for (field, ignore_field) in izip!(&metadata.fields, &metadata.ignore_fields) {
-                if !ignore_field {
-                    non_ignored_fields.push(field)
+            let table_order = metadata.order.clone();
+
+            for order in table_order {
+                if !metadata.ignore_fields[order] {
+                    non_ignored_fields.push(metadata.fields[order].clone())
                 }
             }
 
@@ -854,16 +906,21 @@ impl FlatFiles {
             let mut output_row = ByteRecord::new();
 
             for row in csv_reader.into_byte_records() {
-                let mut this_row = row?;
 
-                while &this_row.len() != field_count {
-                    this_row.push_field(b"");
-                }
+                let this_row = row?;
+                let table_order = metadata.order.clone();
 
-                for (data, ignore_field) in izip!(this_row.iter(), &metadata.ignore_fields) {
-                    if !ignore_field {
-                        output_row.push_field(data);
+                for order in table_order {
+                    if metadata.ignore_fields[order] {
+                        continue
                     }
+
+                    if order >= this_row.len() {
+                        output_row.push_field(b"");
+                    } else {
+                        output_row.push_field(&this_row[order]);
+                    }
+
                 }
 
                 csv_writer.write_byte_record(&output_row)?;
@@ -900,21 +957,33 @@ impl FlatFiles {
 
             let mut col_index = 0;
 
-            for (field, ignore_field) in izip!(&metadata.fields, &metadata.ignore_fields) {
-                if !ignore_field {
-                    worksheet.write_string(0, col_index, &field, None)?;
+            let table_order = metadata.order.clone();
+
+            for order in table_order {
+                if !metadata.ignore_fields[order] {
+                    worksheet.write_string(0, col_index, &metadata.fields[order].clone(), None)?;
                     col_index += 1;
                 }
             }
 
+
             for (row_num, row) in csv_reader.into_records().enumerate() {
                 col_index = 0;
                 let this_row = row?;
-                for (cell, ignore) in izip!(this_row.iter(), &metadata.ignore_fields) {
-                    if *ignore {
-                        continue;
+
+                let table_order = metadata.order.clone();
+
+                for order in table_order {
+                    if metadata.ignore_fields[order] {
+                        continue
                     }
-                    if metadata.field_type[usize::from(col_index)] == "number" {
+                    if order >= this_row.len() {
+                        continue
+                    }
+
+                    let cell = &this_row[order];
+
+                    if metadata.field_type[order] == "number" {
                         if let Ok(number) = cell.parse::<f64>() {
                             worksheet.write_number(
                                 (row_num + 1).try_into()?,
@@ -1089,6 +1158,7 @@ mod tests {
             "main".to_string(),
             vec![],
             false,
+            "".to_string()
         )
         .unwrap();
         flatten(
@@ -1102,7 +1172,7 @@ mod tests {
             println!("{}", expected);
             let output = read_to_string(format!("{}/{}", output_path.clone(), test_file)).unwrap();
             println!("{}", output);
-            assert!(expected == output);
+            assert_eq!(expected, output);
         }
     }
 
@@ -1119,6 +1189,7 @@ mod tests {
             "main".to_string(),
             vec![],
             true,
+            "".to_string()
         )
         .unwrap();
         flatten(
@@ -1156,6 +1227,7 @@ mod tests {
             "main".to_string(),
             vec![],
             false,
+            "".to_string()
         )
         .unwrap();
 
@@ -1190,23 +1262,23 @@ mod tests {
 
         //println!("{}", serde_json::to_value(&flat_files.table_rows).unwrap());
 
-        assert!(expected_table_rows == serde_json::to_value(&flat_files.table_rows).unwrap());
+        assert_eq!(expected_table_rows, serde_json::to_value(&flat_files.table_rows).unwrap());
 
         flat_files.create_rows().unwrap();
 
         let expected_metadata = json!({
           "e": {
             "field_type": [
-              "text",
-              "text",
               "number",
-              "text"
+              "text",
+              "text",
+              "text",
             ],
             "fields": [
+              "ea",
+              "eb",
               "_link",
               "_link_main",
-              "ea",
-              "eb"
             ],
             "field_counts": [
               2,
@@ -1216,6 +1288,7 @@ mod tests {
             ],
             "rows": 2,
             "ignore": false,
+            "order": [],
             "ignore_fields": [
               false,
               false,
@@ -1228,18 +1301,19 @@ mod tests {
               "text",
               "text",
               "text",
+              "date",
               "text",
               "text",
-              "date"
             ],
             "fields": [
-              "_link",
-              "_link_main",
               "a",
               "c",
               "d_da",
-              "d_db"
+              "d_db",
+              "_link",
+              "_link_main",
             ],
+            "order": [],
             "field_counts": [
               1,
               1,
@@ -1265,10 +1339,10 @@ mod tests {
         //    "{}",
         //    serde_json::to_string_pretty(&flat_files.table_metadata).unwrap()
         //);
-        assert!(
-            json!({"e": [],"main": []}) == serde_json::to_value(&flat_files.table_rows).unwrap()
+        assert_eq!(
+            json!({"e": [],"main": []}), serde_json::to_value(&flat_files.table_rows).unwrap()
         );
-        assert!(expected_metadata == serde_json::to_value(&flat_files.table_metadata).unwrap());
+        assert_eq!(expected_metadata, serde_json::to_value(&flat_files.table_metadata).unwrap());
 
         flat_files.process_value(myjson.clone());
         flat_files.create_rows().unwrap();
@@ -1277,16 +1351,16 @@ mod tests {
         {
           "e": {
             "field_type": [
-              "text",
-              "text",
               "number",
-              "text"
+              "text",
+              "text",
+              "text",
             ],
             "fields": [
+              "ea",
+              "eb",
               "_link",
               "_link_main",
-              "ea",
-              "eb"
             ],
             "field_counts": [
               4,
@@ -1296,6 +1370,7 @@ mod tests {
             ],
             "rows": 4,
             "ignore": false,
+            "order": [],
             "ignore_fields": [
               false,
               false,
@@ -1308,17 +1383,17 @@ mod tests {
               "text",
               "text",
               "text",
+              "date",
               "text",
               "text",
-              "date"
             ],
             "fields": [
-              "_link",
-              "_link_main",
               "a",
               "c",
               "d_da",
-              "d_db"
+              "d_db",
+              "_link",
+              "_link_main",
             ],
             "field_counts": [
               2,
@@ -1330,6 +1405,7 @@ mod tests {
             ],
             "rows": 2,
             "ignore": false,
+            "order": [],
             "ignore_fields": [
               false,
               false,
@@ -1345,10 +1421,10 @@ mod tests {
         //    "{}",
         //    serde_json::to_string_pretty(&flat_files.table_metadata).unwrap()
         //);
-        assert!(
-            json!({"e": [],"main": []}) == serde_json::to_value(&flat_files.table_rows).unwrap()
+        assert_eq!(
+            json!({"e": [],"main": []}), serde_json::to_value(&flat_files.table_rows).unwrap()
         );
-        assert!(expected_metadata == serde_json::to_value(&flat_files.table_metadata).unwrap());
+        assert_eq!(expected_metadata, serde_json::to_value(&flat_files.table_metadata).unwrap());
     }
 
     #[test]
@@ -1372,6 +1448,7 @@ mod tests {
             "main".to_string(),
             vec![],
             true,
+            "".to_string()
         )
         .unwrap();
 
@@ -1411,6 +1488,7 @@ mod tests {
             "main".to_string(),
             vec![],
             true,
+            "".to_string()
         )
         .unwrap();
 
@@ -1425,6 +1503,6 @@ mod tests {
             serde_json::to_string_pretty(&flat_files.table_metadata).unwrap()
         );
         assert!(flat_files.table_metadata.get("e").unwrap().ignore == false);
-        assert!(flat_files.table_metadata.get("main").unwrap().ignore_fields == vec![false,false,true,true,false]);
+        assert!(flat_files.table_metadata.get("main").unwrap().ignore_fields == vec![false,true,true,false,false]);
     }
 }

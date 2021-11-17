@@ -2,79 +2,79 @@
   "profile": "tabular-data-package",
   "resources": [
     {
-      "name": "main",
-      "path": "csv/main.csv",
       "profile": "tabular-data-resource",
+      "name": "main",
       "schema": {
         "fields": [
           {
-            "count": 2,
             "name": "_link",
-            "type": "text"
+            "type": "text",
+            "count": 2
           },
           {
-            "count": 2,
             "name": "_link_main",
-            "type": "text"
+            "type": "text",
+            "count": 2
           },
           {
-            "count": 2,
-            "name": "developer_name",
-            "type": "text"
-          },
-          {
-            "count": 2,
             "name": "id",
-            "type": "number"
+            "type": "number",
+            "count": 2
           },
           {
-            "count": 2,
-            "name": "rating_code",
-            "type": "text"
-          },
-          {
-            "count": 2,
-            "name": "rating_name",
-            "type": "text"
-          },
-          {
-            "count": 2,
-            "name": "releaseDate",
-            "type": "date"
-          },
-          {
-            "count": 2,
             "name": "title",
-            "type": "text"
+            "type": "text",
+            "count": 2
+          },
+          {
+            "name": "releaseDate",
+            "type": "date",
+            "count": 2
+          },
+          {
+            "name": "developer_name",
+            "type": "text",
+            "count": 2
+          },
+          {
+            "name": "rating_code",
+            "type": "text",
+            "count": 2
+          },
+          {
+            "name": "rating_name",
+            "type": "text",
+            "count": 2
           }
         ],
         "primaryKey": "_link"
-      }
+      },
+      "path": "csv/main.csv"
     },
     {
-      "name": "platforms",
-      "path": "csv/platforms.csv",
       "profile": "tabular-data-resource",
+      "name": "platforms",
       "schema": {
         "fields": [
           {
-            "count": 3,
             "name": "_link",
-            "type": "text"
+            "type": "text",
+            "count": 3
           },
           {
-            "count": 3,
             "name": "_link_main",
-            "type": "text"
+            "type": "text",
+            "count": 3
           },
           {
-            "count": 3,
             "name": "name",
-            "type": "text"
+            "type": "text",
+            "count": 3
           }
         ],
         "primaryKey": "_link"
-      }
+      },
+      "path": "csv/platforms.csv"
     }
   ]
 }

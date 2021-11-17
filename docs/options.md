@@ -25,6 +25,7 @@ Options:
   -o, --only-fields           Only output fields in fields.csv file
   -i, --inline-one-to-one     If array only has single item for all objects
                               treat as one-to-one
+  -s, --schema TEXT           JSONSchema file or URL to determine field order
   --help                      Show this message and exit.
 ```
 
@@ -287,4 +288,31 @@ import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', inline_one_to_one=True)
 
+```
+
+## Schema
+
+Supply a JSONSchema file to help determine field ordering of the output.  If the schema supplied starts with `http` will try and download the schema from a remote server, otherwise it is assumed to be a file-system path.
+
+
+### CLI Usage
+
+For remote url:
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --schema https://example.com/schema.json
+```
+
+For local file:
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --schema schema.json
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', schema='https://example.com/schema.json')
 ```

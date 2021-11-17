@@ -1,8 +1,6 @@
 [
   {
     "id": 1,
-    "title": "A Game",
-    "releaseDate": "2015-01-01",
     "developer": [
       {"name":"deva"},
     ],
@@ -12,12 +10,12 @@
     "rating": {
       "code": "E",
       "name": "Everyone"
-    }
+    },
+    "releaseDate": "2015-01-01",
+    "title": "A Game"
   },
   {
     "id": 2,
-    "title": "B Game",
-    "releaseDate": "2016-01-01",
     "developer": [
       {"name":"devb"},
     ],
@@ -28,6 +26,8 @@
     "rating": {
       "code": "E",
       "name": "Everyone"
-    }
+    },
+    "releaseDate": "2016-01-01",
+    "title": "B Game"
   }
 ]

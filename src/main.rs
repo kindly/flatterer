@@ -23,6 +23,7 @@ fn main() -> Result<(), ()> {
                            -f --fields=[file]     'fields.csv file to determine order of fields.'
                            -o --only-fields       'use only fields in csv file and no others'
                            -m --main=[main]       'Table name of top level object'
+                           -s --schema=[schema]   'Link to remote or local JSONSchema to help out with field ordering'
                            --force                'Delete output directory if it exist'",
         )
         .get_matches();
@@ -51,6 +52,12 @@ fn main() -> Result<(), ()> {
         main_table_name = format!("main");
     }
 
+    let mut schema_path = "";
+
+    if let Some(schema) = matches.value_of("schema") {
+        schema_path = schema;
+    } 
+
     let mut flat_files = FlatFiles::new (
         output_dir.to_string(),
         matches.is_present("csv") || !matches.is_present("xlsx"),
@@ -59,6 +66,7 @@ fn main() -> Result<(), ()> {
         main_table_name,
         vec![],
         matches.is_present("inline-one-to-one"),
+        schema_path.to_string()
     ).unwrap();
 
     if let Some(fields) = matches.value_of("fields") {
