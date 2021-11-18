@@ -19,7 +19,7 @@ xlsxwriter = "0.3"
 crossbeam-channel="0.5"
 smallvec="1.6.1"
 regex="1"
-jsonref="0.2"
+jsonref="0.3"
 
 [profile.release]
 debug = true
