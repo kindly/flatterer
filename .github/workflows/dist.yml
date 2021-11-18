@@ -8,11 +8,15 @@ on:
 jobs:
   macos:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        # in this example, there is a newer version already installed, 3.7.7, so the older version will be downloaded
+        python-version: ['3.5', '3.6', '3.7', '3.8', '3.9', '3.10']
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: ${{ matrix.python-version }}
           architecture: x64
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
@@ -25,83 +29,129 @@ jobs:
         with:
           target: x86_64
           args: --release --out dist --no-sdist
-      - name: Install built wheel - x86_64
-        run: |
-          pip install flatterer --find-links dist --force-reinstall
-          python -c "import flatterer"
       - name: Build wheels - universal2
         uses: messense/maturin-action@v1
         with:
           args: --release --universal2 --out dist --no-sdist
-      - name: Install built wheel - universal2
-        run: |
-          pip install flatterer --find-links dist --force-reinstall
-          python -c "import flatterer"
       - name: Upload wheels
         uses: actions/upload-artifact@v2
         with:
           name: wheels
           path: dist
 
-  #windows:
-    #runs-on: windows-latest
-    #strategy:
-      #matrix:
-        #target: [x64, x86]
-    #steps:
-      #- uses: actions/checkout@v2
-      #- uses: actions/setup-python@v2
-        #with:
-          #python-version: 3.9
-          #architecture: ${{ matrix.target }}
-      #- name: Install Rust toolchain
-        #uses: actions-rs/toolchain@v1
-        #with:
-          #toolchain: stable
-          #profile: minimal
-          #default: true
-      #- name: Build wheels
-        #uses: messense/maturin-action@v1
-        #with:
-          #target: ${{ matrix.target }}
-          #args: --release --out dist --no-sdist 
-      #- name: Install built wheel
-        #run: |
-          #pip install flatterer --no-index --find-links dist --force-reinstall
-          #python -c "import flatterer"
-      #- name: Upload wheels
-        #uses: actions/upload-artifact@v2
-        #with:
-          #name: wheels
-          #path: dist
+  windows-x64:
+    runs-on: windows-latest
+    env:
+      LIBCLANG_PATH: 'C:\Program Files\LLVM\bin'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          architecture: x64
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          default: true
+      - name: Set up Clang
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: x64
+      - name: Build wheels
+        uses: messense/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: --release --out dist --no-sdist 
+      - name: Upload wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: wheels
+          path: dist
+
+  windows-x86:
+    runs-on: windows-latest
+    env:
+      LIBCLANG_PATH: 'C:\Program Files\LLVM\bin'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          architecture: x86
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          default: true
+      - name: Set up Clang
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: any
+      - name: Build wheels
+        uses: messense/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: --release --out dist --no-sdist 
+      - name: Upload wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: wheels
+          path: dist
 
   linux:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [x86_64, i686]
+        target: [x86_64]
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
       with:
         python-version: 3.9
         architecture: x64
-    - name: Build Wheels
-      uses: messense/maturin-action@v1
-      with:
-        target: ${{ matrix.target }}
-        manylinux: auto
-        args: --release --out dist --no-sdist
-    - name: Install built wheel
-      if: matrix.target == 'x86_64'
+    - name: Make wheel
       run: |
-        pip install flatterer --find-links dist --force-reinstall
-        python -c "import flatterer"
+        sudo docker build -t flatterer-anylinux .
+        sudo docker run  -v $(pwd):/io flatterer-anylinux build --release --out dist
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
         name: wheels
         path: dist
+        
+  #linux:
+    #runs-on: ubuntu-latest
+    #strategy:
+      #matrix:
+        #target: [x86_64]
+    #steps:
+    #- uses: actions/checkout@v2
+    #- uses: actions/setup-python@v2
+      #with:
+        #python-version: 3.9
+        #architecture: x64
+    #- name: Build Wheels
+      #uses: kindly/maturin-action@main
+      #with:
+        #target: ${{ matrix.target }}
+        #manylinux: 2014
+        #args: --release --out dist --no-sdist
+        #extra-build-command: 'curl https://copr.fedorainfracloud.org/coprs/alonid/llvm-5.0.1/repo/epel-7/alonid-llvm-5.0.1-epel-7.repo >> /etc/yum.repos.d/alonid-llvm-5.0.1-epel-7.repo && yum install llvm-5.0.1 clang-5.0.1 llvm-5.0.1-devel clang-5.0.1-devel -y && export LIBCLANG_PATH=/opt/llvm-5.0.1/lib64 && export CPATH=/opt/llvm-5.0.1/lib64/clang/5.0.1/include'
+    #- name: Install built wheel
+      #if: matrix.target == 'x86_64'
+      #run: |
+        #pip install flatterer --find-links dist --force-reinstall
+        #python -c "import flatterer"
+    #- name: Upload wheels
+      #uses: actions/upload-artifact@v2
+      #with:
+        #name: wheels
+        #path: dist
 
   #linux-cross:
     #runs-on: ubuntu-latest
@@ -146,9 +196,9 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    if: "startsWith(github.ref, 'refs/tags/')"
+#    if: "startsWith(github.ref, 'refs/tags/')"
 #    needs: [ macos, windows, linux, linux-cross ]
-    needs: [ macos, linux ]
+    needs: [macos, linux, windows-x86, windows-x86]
     steps:
       - uses: actions/download-artifact@v2
         with:
