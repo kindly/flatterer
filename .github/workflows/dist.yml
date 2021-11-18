@@ -27,7 +27,7 @@ jobs:
           args: --release --out dist --no-sdist
       - name: Install built wheel - x86_64
         run: |
-          pip install flatterer --no-index --find-links dist --force-reinstall
+          pip install flatterer --find-links dist --force-reinstall
           python -c "import flatterer"
       - name: Build wheels - universal2
         uses: messense/maturin-action@v1
@@ -35,7 +35,7 @@ jobs:
           args: --release --universal2 --out dist --no-sdist
       - name: Install built wheel - universal2
         run: |
-          pip install flatterer --no-index --find-links dist --force-reinstall
+          pip install flatterer --find-links dist --force-reinstall
           python -c "import flatterer"
       - name: Upload wheels
         uses: actions/upload-artifact@v2
@@ -95,7 +95,7 @@ jobs:
     - name: Install built wheel
       if: matrix.target == 'x86_64'
       run: |
-        pip install flatterer --no-index --find-links dist --force-reinstall
+        pip install flatterer --find-links dist --force-reinstall
         python -c "import flatterer"
     - name: Upload wheels
       uses: actions/upload-artifact@v2
