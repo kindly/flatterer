@@ -8,7 +8,7 @@ flatterer --help
 
 output looks like
 
-```bash 
+``` 
 Usage: flatterer [OPTIONS] INPUT_FILE OUTPUT_DIRECTORY
 
 Options:

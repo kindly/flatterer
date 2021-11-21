@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Option Reference" href="options.html" />
 
     <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
-        <title>Home - flatterer 0.2.2 documentation</title>
+        <title>Home - flatterer 0.4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
@@ -87,7 +87,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">flatterer 0.2.2 documentation</div></a>
+      <a href="#"><div class="brand">flatterer 0.4.1 documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -101,7 +101,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
   
   
-  <span class="sidebar-brand-text">flatterer 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">flatterer 0.4.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html">
   <input class="sidebar-search" placeholder=Search name="q">
@@ -110,6 +110,7 @@
 </form><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 </ul>
 
@@ -136,7 +137,7 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install flatterer
 </pre></div>
 </div>
-<p>flatterer requires Python 3.6 or greater and on non linux platforms rust/cargo with clang/llvm toolchain.</p>
+<p>Flatterer requires Python 3.6 or greater. It is written as a python extension in Rust but has binaries (wheels) for linux (x64 anylinux), macos (x64 and universal) and windows (x64, x86).  On other platforms a rust toolchain will need to be installed.</p>
 </section>
 <section id="example-json">
 <h3>Example JSON<a class="headerlink" href="#example-json" title="Permalink to this headline">¶</a></h3>
@@ -189,7 +190,8 @@ games_dir/
 │   ├── games.csv
 │   └── platforms.csv
 ├── data_package.json
-└── fields.csv
+├── fields.csv
+└── ...
 </pre></div>
 </div>
 <section id="main-table">
@@ -260,7 +262,7 @@ Sub-object properties are separated by ‘_’.</p>
 <h4>Link Fields<a class="headerlink" href="#link-fields" title="Permalink to this headline">¶</a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">_link</span></code> is the primary key for the <code class="docutils literal notranslate"><span class="pre">platforms</span></code> table too.  Every table contains a <code class="docutils literal notranslate"><span class="pre">_link_games</span></code> field to easily join to the main <code class="docutils literal notranslate"><span class="pre">games</span></code> table.</p>
 <p>If there was a sub-array of <code class="docutils literal notranslate"><span class="pre">platforms</span></code> then that would have <code class="docutils literal notranslate"><span class="pre">_link</span></code>,  <code class="docutils literal notranslate"><span class="pre">_link_games</span></code> and  <code class="docutils literal notranslate"><span class="pre">_link_platforms</span></code> fields.</p>
-<p>To generalize this the <code class="docutils literal notranslate"><span class="pre">_link_&lt;table_name&gt;</span></code> fields joins to the <code class="docutils literal notranslate"><span class="pre">_link</span></code> field of <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;</span></code> i.e the <code class="docutils literal notranslate"><span class="pre">_link_&lt;table_name&gt;</span></code> are the foreign keys refrencing <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;._link</span></code>.</p>
+<p>To generalize this the <code class="docutils literal notranslate"><span class="pre">_link__&lt;table_name&gt;</span></code> fields joins to the <code class="docutils literal notranslate"><span class="pre">_link</span></code> field of <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;</span></code> i.e the <code class="docutils literal notranslate"><span class="pre">_link__&lt;table_name&gt;</span></code> are the foreign keys refrencing <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;._link</span></code>.</p>
 </section>
 <section id="fields-csv">
 <h4>Fields CSV<a class="headerlink" href="#fields-csv" title="Permalink to this headline">¶</a></h4>
@@ -332,6 +334,7 @@ Sub-object properties are separated by ‘_’.</p>
 </div>
 <p>This can be useful for rearranging the field order or if you want to remove some fields the <code class="docutils literal notranslate"><span class="pre">--only-fields</span></code> flag will only include the fields in the edited file.</p>
 <p><code class="docutils literal notranslate"><span class="pre">data_package.json</span></code> contains metadata in the <a class="reference external" href="https://specs.frictionlessdata.io/tabular-data-package/#language">Tabular Datapackge Spec</a></p>
+<p><a class="reference internal" href="outputs.html#outputs"><span class="std std-doc">More information on the output formats.</span></a></p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
