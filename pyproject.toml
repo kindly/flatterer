@@ -1,6 +1,8 @@
 [project]
 name="flatterer"
 dependencies = ["orjson", "ijson", "click"]
+readme="README.md"
+repository="https://github.com/kindly/flatterer"
 
 [build-system]
 requires = ["maturin>=0.11,<0.12"]

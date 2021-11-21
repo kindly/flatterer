@@ -1,10 +1,11 @@
 mod schema_order;
+mod postgresql;
 
 use std::collections::HashMap;
 use std::convert::TryInto;
 use std::error::Error;
 use std::fmt;
-use std::fs::{create_dir_all, remove_dir_all, File};
+use std::fs::{create_dir_all, remove_dir_all, File, canonicalize};
 use std::io::{self, BufReader, Error as IoError, ErrorKind, Read, Write};
 use std::path::PathBuf;
 use std::{panic, thread};
@@ -790,6 +791,8 @@ impl FlatFiles {
 
         if self.csv {
             self.write_csvs()?;
+            self.write_postgresql()?;
+            self.write_sqlite()?;
         };
 
         if self.xlsx {
@@ -798,6 +801,14 @@ impl FlatFiles {
 
         let tmp_path = self.output_path.join("tmp");
         remove_dir_all(&tmp_path)?;
+
+        self.write_data_package()?;
+        self.write_fields_csv()?;
+
+        Ok(())
+    }
+
+    pub fn write_data_package(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
 
         let metadata_file = File::create(self.output_path.join("data_package.json"))?;
 
@@ -841,6 +852,18 @@ impl FlatFiles {
             resources.push(resource)
         }
 
+        let data_package = json!({
+            "profile": "tabular-data-package",
+            "resources": resources
+        });
+
+        serde_json::to_writer_pretty(metadata_file, &data_package)?;
+
+        Ok(())
+    }
+
+
+    pub fn write_fields_csv(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
         let mut fields_writer = Writer::from_path(self.output_path.join("fields.csv"))?;
 
         fields_writer.write_record(["table_name", "field_name", "field_type", "count"])?;
@@ -862,13 +885,6 @@ impl FlatFiles {
                 ])?;
             }
         }
-
-        let data_package = json!({
-            "profile": "tabular-data-package",
-            "resources": resources
-        });
-
-        serde_json::to_writer_pretty(metadata_file, &data_package)?;
 
         Ok(())
     }
@@ -1009,6 +1025,82 @@ impl FlatFiles {
         workbook.close()?;
 
         return Ok(());
+    }
+
+    pub fn write_postgresql(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+
+
+        let postgresql_dir_path = self.output_path.join("postgresql");
+        create_dir_all(&postgresql_dir_path)?;
+
+        let mut postgresql_schema = File::create(postgresql_dir_path.join("postgresql_schema.sql"))?;
+        let mut postgresql_load = File::create(postgresql_dir_path.join("postgresql_load.sql"))?;
+
+
+        for table_name in self.table_metadata.keys().sorted() {
+            let metadata = self.table_metadata.get(table_name).unwrap();
+            if metadata.rows == 0 || metadata.ignore {
+                continue;
+            }
+            let table_order = metadata.order.clone();
+            write!(postgresql_schema, "CREATE TABLE \"{ }\"(\n", table_name.to_lowercase())?;
+
+            let mut fields = Vec::new();
+            for order in table_order {
+                if metadata.ignore_fields[order] {
+                    continue
+                }
+                fields.push(
+                    format!("    \"{}\" {}", metadata.fields[order].to_lowercase(), postgresql::to_postgresql_type(&metadata.field_type[order]))
+                );
+            }
+            write!(postgresql_schema, "{}", fields.join(",\n"))?;
+            write!(postgresql_schema, "{}", ");\n\n")?;
+
+            let csv_path = canonicalize(self.output_path.join("csv").join(format!("{}.csv", table_name)))?;
+
+            write!(postgresql_load, "\\copy \"{}\" from '{}' with CSV HEADER\n", table_name.to_lowercase(), csv_path.to_string_lossy())?;
+        }
+
+        Ok(())
+    }
+
+    pub fn write_sqlite(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+
+        let sqlite_dir_path = self.output_path.join("sqlite");
+        create_dir_all(&sqlite_dir_path)?;
+
+        let mut sqlite_schema = File::create(sqlite_dir_path.join("sqlite_schema.sql"))?;
+        let mut sqlite_load = File::create(sqlite_dir_path.join("sqlite_load.sql"))?;
+
+        write!(sqlite_load, "{}", ".mode csv \n")?;
+
+        for table_name in self.table_metadata.keys().sorted() {
+            let metadata = self.table_metadata.get(table_name).unwrap();
+            if metadata.rows == 0 || metadata.ignore {
+                continue;
+            }
+            let table_order = metadata.order.clone();
+            write!(sqlite_schema, "CREATE TABLE \"{ }\"(\n", table_name.to_lowercase())?;
+
+            let mut fields = Vec::new();
+            for order in table_order {
+                if metadata.ignore_fields[order] {
+                    continue
+                }
+                fields.push(
+                    format!("    \"{}\" {}", metadata.fields[order].to_lowercase(), postgresql::to_postgresql_type(&metadata.field_type[order]))
+                );
+            }
+            write!(sqlite_schema, "{}", fields.join(",\n"))?;
+            write!(sqlite_schema, "{}", ");\n\n")?;
+
+            let csv_path = canonicalize(self.output_path.join("csv").join(format!("{}.csv", table_name)))?;
+
+            write!(sqlite_load, ".import '{}' {} --skip 1 \n", csv_path.to_string_lossy(), table_name.to_lowercase())?;
+        }
+
+        Ok(())
     }
 }
 

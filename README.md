@@ -14,7 +14,7 @@ It aims to be fast and memory efficient.
 pip install flatterer
 ```
 
-flatterer requires Python 3.6 or greater and on non linux platforms rust/cargo with clang/llvm toolchain.
+Flatterer requires Python 3.6 or greater. It is written as a python extension in Rust but has binaries (wheels) for linux (x64), macos (x64 and universal) and windows (x64, x86).  On other platforms a rust toolchain will need to be installed.
 
 ### Example JSON
 
@@ -59,9 +59,6 @@ Run the above file with flatterer.
 flatterer games.json games_dir
 ```
 
-[Full Options Doucmentation](http://flatterer.opendata.coop/options.html)
-
-
 ### Output Files
 
 
@@ -75,7 +72,8 @@ games_dir/
 │   ├── games.csv
 │   └── platforms.csv
 ├── data_package.json
-└── fields.csv
+├── fields.csv
+└── ...
 ```
 
 #### Main Table
@@ -111,7 +109,7 @@ Sub-object properties are separated by '_'.
 
 If there was a sub-array of `platforms` then that would have `_link`,  `_link_games` and  `_link_platforms` fields. 
 
-To generalize this the `_link_<table_name>` fields joins to the `_link` field of `<table_name>` i.e the `_link_<table_name>` are the foreign keys refrencing `<table_name>._link`.
+To generalize this the `_link__<table_name>` fields joins to the `_link` field of `<table_name>` i.e the `_link__<table_name>` are the foreign keys refrencing `<table_name>._link`.
 
 #### Fields CSV
 
@@ -130,7 +128,7 @@ To generalize this the `_link_<table_name>` fields joins to the `_link` field of
 |games      |releaseDate|date    |2    |
 |games      |title     |text     |2    |
 
-The `field_type` column contains a type guess useful for inserting into a database.  After editing this file you can rerun the transform:
+The `field_type` column contains a type guess useful for inserting into a database.  After editing this file then you can rerun the transform:
 
 ```bash
 flatterer games.json new_games_dir -f myfields.csv --only-fields
@@ -139,4 +137,3 @@ flatterer games.json new_games_dir -f myfields.csv --only-fields
 This can be useful for rearranging the field order or if you want to remove some fields the `--only-fields` flag will only include the fields in the edited file.
 
 `data_package.json` contains metadata in the [Tabular Datapackge Spec](https://specs.frictionlessdata.io/tabular-data-package/#language)
-
