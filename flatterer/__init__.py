@@ -35,10 +35,12 @@ def flatten(
     fields='',
     only_fields=False,
     inline_one_to_one=False,
-    schema=""
+    schema="",
+    table_prefix=""
 ):
     flatten_rs(input, output_dir, csv, xlsx,
-               path, main_table_name, emit_path, json_lines, force, fields, only_fields, inline_one_to_one, schema)
+               path, main_table_name, emit_path, json_lines, force, fields, only_fields, inline_one_to_one, schema,
+               table_prefix)
 
 
 def iterator_flatten(
@@ -52,11 +54,13 @@ def iterator_flatten(
     fields='',
     only_fields=False,
     inline_one_to_one=False,
-    schema=""
+    schema="",
+    table_prefix=""
 ):
 
     iterator_flatten_rs(bytes_generator(iterator), output_dir, csv, xlsx,
-                        main_table_name, emit_path, force, fields, only_fields, inline_one_to_one, schema)
+                        main_table_name, emit_path, force, fields, only_fields, inline_one_to_one, schema,
+                        table_prefix)
 
 
 @click.command()
@@ -75,6 +79,8 @@ def iterator_flatten(
               help='If array only has single item for all objects treat as one-to-one')
 @click.option('--schema', '-s', default="",
               help='JSONSchema file or URL to determine field order')
+@click.option('--table-prefix', '-t', default="",
+              help='Prefix to add to all table names')
 @click.argument('input_file')
 @click.argument('output_directory')
 def cli(
@@ -90,6 +96,7 @@ def cli(
     only_fields=False,
     inline_one_to_one=False,
     schema="",
+    table_prefix="",
 ):
 
     if not main_table_name:
@@ -106,4 +113,5 @@ def cli(
             fields=fields,
             only_fields=only_fields,
             inline_one_to_one=inline_one_to_one,
-            schema=schema)
+            schema=schema,
+            table_prefix=table_prefix)

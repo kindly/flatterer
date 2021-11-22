@@ -13,18 +13,19 @@ fn main() -> Result<(), ()> {
         .author("David Raznick")
         .about("Make JSON flatterer")
         .args_from_usage(
-                           "<INPUT>               'Sets the input file to use'
-                           <OUT_DIR>              'Sets the output directory'
-                           -p --path=[path]       'key where array lives, leave if array is at root'
-                           -j --jl                'Treat input as JSON Lines, path will be ignored'
-                           -c --csv               'Output csv files (defualt but required if xlsx is selected)'
-                           -x --xlsx              'Output xlsx file'
-                           -i --inline-one-to-one 'If array always has only one element treat relationship as one-to-one'
-                           -f --fields=[file]     'fields.csv file to determine order of fields.'
-                           -o --only-fields       'use only fields in csv file and no others'
-                           -m --main=[main]       'Table name of top level object'
-                           -s --schema=[schema]   'Link to remote or local JSONSchema to help out with field ordering'
-                           --force                'Delete output directory if it exist'",
+                           "<INPUT>                              'Sets the input file to use'
+                           <OUT_DIR>                             'Sets the output directory'
+                           -p --path=[path]                      'key where array lives, leave if array is at root'
+                           -j --jl                               'Treat input as JSON Lines, path will be ignored'
+                           -c --csv                              'Output csv files (defualt but required if xlsx is selected)'
+                           -x --xlsx                             'Output xlsx file'
+                           -i --inline-one-to-one                'If array always has only one element treat relationship as one-to-one'
+                           -f --fields=[file]                    'fields.csv file to determine order of fields.'
+                           -o --only-fields                      'use only fields in csv file and no others'
+                           -m --main=[main]                      'Table name of top level object'
+                           -s --schema=[schema]                  'Link to remote or local JSONSchema to help out with field ordering'
+                           -t --table-prefix=[table-prefix]      'prefix to add to all table names'
+                           --force                               'Delete output directory if it exist'",
         )
         .get_matches();
 
@@ -58,6 +59,12 @@ fn main() -> Result<(), ()> {
         schema_path = schema;
     } 
 
+    let mut table_prefix = "";
+
+    if let Some(table_name_prefix) = matches.value_of("table-prefix") {
+        table_prefix = table_name_prefix;
+    } 
+
     let mut flat_files = FlatFiles::new (
         output_dir.to_string(),
         matches.is_present("csv") || !matches.is_present("xlsx"),
@@ -66,7 +73,8 @@ fn main() -> Result<(), ()> {
         main_table_name,
         vec![],
         matches.is_present("inline-one-to-one"),
-        schema_path.to_string()
+        schema_path.to_string(),
+        table_prefix.to_string()
     ).unwrap();
 
     if let Some(fields) = matches.value_of("fields") {

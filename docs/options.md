@@ -26,6 +26,7 @@ Options:
   -i, --inline-one-to-one     If array only has single item for all objects
                               treat as one-to-one
   -s, --schema TEXT           JSONSchema file or URL to determine field order
+  -t, --table-prefix TEXT     Prefix to add to all table names
   --help                      Show this message and exit.
 ```
 
@@ -314,5 +315,24 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --schema schema.json
 ```python
 import flatterer
 
-flatterer.flatten('inputfile.jl', 'ouput_dir', schema='https://example.com/schema.json')
+flatterer.flatten('inputfile.json', 'ouput_dir', schema='https://example.com/schema.json')
+```
+
+## Table Prefix
+
+Prefix to add to all table names. Can be useful if you are trying to namespace the output when inserting into a database.
+
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --table-prefix myprefix__
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', table_prefix='myprefix_')
 ```

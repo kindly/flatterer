@@ -41,6 +41,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         only_fields: bool,
         inline_one_to_one: bool,
         schema: String,
+        table_prefix: String
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
@@ -50,7 +51,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             main_table_name,
             emit_path,
             inline_one_to_one,
-            schema
+            schema,
+            table_prefix
         );
 
         let mut selectors = vec![];
@@ -124,7 +126,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         fields: String,
         only_fields: bool,
         inline_one_to_one: bool,
-        schema: String
+        schema: String,
+        table_prefix: String,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
@@ -134,7 +137,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             main_table_name,
             emit_path,
             inline_one_to_one,
-            schema
+            schema,
+            table_prefix
         );
 
         if flat_files_res.is_err() {
@@ -269,7 +273,8 @@ pub struct FlatFiles {
     inline_one_to_one: bool,
     one_to_many_arrays: Vec<Vec<String>>,
     one_to_one_arrays: Vec<Vec<String>>,
-    schema: String 
+    schema: String,
+    table_prefix: String
 }
 
 #[derive(Serialize, Debug)]
@@ -320,7 +325,8 @@ impl FlatFiles {
         main_table_name: String,
         emit_obj: Vec<Vec<String>>,
         inline_one_to_one: bool,
-        schema: String
+        schema: String,
+        table_prefix: String
     ) -> Result<FlatFiles, IoError> {
         let output_path = PathBuf::from(output_dir.clone());
         if output_path.is_dir() {
@@ -345,7 +351,7 @@ impl FlatFiles {
             output_path,
             csv,
             xlsx,
-            main_table_name,
+            main_table_name: [table_prefix.clone(), main_table_name].concat(),
             emit_obj,
             row_number: 1,
             date_regexp: Regex::new(r"^([1-3]\d{3})-(\d{2})-(\d{2})([T ](\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)((-(\d{2}):(\d{2})|Z)?))?$").unwrap(),
@@ -356,7 +362,8 @@ impl FlatFiles {
             inline_one_to_one,
             one_to_many_arrays: Vec::new(),
             one_to_one_arrays: Vec::new(),
-            schema
+            schema,
+            table_prefix
         })
     }
 
@@ -573,9 +580,9 @@ impl FlatFiles {
             Value::String(self.row_number.to_string()),
         );
 
-        let mut table_name = no_index_path.join("_");
+        let mut table_name = [self.table_prefix.clone(), no_index_path.join("_")].concat();
 
-        if table_name == "" {
+        if no_index_path.len() == 0{
             table_name = self.main_table_name.clone();
         }
 
@@ -1250,7 +1257,8 @@ mod tests {
             "main".to_string(),
             vec![],
             false,
-            "".to_string()
+            "".to_string(),
+            "".to_string(),
         )
         .unwrap();
         flatten(
@@ -1281,7 +1289,8 @@ mod tests {
             "main".to_string(),
             vec![],
             true,
-            "".to_string()
+            "".to_string(),
+            "".to_string(),
         )
         .unwrap();
         flatten(
@@ -1319,6 +1328,7 @@ mod tests {
             "main".to_string(),
             vec![],
             false,
+            "".to_string(),
             "".to_string()
         )
         .unwrap();
@@ -1540,7 +1550,8 @@ mod tests {
             "main".to_string(),
             vec![],
             true,
-            "".to_string()
+            "".to_string(),
+            "".to_string(),
         )
         .unwrap();
 
@@ -1580,7 +1591,8 @@ mod tests {
             "main".to_string(),
             vec![],
             true,
-            "".to_string()
+            "".to_string(),
+            "".to_string(),
         )
         .unwrap();
 
