@@ -7,14 +7,16 @@ use std::collections::HashMap;
 #[derive(Clone, Debug, PartialEq)]
 struct SchemaOrder {
     schema: String,
+    path_separator: String,
     output: Vec<String>,
 }
 
 impl SchemaOrder {
 
-    fn new(schema: &str) -> SchemaOrder {
+    fn new(schema: &str, path_separator: &str) -> SchemaOrder {
         return SchemaOrder {
             schema: schema.to_owned(),
+            path_separator: path_separator.to_owned(),
             output: vec![],
         }
     }
@@ -52,7 +54,7 @@ impl SchemaOrder {
                 } else if let Some(properties) = property.pointer("/items/properties") {
                     self.parse_properties(properties, new_path.clone());
                 } else {
-                    let field_path = new_path.join("_");
+                    let field_path = new_path.join(&self.path_separator);
                     self.output.push(field_path);
                 }
             }
@@ -60,8 +62,8 @@ impl SchemaOrder {
     }
 }
 
-pub fn schema_order(schema_path: &str) -> Result<HashMap<String, usize>, Box<dyn Error + Sync + Send>>{
-    let mut schema = SchemaOrder::new(schema_path);
+pub fn schema_order(schema_path: &str, path_separator: &str) -> Result<HashMap<String, usize>, Box<dyn Error + Sync + Send>>{
+    let mut schema = SchemaOrder::new(schema_path, path_separator);
     schema.parse()?;
 
     let mut output_map = HashMap::new();
@@ -93,7 +95,8 @@ mod tests {
 
         assert_eq!(
             schema_order(
-                "https://gist.githubusercontent.com/kindly/91e09f88ced65aaca1a15d85a56a28f9/raw/52f8477435cff0b73c54aacc70926c101ce6c685/base.json"
+                "https://gist.githubusercontent.com/kindly/91e09f88ced65aaca1a15d85a56a28f9/raw/52f8477435cff0b73c54aacc70926c101ce6c685/base.json",
+                "_"
                 ).unwrap(), expected
             );
     }

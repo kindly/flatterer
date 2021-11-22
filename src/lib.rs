@@ -41,7 +41,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         only_fields: bool,
         inline_one_to_one: bool,
         schema: String,
-        table_prefix: String
+        table_prefix: String,
+        path_separator: String
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
@@ -52,7 +53,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             emit_path,
             inline_one_to_one,
             schema,
-            table_prefix
+            table_prefix,
+            path_separator
         );
 
         let mut selectors = vec![];
@@ -128,6 +130,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         inline_one_to_one: bool,
         schema: String,
         table_prefix: String,
+        path_separator: String
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir.to_string(),
@@ -138,7 +141,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             emit_path,
             inline_one_to_one,
             schema,
-            table_prefix
+            table_prefix,
+            path_separator,
         );
 
         if flat_files_res.is_err() {
@@ -274,7 +278,8 @@ pub struct FlatFiles {
     one_to_many_arrays: Vec<Vec<String>>,
     one_to_one_arrays: Vec<Vec<String>>,
     schema: String,
-    table_prefix: String
+    table_prefix: String,
+    path_separator: String,
 }
 
 #[derive(Serialize, Debug)]
@@ -326,7 +331,8 @@ impl FlatFiles {
         emit_obj: Vec<Vec<String>>,
         inline_one_to_one: bool,
         schema: String,
-        table_prefix: String
+        table_prefix: String,
+        path_separator: String
     ) -> Result<FlatFiles, IoError> {
         let output_path = PathBuf::from(output_dir.clone());
         if output_path.is_dir() {
@@ -363,7 +369,8 @@ impl FlatFiles {
             one_to_many_arrays: Vec::new(),
             one_to_one_arrays: Vec::new(),
             schema,
-            table_prefix
+            table_prefix,
+            path_separator
         })
     }
 
@@ -499,7 +506,7 @@ impl FlatFiles {
                         for (new_key, new_value) in my_obj.iter_mut() {
                             let mut object_key = String::with_capacity(100);
                             object_key.push_str(key);
-                            object_key.push_str("_");
+                            object_key.push_str(&self.path_separator);
                             object_key.push_str(new_key);
 
                             to_insert.push((object_key, new_value.take()));
@@ -550,7 +557,7 @@ impl FlatFiles {
         while let Some((full, no_index)) = path_iter.next() {
             if path_iter.peek().is_some() {
                 obj.insert(
-                    ["_link_".to_string(), no_index.iter().join("_")].concat(),
+                    ["_link_".to_string(), no_index.iter().join(&self.path_separator)].concat(),
                     Value::String(
                         [
                             self.row_number.to_string(),
@@ -580,7 +587,7 @@ impl FlatFiles {
             Value::String(self.row_number.to_string()),
         );
 
-        let mut table_name = [self.table_prefix.clone(), no_index_path.join("_")].concat();
+        let mut table_name = [self.table_prefix.clone(), no_index_path.join(&self.path_separator)].concat();
 
         if no_index_path.len() == 0{
             table_name = self.main_table_name.clone();
@@ -595,6 +602,7 @@ impl FlatFiles {
     }
 
     pub fn create_rows(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+
         for (table, rows) in self.table_rows.iter_mut() {
             if !self.tmp_csvs.contains_key(table) {
                 self.tmp_csvs.insert(
@@ -714,21 +722,25 @@ impl FlatFiles {
         let one_to_many_table_names = self
             .one_to_many_arrays
             .iter()
-            .map(|item| item.join("_"))
+            .map(|item| item.join(&self.path_separator))
             .collect_vec();
 
         for (table_name, metadata) in self.table_metadata.iter_mut() {
-            let table_name_with_underscore = if table_name == &self.main_table_name {
+            let table_name_with_separator = if table_name == &self.main_table_name {
                 "".to_string()
             } else {
-                format!("{}_", table_name)
+                let mut full_path = format!("{}{}", table_name, self.path_separator);
+                if self.table_prefix != "" {
+                    full_path.replace_range(0..self.table_prefix.len(), "");
+                }
+                full_path
             };
 
             for (num, field) in metadata.fields.iter().enumerate() {
-                let full_path = format!("{}{}", table_name_with_underscore, field);
+                let full_path = format!("{}{}", table_name_with_separator, field);
                 for one_to_many_table_name in &one_to_many_table_names {
                     if full_path.starts_with(one_to_many_table_name)
-                        && !table_name_with_underscore.starts_with(one_to_many_table_name)
+                        && !table_name_with_separator.starts_with(one_to_many_table_name)
                     {
                         metadata.ignore_fields[num] = true;
                     }
@@ -737,7 +749,7 @@ impl FlatFiles {
         }
 
         for table_path in &self.one_to_one_arrays {
-            let table_name = table_path.iter().join("_");
+            let table_name = format!("{}{}", self.table_prefix, table_path.iter().join(&self.path_separator));
             if let Some(table_metadata) = self.table_metadata.get_mut(&table_name) {
                 table_metadata.ignore = true
             }
@@ -749,22 +761,26 @@ impl FlatFiles {
         let order_map;
 
         if &self.schema != "" {
-            order_map = schema_order::schema_order(&self.schema)?
+            order_map = schema_order::schema_order(&self.schema, &self.path_separator)?
         } else {
             order_map = HashMap::new()
         }
 
         for (table_name, metadata) in self.table_metadata.iter_mut() {
-            let table_name_with_underscore = if table_name == &self.main_table_name {
+            let table_name_with_separator = if table_name == &self.main_table_name {
                 "".to_string()
             } else {
-                format!("{}_", table_name)
+                let mut full_path = format!("{}{}", table_name, self.path_separator);
+                if self.table_prefix != "" {
+                    full_path.replace_range(0..self.table_prefix.len(), "");
+                }
+                full_path
             };
 
             let mut fields_to_order: Vec<(usize, usize)> = vec![];
 
             for (num, field) in metadata.fields.iter().enumerate() {
-                let full_path = format!("{}{}", table_name_with_underscore, field);
+                let full_path = format!("{}{}", table_name_with_separator, field);
 
                 let schema_order: usize;
 
@@ -1259,6 +1275,7 @@ mod tests {
             false,
             "".to_string(),
             "".to_string(),
+            "_".to_string(),
         )
         .unwrap();
         flatten(
@@ -1291,6 +1308,7 @@ mod tests {
             true,
             "".to_string(),
             "".to_string(),
+            "_".to_string(),
         )
         .unwrap();
         flatten(
@@ -1329,7 +1347,8 @@ mod tests {
             vec![],
             false,
             "".to_string(),
-            "".to_string()
+            "".to_string(),
+            "_".to_string(),
         )
         .unwrap();
 
@@ -1552,6 +1571,7 @@ mod tests {
             true,
             "".to_string(),
             "".to_string(),
+            "_".to_string(),
         )
         .unwrap();
 
@@ -1593,6 +1613,7 @@ mod tests {
             true,
             "".to_string(),
             "".to_string(),
+            "_".to_string(),
         )
         .unwrap();
 

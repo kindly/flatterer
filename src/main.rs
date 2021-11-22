@@ -15,16 +15,17 @@ fn main() -> Result<(), ()> {
         .args_from_usage(
                            "<INPUT>                              'Sets the input file to use'
                            <OUT_DIR>                             'Sets the output directory'
-                           -p --path=[path]                      'key where array lives, leave if array is at root'
+                           -p --path=[path]                      'Key where array lives, leave if array is at root'
                            -j --jl                               'Treat input as JSON Lines, path will be ignored'
                            -c --csv                              'Output csv files (defualt but required if xlsx is selected)'
                            -x --xlsx                             'Output xlsx file'
                            -i --inline-one-to-one                'If array always has only one element treat relationship as one-to-one'
                            -f --fields=[file]                    'fields.csv file to determine order of fields.'
-                           -o --only-fields                      'use only fields in csv file and no others'
+                           -o --only-fields                      'Use only fields in csv file and no others'
                            -m --main=[main]                      'Table name of top level object'
                            -s --schema=[schema]                  'Link to remote or local JSONSchema to help out with field ordering'
-                           -t --table-prefix=[table-prefix]      'prefix to add to all table names'
+                           -t --table-prefix=[table-prefix]      'Prefix to add to all table names'
+                           -a --path-separator=[path-separator]  'Seperator to denote new path within the input JSON. Defaults to `_`'
                            --force                               'Delete output directory if it exist'",
         )
         .get_matches();
@@ -53,17 +54,17 @@ fn main() -> Result<(), ()> {
         main_table_name = format!("main");
     }
 
-    let mut schema_path = "";
+    let schema_path = if let Some(schema_path) = matches.value_of("schema") {
+        schema_path
+    } else {""};
 
-    if let Some(schema) = matches.value_of("schema") {
-        schema_path = schema;
-    } 
+    let table_prefix = if let Some(table_prefix) = matches.value_of("table-prefix") {
+        table_prefix
+    } else {""};
 
-    let mut table_prefix = "";
-
-    if let Some(table_name_prefix) = matches.value_of("table-prefix") {
-        table_prefix = table_name_prefix;
-    } 
+    let path_separator = if let Some(path_seperator) = matches.value_of("path-separator") {
+        path_seperator
+    } else {"_"};
 
     let mut flat_files = FlatFiles::new (
         output_dir.to_string(),
@@ -74,7 +75,8 @@ fn main() -> Result<(), ()> {
         vec![],
         matches.is_present("inline-one-to-one"),
         schema_path.to_string(),
-        table_prefix.to_string()
+        table_prefix.to_string(),
+        path_separator.to_string()
     ).unwrap();
 
     if let Some(fields) = matches.value_of("fields") {

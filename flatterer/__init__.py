@@ -36,11 +36,12 @@ def flatten(
     only_fields=False,
     inline_one_to_one=False,
     schema="",
-    table_prefix=""
+    table_prefix="",
+    path_separator= "_",
 ):
     flatten_rs(input, output_dir, csv, xlsx,
                path, main_table_name, emit_path, json_lines, force, fields, only_fields, inline_one_to_one, schema,
-               table_prefix)
+               table_prefix, path_separator)
 
 
 def iterator_flatten(
@@ -55,12 +56,13 @@ def iterator_flatten(
     only_fields=False,
     inline_one_to_one=False,
     schema="",
-    table_prefix=""
+    table_prefix="",
+    path_separator= "_",
 ):
 
     iterator_flatten_rs(bytes_generator(iterator), output_dir, csv, xlsx,
                         main_table_name, emit_path, force, fields, only_fields, inline_one_to_one, schema,
-                        table_prefix)
+                        table_prefix, path_separator)
 
 
 @click.command()
@@ -81,6 +83,8 @@ def iterator_flatten(
               help='JSONSchema file or URL to determine field order')
 @click.option('--table-prefix', '-t', default="",
               help='Prefix to add to all table names')
+@click.option('--path-separator', '-a', default="_",
+              help='Seperator to denote new path within the input JSON. Defaults to `_`')
 @click.argument('input_file')
 @click.argument('output_directory')
 def cli(
@@ -97,10 +101,11 @@ def cli(
     inline_one_to_one=False,
     schema="",
     table_prefix="",
+    path_separator="_",
 ):
 
     if not main_table_name:
-        main_table_name = input_file.split('.')[0]
+        main_table_name = input_file.split('/')[-1].split('.')[0]
 
     flatten(input_file,
             output_directory,
@@ -114,4 +119,5 @@ def cli(
             only_fields=only_fields,
             inline_one_to_one=inline_one_to_one,
             schema=schema,
-            table_prefix=table_prefix)
+            table_prefix=table_prefix,
+            path_separator=path_separator)

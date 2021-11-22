@@ -27,6 +27,9 @@ Options:
                               treat as one-to-one
   -s, --schema TEXT           JSONSchema file or URL to determine field order
   -t, --table-prefix TEXT     Prefix to add to all table names
+  -a, --path-separator TEXT   Seperator to denote new path within the input
+                              JSON. Defaults to `_`
+
   --help                      Show this message and exit.
 ```
 
@@ -270,10 +273,11 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --fields fields.csv --only-fields
 import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', fields='fields.csv', only_fields=True)
+```
 
 ## Inline One To One
 
-When an key has an array of objects as its value, but that array only ever has single items in it, then treat it these single item as if they are a sub-object (not sub array).  
+When a key has an array of objects as its value, but that array only ever has single items in it, then treat it these single item as if they are a sub-object (not sub array).  
 Without this set any array of objects will be treated like a one-to-many relationship and therefore have a new table associated with it.  With this set and if all arrays under a particular key only have one item in it, the child table will not be created and the values will appear in the parent table.  
 
 ### CLI Usage
@@ -320,13 +324,14 @@ flatterer.flatten('inputfile.json', 'ouput_dir', schema='https://example.com/sch
 
 ## Table Prefix
 
-Prefix to add to all table names. Can be useful if you are trying to namespace the output when inserting into a database.
+Prefix to add to all table names. So if the output has a table called `mytable` and the "table prefix" is specified as `myprefix_` then the table (therefore csv file or excel sheet name) will be called `myprefix_mytable`.  
+This can be useful if you are trying to namespace the output when inserting into an exiting database.
 
 
 ### CLI Usage
 
 ```bash 
-flatterer INPUT_FILE OUTPUT_DIRECTORY --table-prefix myprefix__
+flatterer INPUT_FILE OUTPUT_DIRECTORY --table-prefix myprefix_
 ```
 
 ### Python Usage
@@ -335,4 +340,27 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --table-prefix myprefix__
 import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', table_prefix='myprefix_')
+```
+
+## Path Separator
+
+By default all table and field names have `_` as the seperator which denotes a that the field after the `_` is a sub-property. For example `myObject_myField` says that `myField` exists as a property of `myObject`. 
+
+However some data already has `_` in the property names.  For example if in the input data theres was an object called `my_object` and the property called `my_field` then by default the field name would be `my_object_my_field`.  This is confusing as you might expect `object` to be a property of `my` and it might cause some name clashes.
+
+To fix this you can change the path separator to whatever you like. You could choose `___` as a separator, so in the example above, the field would be called `my_object__my_field`.
+
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --path-separator __
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', path_separoator='__')
 ```
