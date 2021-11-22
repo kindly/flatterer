@@ -134,24 +134,28 @@
 </pre></div>
 </div>
 <p>output looks like</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">flatterer</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">INPUT_FILE</span> <span class="n">OUTPUT_DIRECTORY</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Usage: flatterer [OPTIONS] INPUT_FILE OUTPUT_DIRECTORY
 
-<span class="n">Options</span><span class="p">:</span>
-  <span class="o">--</span><span class="n">csv</span> <span class="o">/</span> <span class="o">--</span><span class="n">nocsv</span>             <span class="n">Output</span> <span class="n">CSV</span> <span class="n">files</span><span class="p">,</span> <span class="n">default</span> <span class="n">true</span>
-  <span class="o">--</span><span class="n">xlsx</span> <span class="o">/</span> <span class="o">--</span><span class="n">noxlsx</span>           <span class="n">Output</span> <span class="n">XLSX</span> <span class="n">file</span><span class="p">,</span> <span class="n">default</span> <span class="n">false</span>
-  <span class="o">-</span><span class="n">m</span><span class="p">,</span> <span class="o">--</span><span class="n">main</span><span class="o">-</span><span class="n">table</span><span class="o">-</span><span class="n">name</span> <span class="n">TEXT</span>  <span class="n">Name</span> <span class="n">of</span> <span class="n">main</span> <span class="n">table</span><span class="p">,</span> <span class="n">defaults</span> <span class="n">to</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">file</span>
-                              <span class="n">without</span> <span class="n">the</span> <span class="n">extension</span>
-  <span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="o">--</span><span class="n">path</span> <span class="n">TEXT</span>             <span class="n">Key</span> <span class="n">name</span> <span class="n">of</span> <span class="n">where</span> <span class="n">json</span> <span class="n">array</span> <span class="n">starts</span><span class="p">,</span> <span class="n">default</span> <span class="n">top</span>
-                              <span class="n">level</span> <span class="n">array</span>
-  <span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">lines</span>            <span class="n">Is</span> <span class="n">file</span> <span class="n">a</span> <span class="n">jsonlines</span> <span class="n">file</span><span class="p">,</span> <span class="n">default</span> <span class="n">false</span>
-  <span class="o">--</span><span class="n">force</span>                     <span class="n">Delete</span> <span class="n">output</span> <span class="n">directory</span> <span class="k">if</span> <span class="n">it</span> <span class="n">exists</span><span class="p">,</span> <span class="n">then</span> <span class="n">run</span>
-                              <span class="n">command</span><span class="p">,</span> <span class="n">default</span> <span class="kc">False</span>
-  <span class="o">-</span><span class="n">f</span><span class="p">,</span> <span class="o">--</span><span class="n">fields</span> <span class="n">TEXT</span>           <span class="n">fields</span><span class="o">.</span><span class="n">csv</span> <span class="n">file</span> <span class="n">to</span> <span class="n">use</span>
-  <span class="o">-</span><span class="n">o</span><span class="p">,</span> <span class="o">--</span><span class="n">only</span><span class="o">-</span><span class="n">fields</span>           <span class="n">Only</span> <span class="n">output</span> <span class="n">fields</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">csv</span> <span class="n">file</span>
-  <span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="o">--</span><span class="n">inline</span><span class="o">-</span><span class="n">one</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">one</span>     <span class="n">If</span> <span class="n">array</span> <span class="n">only</span> <span class="n">has</span> <span class="n">single</span> <span class="n">item</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">objects</span>
-                              <span class="n">treat</span> <span class="k">as</span> <span class="n">one</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">one</span>
-  <span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="o">--</span><span class="n">schema</span> <span class="n">TEXT</span>           <span class="n">JSONSchema</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">URL</span> <span class="n">to</span> <span class="n">determine</span> <span class="n">field</span> <span class="n">order</span>
-  <span class="o">--</span><span class="n">help</span>                      <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+Options:
+  --csv / --nocsv             Output CSV files, default true
+  --xlsx / --noxlsx           Output XLSX file, default false
+  -m, --main-table-name TEXT  Name of main table, defaults to name of the file
+                              without the extension
+  -p, --path TEXT             Key name of where json array starts, default top
+                              level array
+  -j, --json-lines            Is file a jsonlines file, default false
+  --force                     Delete output directory if it exists, then run
+                              command, default False
+  -f, --fields TEXT           fields.csv file to use
+  -o, --only-fields           Only output fields in fields.csv file
+  -i, --inline-one-to-one     If array only has single item for all objects
+                              treat as one-to-one
+  -s, --schema TEXT           JSONSchema file or URL to determine field order
+  -t, --table-prefix TEXT     Prefix to add to all table names
+  -a, --path-separator TEXT   Seperator to denote new path within the input
+                              JSON. Defaults to `_`
+
+  --help                      Show this message and exit.
 </pre></div>
 </div>
 </section>
@@ -385,24 +389,25 @@ You can generate just the fields.csv file by <a class="reference internal" href=
 </section>
 <section id="id14">
 <h3>Python Usage<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>import flatterer
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
-flatterer.flatten('inputfile.jl', 'ouput_dir', fields='fields.csv', only_fields=True)
-
-## Inline One To One
-
-When an key has an array of objects as its value, but that array only ever has single items in it, then treat it these single item as if they are a sub-object (not sub array).  
-Without this set any array of objects will be treated like a one-to-many relationship and therefore have a new table associated with it.  With this set and if all arrays under a particular key only have one item in it, the child table will not be created and the values will appear in the parent table.  
-
-### CLI Usage
-
-```bash 
-flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="s1">'fields.csv'</span><span class="p">,</span> <span class="n">only_fields</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
+</section>
+<section id="inline-one-to-one">
+<h2>Inline One To One<a class="headerlink" href="#inline-one-to-one" title="Permalink to this headline">¶</a></h2>
+<p>When a key has an array of objects as its value, but that array only ever has single items in it, then treat it these single item as if they are a sub-object (not sub array).<br/>
+Without this set any array of objects will be treated like a one-to-many relationship and therefore have a new table associated with it.  With this set and if all arrays under a particular key only have one item in it, the child table will not be created and the values will appear in the parent table.</p>
 <section id="id15">
-<h3>Python Usage<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<h3>CLI Usage<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
+</pre></div>
+</div>
+</section>
+<section id="id16">
+<h3>Python Usage<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">inline_one_to_one</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -414,8 +419,8 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
 <section id="schema">
 <h2>Schema<a class="headerlink" href="#schema" title="Permalink to this headline">¶</a></h2>
 <p>Supply a JSONSchema file to help determine field ordering of the output.  If the schema supplied starts with <code class="docutils literal notranslate"><span class="pre">http</span></code> will try and download the schema from a remote server, otherwise it is assumed to be a file-system path.</p>
-<section id="id16">
-<h3>CLI Usage<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<section id="id17">
+<h3>CLI Usage<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
 <p>For remote url:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --schema https://example.com/schema.json
 </pre></div>
@@ -425,11 +430,50 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
 </pre></div>
 </div>
 </section>
-<section id="id17">
-<h3>Python Usage<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<section id="id18">
+<h3>Python Usage<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
-<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s1">'https://example.com/schema.json'</span><span class="p">)</span>
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.json'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s1">'https://example.com/schema.json'</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="table-prefix">
+<h2>Table Prefix<a class="headerlink" href="#table-prefix" title="Permalink to this headline">¶</a></h2>
+<p>Prefix to add to all table names. So if the output has a table called <code class="docutils literal notranslate"><span class="pre">mytable</span></code> and the “table prefix” is specified as <code class="docutils literal notranslate"><span class="pre">myprefix_</span></code> then the table (therefore csv file or excel sheet name) will be called <code class="docutils literal notranslate"><span class="pre">myprefix_mytable</span></code>.<br/>
+This can be useful if you are trying to namespace the output when inserting into an exiting database.</p>
+<section id="id19">
+<h3>CLI Usage<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --table-prefix myprefix_
+</pre></div>
+</div>
+</section>
+<section id="id20">
+<h3>Python Usage<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">table_prefix</span><span class="o">=</span><span class="s1">'myprefix_'</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="path-separator">
+<h2>Path Separator<a class="headerlink" href="#path-separator" title="Permalink to this headline">¶</a></h2>
+<p>By default all table and field names have <code class="docutils literal notranslate"><span class="pre">_</span></code> as the seperator which denotes a that the field after the <code class="docutils literal notranslate"><span class="pre">_</span></code> is a sub-property. For example <code class="docutils literal notranslate"><span class="pre">myObject_myField</span></code> says that <code class="docutils literal notranslate"><span class="pre">myField</span></code> exists as a property of <code class="docutils literal notranslate"><span class="pre">myObject</span></code>.</p>
+<p>However some data already has <code class="docutils literal notranslate"><span class="pre">_</span></code> in the property names.  For example if in the input data theres was an object called <code class="docutils literal notranslate"><span class="pre">my_object</span></code> and the property called <code class="docutils literal notranslate"><span class="pre">my_field</span></code> then by default the field name would be <code class="docutils literal notranslate"><span class="pre">my_object_my_field</span></code>.  This is confusing as you might expect <code class="docutils literal notranslate"><span class="pre">object</span></code> to be a property of <code class="docutils literal notranslate"><span class="pre">my</span></code> and it might cause some name clashes.</p>
+<p>To fix this you can change the path separator to whatever you like. You could choose <code class="docutils literal notranslate"><span class="pre">___</span></code> as a separator, so in the example above, the field would be called <code class="docutils literal notranslate"><span class="pre">my_object__my_field</span></code>.</p>
+<section id="id21">
+<h3>CLI Usage<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --path-separator __
+</pre></div>
+</div>
+</section>
+<section id="id22">
+<h3>Python Usage<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">path_separoator</span><span class="o">=</span><span class="s1">'__'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -530,12 +574,26 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
 <li><a class="reference internal" href="#only-fields">Only Fields</a><ul>
 <li><a class="reference internal" href="#id13">CLI Usage</a></li>
 <li><a class="reference internal" href="#id14">Python Usage</a></li>
-<li><a class="reference internal" href="#id15">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inline-one-to-one">Inline One To One</a><ul>
+<li><a class="reference internal" href="#id15">CLI Usage</a></li>
+<li><a class="reference internal" href="#id16">Python Usage</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#schema">Schema</a><ul>
-<li><a class="reference internal" href="#id16">CLI Usage</a></li>
-<li><a class="reference internal" href="#id17">Python Usage</a></li>
+<li><a class="reference internal" href="#id17">CLI Usage</a></li>
+<li><a class="reference internal" href="#id18">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#table-prefix">Table Prefix</a><ul>
+<li><a class="reference internal" href="#id19">CLI Usage</a></li>
+<li><a class="reference internal" href="#id20">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#path-separator">Path Separator</a><ul>
+<li><a class="reference internal" href="#id21">CLI Usage</a></li>
+<li><a class="reference internal" href="#id22">Python Usage</a></li>
 </ul>
 </li>
 </ul>
