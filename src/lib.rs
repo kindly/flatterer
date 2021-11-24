@@ -664,8 +664,7 @@ impl FlatFiles {
                 }
                 if output_row.len() > 0 {
                     table_metadata.rows += 1;
-                    writer.write_record(&output_row)
-                        .context(format!("Can not write row `{:?}` to file `{}`", output_row, output_csv_path.to_string_lossy()))?;
+                    writer.write_record(&output_row)?;
                 }
             }
         }
