@@ -1,7 +1,7 @@
 use jsonref::JsonRef;
-use std::error::Error;
 use serde_json::Value;
 use std::collections::HashMap;
+use anyhow::Result;
 
 
 #[derive(Clone, Debug, PartialEq)]
@@ -21,7 +21,7 @@ impl SchemaOrder {
         }
     }
 
-    fn parse(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    fn parse(&mut self) -> Result<()> {
         let mut jsonref = JsonRef::new();
         let value: Value;
         if self.schema.starts_with("http") {
@@ -62,7 +62,7 @@ impl SchemaOrder {
     }
 }
 
-pub fn schema_order(schema_path: &str, path_separator: &str) -> Result<HashMap<String, usize>, Box<dyn Error + Sync + Send>>{
+pub fn schema_order(schema_path: &str, path_separator: &str) -> Result<HashMap<String, usize>>{
     let mut schema = SchemaOrder::new(schema_path, path_separator);
     schema.parse()?;
 

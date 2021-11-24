@@ -1,6 +1,6 @@
 [package]
 name = "flatterer"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["David Raznick <kindly@gmail.com>"]
 edition = "2021"
 
@@ -19,7 +19,8 @@ xlsxwriter = "0.3"
 crossbeam-channel="0.5"
 smallvec="1.6.1"
 regex="1"
-jsonref="0.3"
+jsonref= "0.4"
+anyhow="1.0"
 
 [profile.release]
 debug = true

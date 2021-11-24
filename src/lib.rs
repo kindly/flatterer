@@ -3,13 +3,13 @@ mod postgresql;
 
 use std::collections::HashMap;
 use std::convert::TryInto;
-use std::error::Error;
 use std::fmt;
 use std::fs::{create_dir_all, remove_dir_all, File, canonicalize};
 use std::io::{self, BufReader, Error as IoError, ErrorKind, Read, Write};
 use std::path::PathBuf;
 use std::{panic, thread};
 
+use anyhow::{Result, Context};
 use crossbeam_channel::{bounded, Receiver, Sender};
 use csv::{ByteRecord, Reader, ReaderBuilder, Writer, WriterBuilder};
 use itertools::Itertools;
@@ -84,14 +84,14 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let file;
 
-        match File::open(input_file) {
+        match File::open(&input_file) {
             Ok(input) => {
                 file = BufReader::new(input);
             }
             Err(err) => {
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
-                    "{:?}",
-                    err
+                    "Can not open file `{}`: {:?}",
+                    input_file, anyhow::Error::new(err)
                 )));
             }
         };
@@ -333,25 +333,25 @@ impl FlatFiles {
         schema: String,
         table_prefix: String,
         path_separator: String
-    ) -> Result<FlatFiles, IoError> {
+    ) -> Result<FlatFiles> {
         let output_path = PathBuf::from(output_dir.clone());
         if output_path.is_dir() {
             if force {
-                remove_dir_all(&output_path)?;
+                remove_dir_all(&output_path).context(format!("Can not remove output path `{}`", output_dir))?;
             } else {
-                return Err(IoError::new(
+                return Err(anyhow::Error::new(IoError::new(
                     ErrorKind::AlreadyExists,
                     format!("Directory {} already exists", output_dir),
-                ));
+                )));
             }
         }
         if csv {
             let csv_path = output_path.join("csv");
-            create_dir_all(&csv_path)?;
+            create_dir_all(&csv_path).context(format!("Can not create output path `{}`", output_dir))?;
         }
 
         let tmp_path = output_path.join("tmp");
-        create_dir_all(&tmp_path)?;
+        create_dir_all(&tmp_path).context(format!("Can not create output path `{}`", output_dir))?;
 
         Ok(FlatFiles {
             output_path,
@@ -601,15 +601,17 @@ impl FlatFiles {
         }
     }
 
-    pub fn create_rows(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    pub fn create_rows(&mut self) -> Result<()> {
 
         for (table, rows) in self.table_rows.iter_mut() {
+            let output_csv_path = self.output_path.join(format!("tmp/{}.csv", table));
             if !self.tmp_csvs.contains_key(table) {
                 self.tmp_csvs.insert(
                     table.clone(),
                     WriterBuilder::new()
                         .flexible(true)
-                        .from_path(self.output_path.join(format!("tmp/{}.csv", table)))?,
+                        .from_path(&output_csv_path)
+                        .context(format!("Can not create csv file `{}`", &output_csv_path.to_string_lossy()))?
                 );
             }
 
@@ -662,7 +664,8 @@ impl FlatFiles {
                 }
                 if output_row.len() > 0 {
                     table_metadata.rows += 1;
-                    writer.write_record(&output_row)?;
+                    writer.write_record(&output_row)
+                        .context(format!("Can not write row `{:?}` to file `{}`", output_row, output_csv_path.to_string_lossy()))?;
                 }
             }
         }
@@ -683,15 +686,16 @@ impl FlatFiles {
         &mut self,
         filepath: String,
         only_fields: bool,
-    ) -> Result<(), csv::Error> {
-        let mut fields_reader = Reader::from_path(filepath)?;
+    ) -> Result<()> {
+        let mut fields_reader = Reader::from_path(&filepath)
+             .context(format!("Can not open file `{}`", filepath))?;
 
         if only_fields {
             self.only_fields = true;
         }
 
         for row in fields_reader.deserialize() {
-            let row: FieldsRecord = row?;
+            let row: FieldsRecord = row.context(format!("Failed to read row from `{}`", filepath))?;
 
             if !self.table_metadata.contains_key(&row.table_name) {
                 self.table_metadata.insert(
@@ -756,7 +760,7 @@ impl FlatFiles {
         }
     }
 
-    pub fn determine_order(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    pub fn determine_order(&mut self) -> Result<()> {
 
         let order_map;
 
@@ -804,12 +808,13 @@ impl FlatFiles {
 
     }
 
-    pub fn write_files(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    pub fn write_files(&mut self) -> Result<()> {
         self.mark_ignore();
         self.determine_order()?;
 
-        for tmp_csv in self.tmp_csvs.values_mut() {
-            tmp_csv.flush()?;
+        for (file, tmp_csv) in self.tmp_csvs.iter_mut() {
+            tmp_csv.flush()
+                .context(format!("Can not flush file `{}`", file))?;
         }
 
         if self.csv {
@@ -831,7 +836,7 @@ impl FlatFiles {
         Ok(())
     }
 
-    pub fn write_data_package(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    pub fn write_data_package(&mut self) -> Result<()> {
 
         let metadata_file = File::create(self.output_path.join("data_package.json"))?;
 
@@ -886,7 +891,7 @@ impl FlatFiles {
     }
 
 
-    pub fn write_fields_csv(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    pub fn write_fields_csv(&mut self) -> Result<()> {
         let mut fields_writer = Writer::from_path(self.output_path.join("fields.csv"))?;
 
         fields_writer.write_record(["table_name", "field_name", "field_type", "count"])?;
@@ -912,7 +917,7 @@ impl FlatFiles {
         Ok(())
     }
 
-    pub fn write_csvs(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    pub fn write_csvs(&mut self) -> Result<()> {
         let tmp_path = self.output_path.join("tmp");
         let csv_path = self.output_path.join("csv");
 
@@ -970,7 +975,7 @@ impl FlatFiles {
         Ok(())
     }
 
-    pub fn write_xlsx(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    pub fn write_xlsx(&mut self) -> Result<()> {
         let tmp_path = self.output_path.join("tmp");
 
         let workbook = Workbook::new_with_options(
@@ -1050,7 +1055,7 @@ impl FlatFiles {
         return Ok(());
     }
 
-    pub fn write_postgresql(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    pub fn write_postgresql(&mut self) -> Result<()> {
 
 
         let postgresql_dir_path = self.output_path.join("postgresql");
@@ -1088,7 +1093,7 @@ impl FlatFiles {
         Ok(())
     }
 
-    pub fn write_sqlite(&mut self) -> Result<(), Box<dyn Error + Sync + Send>> {
+    pub fn write_sqlite(&mut self) -> Result<()> {
 
         let sqlite_dir_path = self.output_path.join("sqlite");
         create_dir_all(&sqlite_dir_path)?;
@@ -1180,10 +1185,10 @@ fn value_convert(
     }
 }
 
-pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<(), Box<dyn Error>> {
+pub fn flatten_from_jl<R: Read>(input: R, mut flat_files: FlatFiles) -> Result<()> {
     let (value_sender, value_receiver) = bounded(1000);
 
-    let thread = thread::spawn(move || -> Result<(), Box<dyn Error + Sync + Send>> {
+    let thread = thread::spawn(move || -> Result<()> {
         for value in value_receiver {
             flat_files.process_value(value);
             flat_files.create_rows()?
@@ -1216,10 +1221,10 @@ pub fn flatten<R: Read>(
     mut input: BufReader<R>,
     mut flat_files: FlatFiles,
     selectors: Vec<Selector>,
-) -> Result<(), Box<dyn Error>> {
+) -> Result<()> {
     let (buf_sender, buf_receiver): (Sender<Vec<u8>>, Receiver<Vec<u8>>) = bounded(1000);
 
-    let thread = thread::spawn(move || -> Result<(), Box<dyn Error + Sync + Send>> {
+    let thread = thread::spawn(move || -> Result<()> {
         for buf in buf_receiver.iter() {
             let value = serde_json::from_slice::<Value>(&buf)?;
             flat_files.process_value(value);

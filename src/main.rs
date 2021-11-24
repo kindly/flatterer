@@ -4,12 +4,12 @@ use std::io::BufReader;
 use std::fs:: File;
 use yajlish::ndjson_handler::Selector;
 use flatterer::{FlatFiles, flatten_from_jl, flatten};
+use anyhow::Result;
 
 
-
-fn main() -> Result<(), ()> {
+fn main() -> Result<()> {
     let matches = App::new("flatterer")
-        .version("0.1")
+        .version("0.6")
         .author("David Raznick")
         .about("Make JSON flatterer")
         .args_from_usage(
@@ -30,15 +30,15 @@ fn main() -> Result<(), ()> {
         )
         .get_matches();
 
-    let input = matches.value_of("INPUT").unwrap();
+    let input = matches.value_of("INPUT").unwrap(); //ok as parser will detect
     let input_path = PathBuf::from(input);
     if !input_path.exists() {
         eprintln!("Can not find file {}", input);
         return Ok(());
     }
-    let input = BufReader::new(File::open(input).unwrap());
+    let input = BufReader::new(File::open(input)?);
 
-    let output_dir = matches.value_of("OUT_DIR").unwrap();
+    let output_dir = matches.value_of("OUT_DIR").unwrap(); //ok as parser will detect
 
     let mut selectors = vec![];
 
@@ -77,16 +77,16 @@ fn main() -> Result<(), ()> {
         schema_path.to_string(),
         table_prefix.to_string(),
         path_separator.to_string()
-    ).unwrap();
+    )?;
 
     if let Some(fields) = matches.value_of("fields") {
-        flat_files.use_fields_csv(fields.to_string(), matches.is_present("only-fields")).unwrap();
+        flat_files.use_fields_csv(fields.to_string(), matches.is_present("only-fields"))?;
     };
 
     if matches.is_present("jl") {
-        flatten_from_jl(input, flat_files).unwrap();
+        flatten_from_jl(input, flat_files)?;
     } else {
-        flatten(input, flat_files, selectors).unwrap();
+        flatten(input, flat_files, selectors)?;
     }
 
     Ok(())
