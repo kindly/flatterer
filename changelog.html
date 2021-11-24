@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Change Log" href="changelog.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Development" href="development.html" /><link rel="prev" title="Outputs" href="outputs.html" />
 
     <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
-        <title>Development - flatterer 0.6 documentation</title>
+        <title>Change Log - flatterer 0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
@@ -111,8 +111,8 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Development</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 </ul>
 
 </div>
@@ -127,38 +127,69 @@
         <label class="toc-overlay-icon toc-content-icon" for="__toc">
           <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
         </label>
-        <section class="tex2jax_ignore mathjax_ignore" id="development">
-<h1>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h1>
-<p>Please contribute <a class="reference external" href="https://github.com/kindly/flatterer">on github</a>.</p>
-<section id="local-install">
-<h2>Local install<a class="headerlink" href="#local-install" title="Permalink to this headline">¶</a></h2>
-<p>Need local rust stable toolchain and python-virtualenv.</p>
-<p>Clone this repo.</p>
-<p>Create python virtual environment.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>virtualenv .ve
-<span class="nb">source</span> .ve/bin/activate
-</pre></div>
-</div>
-<p>Install maturin (the build tool for building rust extensions)</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install maturin
-</pre></div>
-</div>
-<p>Test local build.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>maturin develop --release 
-</pre></div>
-</div>
+        <section class="tex2jax_ignore mathjax_ignore" id="change-log">
+<h1>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
+<p>All notable changes to this project will be documented in this file.</p>
+<p>The format is based on <a class="reference external" href="http://keepachangelog.com/">Keep a Changelog</a>
+and this project adheres to <a class="reference external" href="http://semver.org/">Semantic Versioning</a>.</p>
+<section id="id1">
+<h2>[0.6.2] - 2021-11-24<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Change to pypi metadata</p></li>
+<li><p>Tests run in action</p></li>
+<li><p>Changelog in docs</p></li>
+</ul>
 </section>
-<section id="builds">
-<h2>Builds<a class="headerlink" href="#builds" title="Permalink to this headline">¶</a></h2>
-<p>Build anylinux wheels for all pythons 3.6+ and source distribution.</p>
-<p>Run this once</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">flatterer</span><span class="o">-</span><span class="n">anylinux</span> <span class="o">.</span>
-</pre></div>
-</div>
-<p>To build</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo docker run  -v $(pwd):/io flatterer-anylinux build --release
-</pre></div>
-</div>
+</section>
+<section id="id2">
+<h2>[0.6.1] - 2021-11-24<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<section id="id3">
+<h3>Fixed<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Regression in speed due to new error handling</p></li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h2>[0.6] - 2021-11-23<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>New error handling using <code class="docutils literal notranslate"><span class="pre">anyhow</span></code>, giving errors more context.</p></li>
+</ul>
+</section>
+</section>
+<section id="id5">
+<h2>[0.5] - 2021-11-22<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<section id="added">
+<h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#schema">Schema option</a> to supply JSONSchema, to make field order the same as schema.</p></li>
+<li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#table-prefix">Table prefix option</a> to namespece exported tables.</p></li>
+<li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#path-separator">Path separator option</a> to change the JSON path separator from <code class="docutils literal notranslate"><span class="pre">_</span></code> if the data has them in the field names.</p></li>
+</ul>
+</section>
+</section>
+<section id="id6">
+<h2>[0.4] - 2021-11-20<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<section id="id7">
+<h3>Added<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Postgresql and sqlite scripts to load CSV data into databases.</p></li>
+<li><p>Wheel builds for Windows and MacOS, automatically published using github actions.</p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h2>[0.3] - 2021-10-25<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<section id="id9">
+<h3>Added<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#inline-one-to-one">Inline One to One option</a> to mean that if an array only has one item in for all the data then treat it as sub-object.</p></li>
+</ul>
+</section>
 </section>
 </section>
 
@@ -166,15 +197,23 @@
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="changelog.html">
+          <a class="next-page" href="development.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Development</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="outputs.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Change Log</div>
+                <div class="title">Outputs</div>
                 
               </div>
             </a>
@@ -188,7 +227,7 @@
               <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
               <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
             |
-            <a class="muted-link" href="_sources/development.md.txt"
+            <a class="muted-link" href="_sources/changelog.md.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -208,9 +247,31 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Development</a><ul>
-<li><a class="reference internal" href="#local-install">Local install</a></li>
-<li><a class="reference internal" href="#builds">Builds</a></li>
+<li><a class="reference internal" href="#">Change Log</a><ul>
+<li><a class="reference internal" href="#id1">[0.6.2] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#fixed">Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2">[0.6.1] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id3">Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">[0.6] - 2021-11-23</a><ul>
+<li><a class="reference internal" href="#changed">Changed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id5">[0.5] - 2021-11-22</a><ul>
+<li><a class="reference internal" href="#added">Added</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">[0.4] - 2021-11-20</a><ul>
+<li><a class="reference internal" href="#id7">Added</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">[0.3] - 2021-10-25</a><ul>
+<li><a class="reference internal" href="#id9">Added</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
