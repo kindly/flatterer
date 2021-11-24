@@ -827,7 +827,7 @@ impl FlatFiles {
         };
 
         let tmp_path = self.output_path.join("tmp");
-        remove_dir_all(&tmp_path)?;
+        remove_dir_all(&tmp_path).context(format!("Can not remove output path `{}`", tmp_path.to_string_lossy()))?;
 
         self.write_data_package()?;
         self.write_fields_csv()?;

@@ -1,0 +1,20 @@
+name: test
+on: [push, pull_request]
+jobs:
+  test:
+    env:
+      RUST_BACKTRACE: 'full'
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          default: true
+      - name: test
+        run: cargo test
