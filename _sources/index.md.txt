@@ -1,4 +1,4 @@
-# Flatterer. <small><small><small>Making JSON flatterer</small></small></small>
+# Flatterer. Making JSON flatterer
 
 ## Introduction
 
