@@ -145,5 +145,6 @@ This can be useful for rearranging the field order or if you want to remove some
 :hidden:
 options
 outputs
+changelog
 development
 ```
