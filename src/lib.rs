@@ -290,7 +290,8 @@ pub struct TableMetadata {
     rows: u32,
     ignore: bool,
     ignore_fields: Vec<bool>,
-    order: Vec<usize>
+    order: Vec<usize>,
+    field_titles: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -298,6 +299,7 @@ struct FieldsRecord {
     table_name: String,
     field_name: String,
     field_type: String,
+    field_title: Option<String>,
 }
 
 struct JLWriter {
@@ -626,6 +628,7 @@ impl FlatFiles {
                         ignore: false,
                         ignore_fields: vec![],
                         order: vec![],
+                        field_titles: vec![],
                     },
                 );
             }
@@ -654,6 +657,7 @@ impl FlatFiles {
                         table_metadata.field_counts.push(1);
                         table_metadata.field_type.push("".to_string());
                         table_metadata.ignore_fields.push(false);
+                        table_metadata.field_titles.push(key.clone());
                         output_row.push(value_convert(
                             value.take(),
                             &mut table_metadata.field_type,
@@ -706,15 +710,20 @@ impl FlatFiles {
                         rows: 0,
                         ignore: false,
                         ignore_fields: vec![],
-                        order: vec![]
+                        order: vec![],
+                        field_titles: vec![]
                     },
                 );
             }
             let table_metadata = self.table_metadata.get_mut(&row.table_name).unwrap(); //key known
-            table_metadata.fields.push(row.field_name);
+            table_metadata.fields.push(row.field_name.clone());
             table_metadata.field_counts.push(0);
             table_metadata.field_type.push(row.field_type);
             table_metadata.ignore_fields.push(false);
+            match row.field_title {
+                Some(field_title) => {table_metadata.field_titles.push(field_title)},
+                None => {table_metadata.field_titles.push(row.field_name)}
+            }
         }
 
         return Ok(());
@@ -854,7 +863,7 @@ impl FlatFiles {
                     continue
                 }
                 let field = json!({
-                    "name": metadata.fields[order],
+                    "name": metadata.field_titles[order],
                     "type": metadata.field_type[order],
                     "count": metadata.field_counts[order],
                 });
@@ -893,7 +902,7 @@ impl FlatFiles {
     pub fn write_fields_csv(&mut self) -> Result<()> {
         let mut fields_writer = Writer::from_path(self.output_path.join("fields.csv"))?;
 
-        fields_writer.write_record(["table_name", "field_name", "field_type", "count"])?;
+        fields_writer.write_record(["table_name", "field_name", "field_type", "field_title", "count"])?;
         for table_name in self.table_metadata.keys().sorted() {
             let metadata = self.table_metadata.get(table_name).unwrap();
             if metadata.rows == 0 || metadata.ignore {
@@ -908,6 +917,7 @@ impl FlatFiles {
                     table_name,
                     &metadata.fields[order],
                     &metadata.field_type[order],
+                    &metadata.field_titles[order],
                     &metadata.field_counts[order].to_string(),
                 ])?;
             }
@@ -940,7 +950,7 @@ impl FlatFiles {
 
             for order in table_order {
                 if !metadata.ignore_fields[order] {
-                    non_ignored_fields.push(metadata.fields[order].clone())
+                    non_ignored_fields.push(metadata.field_titles[order].clone())
                 }
             }
 
@@ -957,13 +967,11 @@ impl FlatFiles {
                     if metadata.ignore_fields[order] {
                         continue
                     }
-
                     if order >= this_row.len() {
                         output_row.push_field(b"");
                     } else {
                         output_row.push_field(&this_row[order]);
                     }
-
                 }
 
                 csv_writer.write_byte_record(&output_row)?;
@@ -1004,7 +1012,7 @@ impl FlatFiles {
 
             for order in table_order {
                 if !metadata.ignore_fields[order] {
-                    worksheet.write_string(0, col_index, &metadata.fields[order].clone(), None)?;
+                    worksheet.write_string(0, col_index, &metadata.field_titles[order].clone(), None)?;
                     col_index += 1;
                 }
             }
@@ -1056,7 +1064,6 @@ impl FlatFiles {
 
     pub fn write_postgresql(&mut self) -> Result<()> {
 
-
         let postgresql_dir_path = self.output_path.join("postgresql");
         create_dir_all(&postgresql_dir_path)?;
 
@@ -1078,7 +1085,7 @@ impl FlatFiles {
                     continue
                 }
                 fields.push(
-                    format!("    \"{}\" {}", metadata.fields[order].to_lowercase(), postgresql::to_postgresql_type(&metadata.field_type[order]))
+                    format!("    \"{}\" {}", metadata.field_titles[order].to_lowercase(), postgresql::to_postgresql_type(&metadata.field_type[order]))
                 );
             }
             write!(postgresql_schema, "{}", fields.join(",\n"))?;
@@ -1116,7 +1123,7 @@ impl FlatFiles {
                     continue
                 }
                 fields.push(
-                    format!("    \"{}\" {}", metadata.fields[order].to_lowercase(), postgresql::to_postgresql_type(&metadata.field_type[order]))
+                    format!("    \"{}\" {}", metadata.field_titles[order].to_lowercase(), postgresql::to_postgresql_type(&metadata.field_type[order]))
                 );
             }
             write!(sqlite_schema, "{}", fields.join(",\n"))?;
@@ -1419,7 +1426,13 @@ mod tests {
               false,
               false,
               false
-            ]
+            ],
+            "field_titles": [
+              "ea",
+              "eb",
+              "_link",
+              "_link_main",
+            ],
           },
           "main": {
             "field_type": [
@@ -1431,6 +1444,14 @@ mod tests {
               "text",
             ],
             "fields": [
+              "a",
+              "c",
+              "d_da",
+              "d_db",
+              "_link",
+              "_link_main",
+            ],
+            "field_titles": [
               "a",
               "c",
               "d_da",
@@ -1487,6 +1508,12 @@ mod tests {
               "_link",
               "_link_main",
             ],
+            "field_titles": [
+              "ea",
+              "eb",
+              "_link",
+              "_link_main",
+            ],
             "field_counts": [
               4,
               4,
@@ -1513,6 +1540,14 @@ mod tests {
               "text",
             ],
             "fields": [
+              "a",
+              "c",
+              "d_da",
+              "d_db",
+              "_link",
+              "_link_main",
+            ],
+            "field_titles": [
               "a",
               "c",
               "d_da",

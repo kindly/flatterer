@@ -1,4 +1,4 @@
-# Flatterer. <small><small><small>Making JSON flatterer</small></small></small>
+# Flatterer. Making JSON flatterer
 
 [Full Doucmentation](http://flatterer.opendata.coop/)
 
@@ -115,25 +115,27 @@ To generalize this the `_link__<table_name>` fields joins to the `_link` field o
 
 `fields.csv` contains some metadata about the output tables:
 
-|table_name|field_name|field_type|count|
-|----------|----------|----------|-----|
-|platforms |_link     |text      |3    |
-|platforms |_link_games|text     |3    |
-|platforms |name      |text      |3    |
-|games      |_link     |text     |2    |
-|games      |_link_games|text    |2    |
-|games      |id        |number   |2    |
-|games      |rating_code|text    |2    |
-|games      |rating_name|text    |2    |
-|games      |releaseDate|date    |2    |
-|games      |title     |text     |2    |
+|table_name |field_name|field_type|count|field_title|
+|-----------|----------|----------|-----|----------|
+|platforms  |_link     |text      |3    |_link     |
+|platforms  |_link_games|text     |3    |_link_games|
+|platforms  |name      |text      |3    |name      |
+|games      |_link     |text     |2    | _link     |
+|games      |_link_games|text    |2    | _link_games|
+|games      |id        |number   |2    | id        |
+|games      |rating_code|text    |2    | rating_code|
+|games      |rating_name|text    |2    | rating_name|
+|games      |releaseDate|date    |2    | releaseDate|
+|games      |title     |text     |2    | title     |
 
-The `field_type` column contains a type guess useful for inserting into a database.  After editing this file then you can rerun the transform:
+The `field_type` column contains a type guess useful for inserting into a database. The `field_title` is the column heading in the CSV file or XLSX tab, which is initally the same as the field_name.
+After editing this file then you can rerun the transform:
+
 
 ```bash
 flatterer games.json new_games_dir -f myfields.csv --only-fields
 ```
 
-This can be useful for rearranging the field order or if you want to remove some fields the `--only-fields` flag will only include the fields in the edited file.
+This can be useful for renameing columns, rearranging the field order or if you want to remove some fields the `--only-fields` flag will only include the fields in the edited file.
 
 `data_package.json` contains metadata in the [Tabular Datapackge Spec](https://specs.frictionlessdata.io/tabular-data-package/#language)

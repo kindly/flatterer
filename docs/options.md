@@ -224,24 +224,27 @@ Path to fields csv file.  The CSV file needs the following headers:
  * field_name
  * field_type
 
+It has the optional heading of `field_title` which will default to the `field_name` if missing.
+
 For example:
 
-|table_name|field_name|field_type|
-|----------|----------|----------|
-|main|_link|text|
-|main|_link_main|text|
-|main|statementID|text|
-|main|statemenftID|text|
-|main|publicationDetails_license|text|
+|table_name |field_name|field_type|count|field_title|
+|-----------|----------|----------|-----|----------|
+|platforms  |_link     |text      |3    |_link     |
+|platforms  |_link_games|text     |3    |_link_games|
+|platforms  |name      |text      |3    |name      |
+|games      |_link     |text     |2    | _link     |
+|games      |_link_games|text    |2    | _link_games|
+|games      |id        |number   |2    | id        |
 
-It can have additional header in the file but they will not be used.
+It can have additional headers in the file but they will not be used.
 
-Field order in the output will the same as the row order in the CSV file.
+Field order in the output will the same as the row order in the the file.
 
-Table and fields names need to match up with the eventual structure of output. The easiest make sure of this is to edit the `fields.csv` that is in an output directory.  
+`table_name` and `field_name` need to match up with the eventual structure of output. The easiest make sure of this is to edit the `fields.csv` that is in an output directory.  
 You can generate just the fields.csv file by [not outputting the CSV files](#csv).
 
-By default if there are fields in the data that are not in the `fields.csv` they will be added to the output after the defined fields.  Use [](#only-fields) to change this behaviour.
+By default if there are fields in the data that are not in the `fields.csv` they will be added to the output after the defined fields.  Use [](#only-fields) to change this behaviour so that field not in the file will be excluded.
 
 ### CLI Usage
 
