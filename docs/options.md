@@ -29,7 +29,9 @@ Options:
   -t, --table-prefix TEXT     Prefix to add to all table names
   -a, --path-separator TEXT   Seperator to denote new path within the input
                               JSON. Defaults to `_`
-
+  -i, --schema-titles TEXT    Use titles from JSONSchema in the given way.
+                              Options are `full`, `slug`, `underscore_slug`. Default to
+                              not using titles.
   --help                      Show this message and exit.
 ```
 
@@ -366,4 +368,29 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --path-separator __
 import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', path_separoator='__')
+```
+
+## Schema Titles
+
+When supplying a JSONSchema then use the `title` field in the schema for the field name (if it exists).  This option takes a string which can be one of:
+
+* `full` Use make the `title` field from JSONSchema without modification.
+* `slug` use the `title` field but slugify it removing all charactors that are non alphanumeric characters, lower casing and replaceing spaces with `-`.  For example `My *&*Strange   Title` will turn into `my-strange-title`
+* `underscore_slug` same as slug but uses `_` instead of `-`. The previous example the output would be `my_strange_title`
+
+If this option is left out or is the empty string then it will not take the heading from JSONSchema. 
+
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --schema-titles underscore_slug
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', schema_titles='underscore_slug_')
 ```
