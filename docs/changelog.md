@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
+## [0.7] - 2021-11-24
+ 
+### Added 
+ 
+-  Ability to add `field_title` to `fields.csv` so you can rename column headings.
+-  `schema-titles` option to get field names out of JSONSchema.
+-  Speed improvments using `SmartString` and `smallvec`.
+
 
 ## [0.6.2] - 2021-11-24
  
