@@ -251,7 +251,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
     Ok(())
 }
 
-#[derive(Clone, Debug)]
+#[derive(Hash, Clone, Debug)]
 pub enum PathItem {
     Key(String),
     Index(usize),
@@ -272,7 +272,7 @@ pub struct FlatFiles {
     csv: bool,
     xlsx: bool,
     main_table_name: String,
-    emit_obj: Vec<Vec<String>>,
+    emit_obj: SmallVec<[SmallVec<[String; 5]>; 5]>,
     row_number: u128,
     date_regexp: Regex,
     table_rows: HashMap<String, Vec<Map<String, Value>>>,
@@ -280,8 +280,8 @@ pub struct FlatFiles {
     table_metadata: HashMap<String, TableMetadata>,
     only_fields: bool,
     inline_one_to_one: bool,
-    one_to_many_arrays: Vec<Vec<String>>,
-    one_to_one_arrays: Vec<Vec<String>>,
+    one_to_many_arrays: SmallVec<[SmallVec<[String; 5]>; 5]>,
+    one_to_one_arrays: SmallVec<[SmallVec<[String; 5]>; 5]>,
     schema: String,
     table_prefix: String,
     path_separator: String,
@@ -411,12 +411,18 @@ impl FlatFiles {
             field_titles_map = HashMap::new()
         }
 
+        let mut smallvec_emit_obj: SmallVec<[SmallVec<[String; 5]>; 5]> = smallvec![];
+
+        for emit_vec in emit_obj {
+            smallvec_emit_obj.push(SmallVec::from_vec(emit_vec))
+        }
+
         Ok(FlatFiles {
             output_path,
             csv,
             xlsx,
             main_table_name: [table_prefix.clone(), main_table_name].concat(),
-            emit_obj,
+            emit_obj: smallvec_emit_obj,
             row_number: 1,
             date_regexp: Regex::new(r"^([1-3]\d{3})-(\d{2})-(\d{2})([T ](\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)((-(\d{2}):(\d{2})|Z)?))?$").unwrap(),
             table_rows: HashMap::new(),
@@ -424,8 +430,8 @@ impl FlatFiles {
             table_metadata: HashMap::new(),
             only_fields: false,
             inline_one_to_one,
-            one_to_many_arrays: Vec::new(),
-            one_to_one_arrays: Vec::new(),
+            one_to_many_arrays: SmallVec::new(),
+            one_to_one_arrays: SmallVec::new(),
             schema,
             table_prefix,
             path_separator,
@@ -438,10 +444,10 @@ impl FlatFiles {
         &mut self,
         mut obj: Map<String, Value>,
         emit: bool,
-        full_path: Vec<PathItem>,
-        no_index_path: Vec<String>,
-        one_to_many_full_paths: Vec<Vec<PathItem>>,
-        one_to_many_no_index_paths: Vec<Vec<String>>,
+        full_path: SmallVec<[PathItem; 10]>,
+        no_index_path: SmallVec<[String; 5]>,
+        one_to_many_full_paths: SmallVec<[SmallVec<[PathItem; 10]>; 5]>,
+        one_to_many_no_index_paths: SmallVec<[SmallVec<[String; 5]>; 5]>,
         one_to_one_key: bool,
     ) -> Option<Map<String, Value>> {
         let mut to_insert: SmallVec<[(String, Value); 30]> = smallvec![];
@@ -598,9 +604,9 @@ impl FlatFiles {
     pub fn process_obj(
         &mut self,
         mut obj: Map<String, Value>,
-        no_index_path: Vec<String>,
-        one_to_many_full_paths: Vec<Vec<PathItem>>,
-        one_to_many_no_index_paths: Vec<Vec<String>>,
+        no_index_path: SmallVec<[String; 5]>,
+        one_to_many_full_paths: SmallVec<[SmallVec<[PathItem; 10]>; 5]>,
+        one_to_many_no_index_paths: SmallVec<[SmallVec<[String; 5]>; 5]>,
     ) {
         let mut path_iter = one_to_many_full_paths
             .iter()
@@ -752,7 +758,7 @@ impl FlatFiles {
 
     pub fn process_value(&mut self, value: Value) {
         if let Value::Object(obj) = value {
-            self.handle_obj(obj, true, vec![], vec![], vec![], vec![], false);
+            self.handle_obj(obj, true, smallvec![], smallvec![], smallvec![], smallvec![], false);
             self.row_number += 1;
         }
     }
