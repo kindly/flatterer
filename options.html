@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Outputs" href="outputs.html" /><link rel="prev" title="Flatterer. Making JSON flatterer" href="index.html" />
 
     <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
-        <title>Option Reference - flatterer 0.6 documentation</title>
+        <title>Option Reference - flatterer 0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
@@ -87,7 +87,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">flatterer 0.6 documentation</div></a>
+      <a href="index.html"><div class="brand">flatterer 0.7 documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -101,7 +101,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">flatterer 0.6 documentation</span>
+  <span class="sidebar-brand-text">flatterer 0.7 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html">
   <input class="sidebar-search" placeholder=Search name="q">
@@ -155,7 +155,9 @@ Options:
   -t, --table-prefix TEXT     Prefix to add to all table names
   -a, --path-separator TEXT   Seperator to denote new path within the input
                               JSON. Defaults to `_`
-
+  -i, --schema-titles TEXT    Use titles from JSONSchema in the given way.
+                              Options are `full`, `slug`, `underscore_slug`. Default to
+                              not using titles.
   --help                      Show this message and exit.
 </pre></div>
 </div>
@@ -328,42 +330,61 @@ flatterer.flatten<span class="o">(</span><span class="s1">'inputfile.json'</span
 <li><p>field_name</p></li>
 <li><p>field_type</p></li>
 </ul>
+<p>It has the optional heading of <code class="docutils literal notranslate"><span class="pre">field_title</span></code> which will default to the <code class="docutils literal notranslate"><span class="pre">field_name</span></code> if missing.</p>
 <p>For example:</p>
 <div class="table-wrapper"><table class="colwidths-auto docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>table_name</p></th>
 <th class="head"><p>field_name</p></th>
 <th class="head"><p>field_type</p></th>
+<th class="head"><p>count</p></th>
+<th class="head"><p>field_title</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>main</p></td>
+<tr class="row-even"><td><p>platforms</p></td>
 <td><p>_link</p></td>
 <td><p>text</p></td>
+<td><p>3</p></td>
+<td><p>_link</p></td>
 </tr>
-<tr class="row-odd"><td><p>main</p></td>
-<td><p>_link_main</p></td>
+<tr class="row-odd"><td><p>platforms</p></td>
+<td><p>_link_games</p></td>
 <td><p>text</p></td>
+<td><p>3</p></td>
+<td><p>_link_games</p></td>
 </tr>
-<tr class="row-even"><td><p>main</p></td>
-<td><p>statementID</p></td>
+<tr class="row-even"><td><p>platforms</p></td>
+<td><p>name</p></td>
 <td><p>text</p></td>
+<td><p>3</p></td>
+<td><p>name</p></td>
 </tr>
-<tr class="row-odd"><td><p>main</p></td>
-<td><p>statemenftID</p></td>
+<tr class="row-odd"><td><p>games</p></td>
+<td><p>_link</p></td>
 <td><p>text</p></td>
+<td><p>2</p></td>
+<td><p>_link</p></td>
 </tr>
-<tr class="row-even"><td><p>main</p></td>
-<td><p>publicationDetails_license</p></td>
+<tr class="row-even"><td><p>games</p></td>
+<td><p>_link_games</p></td>
 <td><p>text</p></td>
+<td><p>2</p></td>
+<td><p>_link_games</p></td>
+</tr>
+<tr class="row-odd"><td><p>games</p></td>
+<td><p>id</p></td>
+<td><p>number</p></td>
+<td><p>2</p></td>
+<td><p>id</p></td>
 </tr>
 </tbody>
 </table></div>
-<p>It can have additional header in the file but they will not be used.</p>
-<p>Field order in the output will the same as the row order in the CSV file.</p>
-<p>Table and fields names need to match up with the eventual structure of output. The easiest make sure of this is to edit the <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> that is in an output directory.<br/>
+<p>It can have additional headers in the file but they will not be used.</p>
+<p>Field order in the output will the same as the row order in the the file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">table_name</span></code> and <code class="docutils literal notranslate"><span class="pre">field_name</span></code> need to match up with the eventual structure of output. The easiest make sure of this is to edit the <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> that is in an output directory.<br/>
 You can generate just the fields.csv file by <a class="reference internal" href="#csv"><span class="std std-doc">not outputting the CSV files</span></a>.</p>
-<p>By default if there are fields in the data that are not in the <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> they will be added to the output after the defined fields.  Use <a class="reference internal" href="#only-fields"><span class="std std-doc">Only Fields</span></a> to change this behaviour.</p>
+<p>By default if there are fields in the data that are not in the <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> they will be added to the output after the defined fields.  Use <a class="reference internal" href="#only-fields"><span class="std std-doc">Only Fields</span></a> to change this behaviour so that field not in the file will be excluded.</p>
 <section id="id11">
 <h3>CLI Usage<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --fields fields.csv
@@ -475,6 +496,30 @@ This can be useful if you are trying to namespace the output when inserting into
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">path_separoator</span><span class="o">=</span><span class="s1">'__'</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="schema-titles">
+<h2>Schema Titles<a class="headerlink" href="#schema-titles" title="Permalink to this headline">¶</a></h2>
+<p>When supplying a JSONSchema then use the <code class="docutils literal notranslate"><span class="pre">title</span></code> field in the schema for the field name (if it exists).  This option takes a string which can be one of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">full</span></code> Use make the <code class="docutils literal notranslate"><span class="pre">title</span></code> field from JSONSchema without modification.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slug</span></code> use the <code class="docutils literal notranslate"><span class="pre">title</span></code> field but slugify it removing all charactors that are non alphanumeric characters, lower casing and replaceing spaces with <code class="docutils literal notranslate"><span class="pre">-</span></code>.  For example <code class="docutils literal notranslate"><span class="pre">My</span> <span class="pre">*&amp;*Strange</span>   <span class="pre">Title</span></code> will turn into <code class="docutils literal notranslate"><span class="pre">my-strange-title</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">underscore_slug</span></code> same as slug but uses <code class="docutils literal notranslate"><span class="pre">_</span></code> instead of <code class="docutils literal notranslate"><span class="pre">-</span></code>. The previous example the output would be <code class="docutils literal notranslate"><span class="pre">my_strange_title</span></code></p></li>
+</ul>
+<p>If this option is left out or is the empty string then it will not take the heading from JSONSchema.</p>
+<section id="id23">
+<h3>CLI Usage<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --schema-titles underscore_slug
+</pre></div>
+</div>
+</section>
+<section id="id24">
+<h3>Python Usage<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">schema_titles</span><span class="o">=</span><span class="s1">'underscore_slug_'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -595,6 +640,11 @@ This can be useful if you are trying to namespace the output when inserting into
 <li><a class="reference internal" href="#path-separator">Path Separator</a><ul>
 <li><a class="reference internal" href="#id21">CLI Usage</a></li>
 <li><a class="reference internal" href="#id22">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#schema-titles">Schema Titles</a><ul>
+<li><a class="reference internal" href="#id23">CLI Usage</a></li>
+<li><a class="reference internal" href="#id24">Python Usage</a></li>
 </ul>
 </li>
 </ul>

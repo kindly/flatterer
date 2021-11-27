@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Option Reference" href="options.html" />
 
     <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
-        <title>Home - flatterer 0.6 documentation</title>
+        <title>Home - flatterer 0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
@@ -87,7 +87,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">flatterer 0.6 documentation</div></a>
+      <a href="#"><div class="brand">flatterer 0.7 documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -101,7 +101,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
   
   
-  <span class="sidebar-brand-text">flatterer 0.6 documentation</span>
+  <span class="sidebar-brand-text">flatterer 0.7 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html">
   <input class="sidebar-search" placeholder=Search name="q">
@@ -274,6 +274,7 @@ Sub-object properties are separated by ‘_’.</p>
 <th class="head"><p>field_name</p></th>
 <th class="head"><p>field_type</p></th>
 <th class="head"><p>count</p></th>
+<th class="head"><p>field_title</p></th>
 </tr>
 </thead>
 <tbody>
@@ -281,59 +282,70 @@ Sub-object properties are separated by ‘_’.</p>
 <td><p>_link</p></td>
 <td><p>text</p></td>
 <td><p>3</p></td>
+<td><p>_link</p></td>
 </tr>
 <tr class="row-odd"><td><p>platforms</p></td>
 <td><p>_link_games</p></td>
 <td><p>text</p></td>
 <td><p>3</p></td>
+<td><p>_link_games</p></td>
 </tr>
 <tr class="row-even"><td><p>platforms</p></td>
 <td><p>name</p></td>
 <td><p>text</p></td>
 <td><p>3</p></td>
+<td><p>name</p></td>
 </tr>
 <tr class="row-odd"><td><p>games</p></td>
 <td><p>_link</p></td>
 <td><p>text</p></td>
 <td><p>2</p></td>
+<td><p>_link</p></td>
 </tr>
 <tr class="row-even"><td><p>games</p></td>
 <td><p>_link_games</p></td>
 <td><p>text</p></td>
 <td><p>2</p></td>
+<td><p>_link_games</p></td>
 </tr>
 <tr class="row-odd"><td><p>games</p></td>
 <td><p>id</p></td>
 <td><p>number</p></td>
 <td><p>2</p></td>
+<td><p>id</p></td>
 </tr>
 <tr class="row-even"><td><p>games</p></td>
 <td><p>rating_code</p></td>
 <td><p>text</p></td>
 <td><p>2</p></td>
+<td><p>rating_code</p></td>
 </tr>
 <tr class="row-odd"><td><p>games</p></td>
 <td><p>rating_name</p></td>
 <td><p>text</p></td>
 <td><p>2</p></td>
+<td><p>rating_name</p></td>
 </tr>
 <tr class="row-even"><td><p>games</p></td>
 <td><p>releaseDate</p></td>
 <td><p>date</p></td>
 <td><p>2</p></td>
+<td><p>releaseDate</p></td>
 </tr>
 <tr class="row-odd"><td><p>games</p></td>
 <td><p>title</p></td>
 <td><p>text</p></td>
 <td><p>2</p></td>
+<td><p>title</p></td>
 </tr>
 </tbody>
 </table></div>
-<p>The <code class="docutils literal notranslate"><span class="pre">field_type</span></code> column contains a type guess useful for inserting into a database.  After editing this file then you can rerun the transform:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">field_type</span></code> column contains a type guess useful for inserting into a database. The <code class="docutils literal notranslate"><span class="pre">field_title</span></code> is the column heading in the CSV file or XLSX sheet, which is initally the same as the field_name.
+After editing this file then you can rerun the transform:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer games.json new_games_dir -f myfields.csv --only-fields
 </pre></div>
 </div>
-<p>This can be useful for rearranging the field order or if you want to remove some fields the <code class="docutils literal notranslate"><span class="pre">--only-fields</span></code> flag will only include the fields in the edited file.</p>
+<p>This can be useful for renameing columns, rearranging the field order or if you want to remove some fields the <code class="docutils literal notranslate"><span class="pre">--only-fields</span></code> flag will only include the fields in the edited file.</p>
 <p><code class="docutils literal notranslate"><span class="pre">data_package.json</span></code> contains metadata in the <a class="reference external" href="https://specs.frictionlessdata.io/tabular-data-package/#language">Tabular Datapackge Spec</a></p>
 <p><a class="reference internal" href="outputs.html#outputs"><span class="std std-doc">More information on the output formats.</span></a></p>
 <div class="toctree-wrapper compound">
