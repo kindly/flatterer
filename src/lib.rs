@@ -9,6 +9,7 @@ use std::io::{self, BufReader, Error as IoError, ErrorKind, Read, Write};
 use std::path::PathBuf;
 use std::{panic, thread};
 
+use smartstring::alias::String as SmartString;
 use anyhow::{Context, Result};
 use crossbeam_channel::{bounded, Receiver, Sender};
 use csv::{ByteRecord, Reader, ReaderBuilder, Writer, WriterBuilder};
@@ -253,7 +254,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
 #[derive(Hash, Clone, Debug)]
 pub enum PathItem {
-    Key(String),
+    Key(SmartString),
     Index(usize),
 }
 
@@ -280,8 +281,8 @@ pub struct FlatFiles {
     table_metadata: HashMap<String, TableMetadata>,
     only_fields: bool,
     inline_one_to_one: bool,
-    one_to_many_arrays: SmallVec<[SmallVec<[String; 5]>; 5]>,
-    one_to_one_arrays: SmallVec<[SmallVec<[String; 5]>; 5]>,
+    one_to_many_arrays: SmallVec<[SmallVec<[SmartString; 5]>; 5]>,
+    one_to_one_arrays: SmallVec<[SmallVec<[SmartString; 5]>; 5]>,
     schema: String,
     table_prefix: String,
     path_separator: String,
@@ -376,6 +377,7 @@ impl FlatFiles {
         path_separator: String,
         schema_titles: String,
     ) -> Result<FlatFiles> {
+        smartstring::validate();
         let output_path = PathBuf::from(output_dir.clone());
         if output_path.is_dir() {
             if force {
@@ -445,9 +447,9 @@ impl FlatFiles {
         mut obj: Map<String, Value>,
         emit: bool,
         full_path: SmallVec<[PathItem; 10]>,
-        no_index_path: SmallVec<[String; 5]>,
+        no_index_path: SmallVec<[SmartString; 5]>,
         one_to_many_full_paths: SmallVec<[SmallVec<[PathItem; 10]>; 5]>,
-        one_to_many_no_index_paths: SmallVec<[SmallVec<[String; 5]>; 5]>,
+        one_to_many_no_index_paths: SmallVec<[SmallVec<[SmartString; 5]>; 5]>,
         one_to_one_key: bool,
     ) -> Option<Map<String, Value>> {
         let mut to_insert: SmallVec<[(String, Value); 30]> = smallvec![];
@@ -486,14 +488,14 @@ impl FlatFiles {
                         let my_value = array_value.take();
 
                         let mut new_full_path = full_path.clone();
-                        new_full_path.push(PathItem::Key(key.clone()));
+                        new_full_path.push(PathItem::Key(SmartString::from(key)));
                         new_full_path.push(PathItem::Index(i));
 
                         let mut new_one_to_many_full_paths = one_to_many_full_paths.clone();
                         new_one_to_many_full_paths.push(new_full_path.clone());
 
                         let mut new_no_index_path = no_index_path.clone();
-                        new_no_index_path.push(key.clone());
+                        new_no_index_path.push(SmartString::from(key));
 
                         let mut new_one_to_many_no_index_paths = one_to_many_no_index_paths.clone();
                         new_one_to_many_no_index_paths.push(new_no_index_path.clone());
@@ -546,9 +548,9 @@ impl FlatFiles {
                 to_delete.push(key.clone());
 
                 let mut new_full_path = full_path.clone();
-                new_full_path.push(PathItem::Key(key.clone()));
+                new_full_path.push(PathItem::Key(SmartString::from(key)));
                 let mut new_no_index_path = no_index_path.clone();
-                new_no_index_path.push(key.clone());
+                new_no_index_path.push(SmartString::from(key));
 
                 let mut emit_child = false;
                 if self
@@ -604,9 +606,9 @@ impl FlatFiles {
     pub fn process_obj(
         &mut self,
         mut obj: Map<String, Value>,
-        no_index_path: SmallVec<[String; 5]>,
+        no_index_path: SmallVec<[SmartString; 5]>,
         one_to_many_full_paths: SmallVec<[SmallVec<[PathItem; 10]>; 5]>,
-        one_to_many_no_index_paths: SmallVec<[SmallVec<[String; 5]>; 5]>,
+        one_to_many_no_index_paths: SmallVec<[SmallVec<[SmartString; 5]>; 5]>,
     ) {
         let mut path_iter = one_to_many_full_paths
             .iter()

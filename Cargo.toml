@@ -22,6 +22,7 @@ regex="1"
 jsonref= "0.4"
 anyhow="1.0"
 slug="0.1"
+smartstring={version = "0.2", features = ["serde"] }
 
 [profile.release]
 debug = true
