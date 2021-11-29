@@ -248,6 +248,7 @@ dependencies = [
  "slug",
  "smallvec",
  "smartstring",
+ "snafu",
  "tempfile",
  "xlsxwriter",
  "yajlish",

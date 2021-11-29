@@ -1,8 +1,20 @@
-use anyhow::Result;
 use jsonref::JsonRef;
 use serde_json::Value;
 use slug::slugify;
 use std::collections::HashMap;
+use snafu::{Snafu, ResultExt};
+
+#[non_exhaustive]
+#[derive(Debug, Snafu)]
+pub enum Error {
+    #[snafu(display("Could not deref schema {}: {}", schema, source))]
+    FlattererJSONRefError {
+        schema: String,
+        source: jsonref::Error,
+    }
+}
+
+type Result<T, E = Error> = std::result::Result<T, E>;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct SchemaAnalysis {
@@ -31,9 +43,9 @@ impl SchemaAnalysis {
         jsonref.set_reference_key("___ref___");
         let value: Value;
         if self.schema.starts_with("http") {
-            value = jsonref.deref_url(&self.schema)?;
+            value = jsonref.deref_url(&self.schema).context(FlattererJSONRefError {schema: &self.schema})?;
         } else {
-            value = jsonref.deref_file(&self.schema)?;
+            value = jsonref.deref_file(&self.schema).context(FlattererJSONRefError {schema: &self.schema})?;
         }
 
         self.parse_value(value);

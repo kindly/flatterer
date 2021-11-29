@@ -20,9 +20,10 @@ crossbeam-channel="0.5"
 smallvec="1.6.1"
 regex="1"
 jsonref= "0.4"
-anyhow="1.0"
+anyhow={version = "1.0"}
 slug="0.1"
 smartstring={version = "0.2", features = ["serde"] }
+snafu = {version = "0.6"}
 
 [profile.release]
 debug = true
