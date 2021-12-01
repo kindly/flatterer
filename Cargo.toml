@@ -1,29 +1,18 @@
 [package]
 name = "flatterer"
-version = "0.7.0"
+version = "0.7.1"
 authors = ["David Raznick <kindly@gmail.com>"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-yajlish = { version = "0.3", features = ["ndjson"] } 
-serde_json = { version = "1", features = ["preserve_order"] }
-tempfile = "3"
-itertools = "0.10"
-csv = "1"
 clap = "2"
-serde = {version = "1", features = ["derive"] }
-pyo3 = {version = "0.14", features = ["extension-module"] }
-xlsxwriter = "0.3"
 crossbeam-channel="0.5"
-smallvec="1.6.1"
-regex="1"
-jsonref= "0.4"
+serde_json = { version = "1", features = ["preserve_order"] }
+pyo3 = {version = "0.14", features = ["extension-module"] }
 anyhow={version = "1.0"}
-slug="0.1"
-smartstring={version = "0.2", features = ["serde"] }
-snafu = {version = "0.6"}
+libflatterer={version = "0.7.1"}
 
 [profile.release]
 debug = true

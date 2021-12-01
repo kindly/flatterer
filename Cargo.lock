@@ -233,25 +233,14 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.7.0"
+version = "0.7.1"
 dependencies = [
  "anyhow",
  "clap",
  "crossbeam-channel",
- "csv",
- "itertools",
- "jsonref",
+ "libflatterer",
  "pyo3",
- "regex",
- "serde",
  "serde_json",
- "slug",
- "smallvec",
- "smartstring",
- "snafu",
- "tempfile",
- "xlsxwriter",
- "yajlish",
 ]
 
 [[package]]
@@ -415,6 +404,28 @@ name = "libc"
 version = "0.2.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fbe5e23404da5b4f555ef85ebed98fb4083e55a00c317800bc2a50ede9f3d219"
+
+[[package]]
+name = "libflatterer"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9a5b5d429b3fa38ace920229d69cf389699d2237c77def2887d46c3082baaf3a"
+dependencies = [
+ "crossbeam-channel",
+ "csv",
+ "itertools",
+ "jsonref",
+ "regex",
+ "serde",
+ "serde_json",
+ "slug",
+ "smallvec",
+ "smartstring",
+ "snafu",
+ "tempfile",
+ "xlsxwriter",
+ "yajlish",
+]
 
 [[package]]
 name = "libloading"
@@ -720,9 +731,9 @@ checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 
 [[package]]
 name = "rustls"
-version = "0.20.1"
+version = "0.20.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dac4581f0fc0e0efd529d069e8189ec7b90b8e7680e21beb35141bdc45f36040"
+checksum = "d37e5e2290f3e040b594b1a9e04377c2c671f1a1cfd9bfdef82106ac1c113f84"
 dependencies = [
  "log",
  "ring",
@@ -732,9 +743,9 @@ dependencies = [
 
 [[package]]
 name = "ryu"
-version = "1.0.5"
+version = "1.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71d301d4193d031abdd79ff7e3dd721168a9572ef3fe51a1517aba235bd8f86e"
+checksum = "3c9613b5a66ab9ba26415184cfc41156594925a9cf3a2057e57f31ff145f6568"
 
 [[package]]
 name = "scopeguard"
@@ -774,9 +785,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.71"
+version = "1.0.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "063bf466a64011ac24040a49009724ee60a57da1b437617ceb32e53ad61bfb19"
+checksum = "d0ffa0837f2dfa6fb90868c2b5468cad482e175f7dad97e7421951e663f2b527"
 dependencies = [
  "indexmap",
  "itoa",

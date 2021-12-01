@@ -1,10 +1,9 @@
 use anyhow::Result;
 use clap::App;
-use flatterer::{flatten, flatten_from_jl, FlatFiles};
+use libflatterer::{flatten, flatten_from_jl, FlatFiles, Selector};
 use std::fs::File;
 use std::io::BufReader;
 use std::path::PathBuf;
-use yajlish::ndjson_handler::Selector;
 
 fn main() -> Result<()> {
     let matches = App::new("flatterer")
@@ -17,6 +16,7 @@ fn main() -> Result<()> {
                            -p --path=[path]                      'Key where array lives, leave if array is at root'
                            -j --jl                               'Treat input as JSON Lines, path will be ignored'
                            -c --csv                              'Output csv files (defualt but required if xlsx is selected)'
+                           -n --nocsv                            'Do not output csv'
                            -x --xlsx                             'Output xlsx file'
                            -i --inline-one-to-one                'If array always has only one element treat relationship as one-to-one'
                            -f --fields=[file]                    'fields.csv file to determine order and name of fields.'
@@ -80,7 +80,7 @@ fn main() -> Result<()> {
 
     let mut flat_files = FlatFiles::new(
         output_dir.to_string(),
-        matches.is_present("csv") || !matches.is_present("xlsx"),
+        !matches.is_present("nocsv"),
         matches.is_present("xlsx"),
         matches.is_present("force"),
         main_table_name,
