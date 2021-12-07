@@ -31,7 +31,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         schema_titles: String,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
-            output_dir.to_string(),
+            output_dir,
             csv,
             xlsx,
             force,
@@ -46,12 +46,11 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let mut selectors = vec![];
 
-        if path != "" {
-            selectors.push(Selector::Identifier(format!("\"{}\"", path.to_string())));
+        if !path.is_empty() {
+            selectors.push(Selector::Identifier(format!("\"{}\"", path)));
         }
 
-        if flat_files_res.is_err() {
-            let err = flat_files_res.unwrap_err();
+        if let Err(err) = flat_files_res {
             return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                 "{:?}",
                 err
@@ -60,7 +59,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let mut flat_files = flat_files_res.unwrap(); //already checked error
 
-        if fields != "" {
+        if !fields.is_empty() {
             if let Err(err) = flat_files.use_fields_csv(fields, only_fields) {
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                     "{:?}",
@@ -91,13 +90,11 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
                     err
                 )));
             }
-        } else {
-            if let Err(err) = flatten(file, flat_files, selectors) {
-                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
-                    "{:?}",
-                    err
-                )));
-            }
+        } else if let Err(err) = flatten(file, flat_files, selectors) {
+            return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                "{:?}",
+                err
+            )));
         }
 
         Ok(())
@@ -122,7 +119,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         schema_titles: String,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
-            output_dir.to_string(),
+            output_dir,
             csv,
             xlsx,
             force,
@@ -135,8 +132,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             schema_titles,
         );
 
-        if flat_files_res.is_err() {
-            let err = flat_files_res.unwrap_err();
+        if let Err(err) = flat_files_res {
             return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                 "{:?}",
                 err
@@ -145,7 +141,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let mut flat_files = flat_files_res.unwrap(); //already checked error
 
-        if fields != "" {
+        if !fields.is_empty() {
             if let Err(err) = flat_files.use_fields_csv(fields, only_fields) {
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                     "{:?}",
@@ -192,7 +188,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
             let json_bytes = PyAny::extract::<&[u8]>(result?)?;
 
-            match serde_json::from_slice::<Value>(&json_bytes) {
+            match serde_json::from_slice::<Value>(json_bytes) {
                 Ok(value) => {
                     if let Err(err) = sender.send(value) {
                         return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(

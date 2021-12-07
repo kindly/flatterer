@@ -12,7 +12,7 @@ crossbeam-channel="0.5"
 serde_json = { version = "1", features = ["preserve_order"] }
 pyo3 = {version = "0.14", features = ["extension-module"] }
 anyhow={version = "1.0"}
-libflatterer={version = "0.7.1"}
+libflatterer={version = "0.8"}
 
 [profile.release]
 debug = true

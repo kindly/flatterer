@@ -51,7 +51,7 @@ fn main() -> Result<()> {
     if let Some(main) = matches.value_of("main") {
         main_table_name = main.to_string();
     } else {
-        main_table_name = format!("main");
+        main_table_name = "main".to_string();
     }
 
     let schema_path = if let Some(schema_path) = matches.value_of("schema") {
