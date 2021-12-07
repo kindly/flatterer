@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
  
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [0.8] - 2021-12-01
+ 
+### Changed
+
+- Paths to data in sqlite and postgres start at root of output.
+- Clippy for linting and insta for tests.
  
 ## [0.7.1] - 2021-12-01
  

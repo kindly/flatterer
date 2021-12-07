@@ -90,8 +90,8 @@ psql postgresql://user:password@host/database -f games_dir/postgresql/postgresql
 This script imports the CSV files into the tables created by `postgresql_schema.csv`. This script requires the `psql` command line tool as it uses its `\copy` command but can easily be adapted to use the plain COPY command by removing the `\`.  The advantage of using `\copy` is that it does not have to be run on the server where the database is. It looks like:
 
 ```sql
-\copy "games" from '/home/kindly/projects/jsonlinesrust/games_dir/csv/games.csv' with CSV HEADER
-\copy "platforms" from '/home/kindly/projects/jsonlinesrust/games_dir/csv/platforms.csv' with CSV HEADER
+\copy "games" from 'csv/games.csv' with CSV HEADER
+\copy "platforms" from 'csv/platforms.csv' with CSV HEADER
 ```
 
 and can be run by:
@@ -120,8 +120,8 @@ This script imports the CSV files into the tables created by `sqlite_schema.csv`
 
 ```sql
 .mode csv 
-.import '/home/kindly/projects/jsonlinesrust/games_dir/csv/games.csv' games --skip 1 
-.import '/home/kindly/projects/jsonlinesrust/games_dir/csv/platforms.csv' platforms --skip 1 
+.import 'csv/games.csv' games --skip 1 
+.import 'csv/platforms.csv' platforms --skip 1 
 ```
 
 and can be run by:

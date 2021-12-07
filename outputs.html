@@ -257,8 +257,8 @@
 <section id="postgresql-load-sql">
 <h3>postgresql_load.sql<a class="headerlink" href="#postgresql-load-sql" title="Permalink to this headline">¶</a></h3>
 <p>This script imports the CSV files into the tables created by <code class="docutils literal notranslate"><span class="pre">postgresql_schema.csv</span></code>. This script requires the <code class="docutils literal notranslate"><span class="pre">psql</span></code> command line tool as it uses its <code class="docutils literal notranslate"><span class="pre">\copy</span></code> command but can easily be adapted to use the plain COPY command by removing the <code class="docutils literal notranslate"><span class="pre">\</span></code>.  The advantage of using <code class="docutils literal notranslate"><span class="pre">\copy</span></code> is that it does not have to be run on the server where the database is. It looks like:</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span>\copy "games" from '/home/kindly/projects/jsonlinesrust/games_dir/csv/games.csv' with CSV HEADER
-\copy "platforms" from '/home/kindly/projects/jsonlinesrust/games_dir/csv/platforms.csv' with CSV HEADER
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span>\copy "games" from 'csv/games.csv' with CSV HEADER
+\copy "platforms" from 'csv/platforms.csv' with CSV HEADER
 </pre></div>
 </div>
 <p>and can be run by:</p>
@@ -282,8 +282,8 @@
 <h3>sqlite_load.sql<a class="headerlink" href="#sqlite-load-sql" title="Permalink to this headline">¶</a></h3>
 <p>This script imports the CSV files into the tables created by <code class="docutils literal notranslate"><span class="pre">sqlite_schema.csv</span></code>. This script requires the <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code> command line tool as it uses its <code class="docutils literal notranslate"><span class="pre">.import</span></code> command. The contents looks like.</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="k">mode</span> <span class="n">csv</span> 
-<span class="p">.</span><span class="n">import</span> <span class="s1">'/home/kindly/projects/jsonlinesrust/games_dir/csv/games.csv'</span> <span class="n">games</span> <span class="c1">--skip 1 </span>
-<span class="p">.</span><span class="n">import</span> <span class="s1">'/home/kindly/projects/jsonlinesrust/games_dir/csv/platforms.csv'</span> <span class="n">platforms</span> <span class="c1">--skip 1 </span>
+<span class="p">.</span><span class="n">import</span> <span class="s1">'csv/games.csv'</span> <span class="n">games</span> <span class="c1">--skip 1 </span>
+<span class="p">.</span><span class="n">import</span> <span class="s1">'csv/platforms.csv'</span> <span class="n">platforms</span> <span class="c1">--skip 1 </span>
 </pre></div>
 </div>
 <p>and can be run by:</p>

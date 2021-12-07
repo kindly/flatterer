@@ -133,17 +133,27 @@
 <p>The format is based on <a class="reference external" href="http://keepachangelog.com/">Keep a Changelog</a>
 and this project adheres to <a class="reference external" href="http://semver.org/">Semantic Versioning</a>.</p>
 <section id="id1">
-<h2>[0.7.1] - 2021-12-01<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>[0.8] - 2021-12-01<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Paths to data in sqlite and postgres start at root of output.</p></li>
+<li><p>Clippy for linting and insta for tests.</p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>[0.7.1] - 2021-12-01<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<section id="id3">
+<h3>Changed<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Do less work when just exporting Metadata.</p></li>
 <li><p>Minor speedup due to not using <code class="docutils literal notranslate"><span class="pre">format</span></code> so much.</p></li>
 </ul>
 </section>
 </section>
-<section id="id2">
-<h2>[0.7] - 2021-11-24<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<section id="id4">
+<h2>[0.7] - 2021-11-24<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -153,8 +163,8 @@ and this project adheres to <a class="reference external" href="http://semver.or
 </ul>
 </section>
 </section>
-<section id="id3">
-<h2>[0.6.2] - 2021-11-24<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<section id="id5">
+<h2>[0.6.2] - 2021-11-24<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -164,28 +174,28 @@ and this project adheres to <a class="reference external" href="http://semver.or
 </ul>
 </section>
 </section>
-<section id="id4">
-<h2>[0.6.1] - 2021-11-24<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<section id="id5">
-<h3>Fixed<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<section id="id6">
+<h2>[0.6.1] - 2021-11-24<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<section id="id7">
+<h3>Fixed<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Regression in speed due to new error handling</p></li>
 </ul>
 </section>
 </section>
-<section id="id6">
-<h2>[0.6] - 2021-11-23<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
-<section id="id7">
-<h3>Changed<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<section id="id8">
+<h2>[0.6] - 2021-11-23<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<section id="id9">
+<h3>Changed<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>New error handling using <code class="docutils literal notranslate"><span class="pre">anyhow</span></code>, giving errors more context.</p></li>
 </ul>
 </section>
 </section>
-<section id="id8">
-<h2>[0.5] - 2021-11-22<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
-<section id="id9">
-<h3>Added<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<section id="id10">
+<h2>[0.5] - 2021-11-22<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<section id="id11">
+<h3>Added<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#schema">Schema option</a> to supply JSONSchema, to make field order the same as schema.</p></li>
 <li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#table-prefix">Table prefix option</a> to namespece exported tables.</p></li>
@@ -193,20 +203,20 @@ and this project adheres to <a class="reference external" href="http://semver.or
 </ul>
 </section>
 </section>
-<section id="id10">
-<h2>[0.4] - 2021-11-20<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
-<section id="id11">
-<h3>Added<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<section id="id12">
+<h2>[0.4] - 2021-11-20<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<section id="id13">
+<h3>Added<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Postgresql and sqlite scripts to load CSV data into databases.</p></li>
 <li><p>Wheel builds for Windows and MacOS, automatically published using github actions.</p></li>
 </ul>
 </section>
 </section>
-<section id="id12">
-<h2>[0.3] - 2021-10-25<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
-<section id="id13">
-<h3>Added<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<section id="id14">
+<h2>[0.3] - 2021-10-25<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<section id="id15">
+<h3>Added<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#inline-one-to-one">Inline One to One option</a> to mean that if an array only has one item in for all the data then treat it as sub-object.</p></li>
 </ul>
@@ -269,36 +279,40 @@ and this project adheres to <a class="reference external" href="http://semver.or
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Change Log</a><ul>
-<li><a class="reference internal" href="#id1">[0.7.1] - 2021-12-01</a><ul>
+<li><a class="reference internal" href="#id1">[0.8] - 2021-12-01</a><ul>
 <li><a class="reference internal" href="#changed">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id2">[0.7] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id2">[0.7.1] - 2021-12-01</a><ul>
+<li><a class="reference internal" href="#id3">Changed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">[0.7] - 2021-11-24</a><ul>
 <li><a class="reference internal" href="#added">Added</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id3">[0.6.2] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id5">[0.6.2] - 2021-11-24</a><ul>
 <li><a class="reference internal" href="#fixed">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id4">[0.6.1] - 2021-11-24</a><ul>
-<li><a class="reference internal" href="#id5">Fixed</a></li>
+<li><a class="reference internal" href="#id6">[0.6.1] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id7">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">[0.6] - 2021-11-23</a><ul>
-<li><a class="reference internal" href="#id7">Changed</a></li>
+<li><a class="reference internal" href="#id8">[0.6] - 2021-11-23</a><ul>
+<li><a class="reference internal" href="#id9">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id8">[0.5] - 2021-11-22</a><ul>
-<li><a class="reference internal" href="#id9">Added</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id10">[0.4] - 2021-11-20</a><ul>
+<li><a class="reference internal" href="#id10">[0.5] - 2021-11-22</a><ul>
 <li><a class="reference internal" href="#id11">Added</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id12">[0.3] - 2021-10-25</a><ul>
+<li><a class="reference internal" href="#id12">[0.4] - 2021-11-20</a><ul>
 <li><a class="reference internal" href="#id13">Added</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id14">[0.3] - 2021-10-25</a><ul>
+<li><a class="reference internal" href="#id15">Added</a></li>
 </ul>
 </li>
 </ul>
