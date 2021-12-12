@@ -233,7 +233,7 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.8.0"
+version = "0.9.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -310,6 +310,7 @@ checksum = "bc633605454125dec4b66843673f01c7df2b89479b32e0ed634e43a91cff62a5"
 dependencies = [
  "autocfg",
  "hashbrown",
+ "serde",
 ]
 
 [[package]]
@@ -407,12 +408,13 @@ checksum = "fbe5e23404da5b4f555ef85ebed98fb4083e55a00c317800bc2a50ede9f3d219"
 
 [[package]]
 name = "libflatterer"
-version = "0.8.0"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "638474e0e6a1a59c5fe24433abfa4ef715da1686a85732b0f28aa163c5729d9d"
+checksum = "6fa07dee5a3e98acddece11f48113e6768883ce600a3fd3f087ad23169611616"
 dependencies = [
  "crossbeam-channel",
  "csv",
+ "indexmap",
  "itertools",
  "jsonref",
  "regex",
