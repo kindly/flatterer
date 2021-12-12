@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.9] - 2021-12-12
+ 
+### Fixed
+
+- Removed unwrap on channel send, to remove possible panic.
+
+### Changed
+
+- Table ordering of output in JSON input order.  Making `xlsx` and `fields.csv` table order reflect the input data.
+- Lib has new `FlatFiles::new_with_dafualts()` to make using the library less verbose.
+- Use insta for more tests.
+
+### New
+
+- Lib has preview option, meaning CSV output will optionally only show specified number of lines.
+
 ## [0.8] - 2021-12-01
  
 ### Changed
