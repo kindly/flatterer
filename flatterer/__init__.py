@@ -3,7 +3,9 @@ import click
 
 import orjson
 
-from .flatterer import iterator_flatten_rs, flatten_rs
+from .flatterer import iterator_flatten_rs, flatten_rs, setup_logging
+
+LOGGING_SETUP = False
 
 
 def default(obj):
@@ -34,15 +36,21 @@ def flatten(
     force=False,
     fields='',
     only_fields=False,
+    tables='',
+    only_tables=False,
     inline_one_to_one=False,
     schema="",
     table_prefix="",
-    path_separator= "_",
-    schema_titles= "",
+    path_separator="_",
+    schema_titles="",
 ):
+    global LOGGING_SETUP
+    if not LOGGING_SETUP:
+        setup_logging("warning")
+        LOGGING_SETUP = True
     flatten_rs(input, output_dir, csv, xlsx,
-               path, main_table_name, emit_path, json_lines, force, fields, only_fields, inline_one_to_one, schema,
-               table_prefix, path_separator, schema_titles)
+               path, main_table_name, emit_path, json_lines, force, fields, only_fields, tables, only_tables,
+               inline_one_to_one, schema, table_prefix, path_separator, schema_titles)
 
 
 def iterator_flatten(
@@ -55,16 +63,21 @@ def iterator_flatten(
     force=False,
     fields='',
     only_fields=False,
+    tables='',
+    only_tables=False,
     inline_one_to_one=False,
     schema="",
     table_prefix="",
-    path_separator= "_",
-    schema_titles= "",
+    path_separator="_",
+    schema_titles="",
 ):
-
+    global LOGGING_SETUP
+    if not LOGGING_SETUP:
+        setup_logging("warning")
+        LOGGING_SETUP = True
     iterator_flatten_rs(bytes_generator(iterator), output_dir, csv, xlsx,
-                        main_table_name, emit_path, force, fields, only_fields, inline_one_to_one, schema,
-                        table_prefix, path_separator, schema_titles)
+                        main_table_name, emit_path, force, fields, only_fields, tables,
+                        only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles)
 
 
 @click.command()
@@ -79,6 +92,8 @@ def iterator_flatten(
               help='Delete output directory if it exists, then run command, default False')
 @click.option('--fields', '-f', default="", help='fields.csv file to use')
 @click.option('--only-fields', '-o', is_flag=True, default=False, help='Only output fields in fields.csv file')
+@click.option('--tables', '-b', default="", help='tables.csv file to use')
+@click.option('--only-tables', '-l', is_flag=True, default=False, help='Only output tables in tables.csv file')
 @click.option('--inline-one-to-one', '-i', is_flag=True, default=False,
               help='If array only has single item for all objects treat as one-to-one')
 @click.option('--schema', '-s', default="",
@@ -102,12 +117,18 @@ def cli(
     force=False,
     fields="",
     only_fields=False,
+    tables="",
+    only_tables=False,
     inline_one_to_one=False,
     schema="",
     table_prefix="",
     path_separator="_",
     schema_titles=""
 ):
+    global LOGGING_SETUP
+    if not LOGGING_SETUP:
+        setup_logging("info")
+        LOGGING_SETUP = True
 
     if not main_table_name:
         main_table_name = input_file.split('/')[-1].split('.')[0]
@@ -122,6 +143,8 @@ def cli(
             force=force,
             fields=fields,
             only_fields=only_fields,
+            tables=tables,
+            only_tables=only_tables,
             inline_one_to_one=inline_one_to_one,
             schema=schema,
             table_prefix=table_prefix,

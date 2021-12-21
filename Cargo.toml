@@ -12,7 +12,10 @@ crossbeam-channel="0.5"
 serde_json = { version = "1", features = ["preserve_order"] }
 pyo3 = {version = "0.14", features = ["extension-module"] }
 anyhow={version = "1.0"}
-libflatterer={version = "0.9"}
+libflatterer={path = "../libflatterer"}
+#libflatterer={version = "0.10"}
+env_logger="0.9"
+log="0.4"
 
 [profile.release]
 debug = true

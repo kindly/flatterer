@@ -4,10 +4,11 @@ use libflatterer::{flatten, flatten_from_jl, FlatFiles, Selector};
 use std::fs::File;
 use std::io::BufReader;
 use std::path::PathBuf;
+use env_logger::Env;
 
 fn main() -> Result<()> {
     let matches = App::new("flatterer")
-        .version("0.6")
+        .version("0.10")
         .author("David Raznick")
         .about("Make JSON flatterer")
         .args_from_usage(
@@ -21,14 +22,18 @@ fn main() -> Result<()> {
                            -i --inline-one-to-one                'If array always has only one element treat relationship as one-to-one'
                            -f --fields=[file]                    'fields.csv file to determine order and name of fields.'
                            -o --only-fields                      'Use only fields in csv file and no others'
+                           -b --tables=[file]                    'tables.csv file to determine name and order of tables.'
+                           -l --only-tables                      'Use only tables in csv file and no others'
                            -m --main=[main]                      'Table name of top level object'
                            -s --schema=[schema]                  'Link to remote or local JSONSchema to help out with field ordering and naming'
                            -t --table-prefix=[table-prefix]      'Prefix to add to all table names'
                            -a --path-separator=[path-separator]  'Seperator to denote new path within the input JSON. Defaults to `_`'
-                           -i --schema-titles=[schema-titles]    'Use titles from JSONSchema in the given way. Options are `full`, `slug`, `underscore_slug`. Default to not using titles..'
+                           -h --schema-titles=[schema-titles]    'Use titles from JSONSchema in the given way. Options are `full`, `slug`, `underscore_slug`. Default to not using titles..'
                            --force                               'Delete output directory if it exist'",
         )
         .get_matches();
+
+    env_logger::Builder::from_env(Env::new().filter_or("FLATTERER_LOG", "info")).init();
 
     let input = matches.value_of("INPUT").unwrap(); //ok as parser will detect
     let input_path = PathBuf::from(input);
@@ -94,6 +99,10 @@ fn main() -> Result<()> {
 
     if let Some(fields) = matches.value_of("fields") {
         flat_files.use_fields_csv(fields.to_string(), matches.is_present("only-fields"))?;
+    };
+
+    if let Some(tables) = matches.value_of("tables") {
+        flat_files.use_tables_csv(tables.to_string(), matches.is_present("only-tables"))?;
     };
 
     if matches.is_present("jl") {
