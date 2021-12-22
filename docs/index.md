@@ -81,13 +81,13 @@ games_dir/
 
 `games.csv` contains:
 
-|_link|_link_games|id |rating_code|rating_name|releaseDate|title |
-|-----|---------- |---|-----------|-----------|-----------|------|
-|1    |1          |1  |E          |Everyone   |2015-01-01 |A Game|
-|2    |2          |2  |E          |Everyone   |2016-01-01 |B Game|
+|_link|id |rating_code|rating_name|releaseDate|title |
+|----|---|-----------|-----------|-----------|------|
+|0   |1  |E          |Everyone   |2015-01-01 |A Game|
+|1   |2  |E          |Everyone   |2016-01-01 |B Game|
 
 
-Special columns `_link` and `_link_games` are generated. `_link` is the primary key there unique per game. 
+Special column `_link` is generated. `_link` is the primary key there unique per game. 
 
 Also the `rating` sub-object is promoted to this table it has a one-to-one relationship with `games`. 
 Sub-object properties are separated by '_'.  
@@ -100,13 +100,13 @@ Sub-object properties are separated by '_'.
 
 |_link|_link_games|name|
 |-----|----------|----|
-|1.platforms.0|1 |Xbox|
-|1.platforms.1|1 |Playstation|
-|2.platforms.0|2 |PC  |
+|0.platforms.0|0 |Xbox|
+|0.platforms.1|0 |Playstation|
+|1.platforms.0|1 |PC  |
 
 #### Link Fields
 
-`_link` is the primary key for the `platforms` table too.  Every table contains a `_link_games` field to easily join to the main `games` table.
+`_link` is the primary key for the `platforms` table too.  Every table except `games` table, contains a `_link_games` field to easily join to the main `games` table.
 
 If there was a sub-array of `platforms` then that would have `_link`,  `_link_games` and  `_link_platforms` fields. 
 

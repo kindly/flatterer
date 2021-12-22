@@ -102,7 +102,7 @@ def iterator_flatten(
               help='Prefix to add to all table names')
 @click.option('--path-separator', '-a', default="_",
               help='Seperator to denote new path within the input JSON. Defaults to `_`')
-@click.option('--schema-titles', '-i', default="",
+@click.option('--schema-titles', '-h', default="",
               help='Use titles from JSONSchema in the given way. Options are `full`, `slug`, `underscore_slug`. Default to not using titles.')
 @click.argument('input_file')
 @click.argument('output_directory')

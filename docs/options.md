@@ -23,6 +23,8 @@ Options:
                               command, default False
   -f, --fields TEXT           fields.csv file to use
   -o, --only-fields           Only output fields in fields.csv file
+  -b, --tables TEXT           tables.csv file to use
+  -l, --only-tables           Only output tables in tables.csv file
   -i, --inline-one-to-one     If array only has single item for all objects
                               treat as one-to-one
   -s, --schema TEXT           JSONSchema file or URL to determine field order
@@ -30,8 +32,8 @@ Options:
   -a, --path-separator TEXT   Seperator to denote new path within the input
                               JSON. Defaults to `_`
   -i, --schema-titles TEXT    Use titles from JSONSchema in the given way.
-                              Options are `full`, `slug`, `underscore_slug`. Default to
-                              not using titles.
+                              Options are `full`, `slug`, `underscore_slug`.
+                              Default to not using titles.
   --help                      Show this message and exit.
 ```
 
@@ -220,11 +222,16 @@ flatterer.flatten('inputfile.jl', 'ouput_dir', force=True)
 
 ## Fields File
 
-Path to fields csv file.  The CSV file needs the following headers: 
+Path to fields CSV file.  The fields file can be used for:
+
+* Changing the field order in output files by rearranging the rows in the correct order. 
+* Giving the fields a new name by using `field_title`
+* Removing unwanted fields when using the [](#only-fields) option.
+
+The CSV file needs the following headers: 
 
  * table_name
  * field_name
- * field_type
 
 It has the optional heading of `field_title` which will default to the `field_name` if missing.
 
@@ -239,9 +246,9 @@ For example:
 |games      |_link_games|text    |2    | _link_games|
 |games      |id        |number   |2    | id        |
 
-It can have additional headers in the file but they will not be used.
+It can have additional headers in the file but they will not be used. This is true of columns `count` and `field_type` in the above example.
 
-Field order in the output will the same as the row order in the the file.
+Field order in the output will the same as the row order in the file.
 
 `table_name` and `field_name` need to match up with the eventual structure of output. The easiest make sure of this is to edit the `fields.csv` that is in an output directory.  
 You can generate just the fields.csv file by [not outputting the CSV files](#csv).
@@ -278,6 +285,64 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --fields fields.csv --only-fields
 import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', fields='fields.csv', only_fields=True)
+```
+
+## Tables File
+
+Path to tables CSV file.  The file can be used for:
+
+* Changing the sheet order in xlsx output. 
+* Giving the tables (and xlsx sheets) a new name by using `table_title`
+* Removing unwanted tables when using the [](#only-tables) option.
+
+The CSV file needs the following headers: 
+
+ * table_name
+ * table_title
+
+For example:
+
+|table_name |table_title|
+|-----------|----------|
+|platforms  |_link     |
+|games      |_link     |
+
+It can have additional headers in the file but they will not be used.
+
+`tables_name` has to be the name that would be output by `flatterer`.  To make sure that these names are correct it is best to use the `tables.csv` that is always in the output directory as an basis for modifying the output.
+
+By default if there are tables in the data that are not in the `tabless.csv` they will be added to the output after the defined tables.  Use [](#only-tables) to change this behaviour so that only tables in this file will be output.
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --tables tables.csv
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', tables='tables.csv')
+```
+
+## Only Tables
+
+Only tables in the tables.csv file will be in the output.
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --tables tables.csv --only-tables
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', tables='tables.csv', only_tables=True)
 ```
 
 ## Inline One To One
