@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Outputs" href="outputs.html" /><link rel="prev" title="Flatterer. Making JSON flatterer" href="index.html" />
 
     <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
-        <title>Option Reference - flatterer 0.9 documentation</title>
+        <title>Option Reference - flatterer 0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
@@ -87,7 +87,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">flatterer 0.9 documentation</div></a>
+      <a href="index.html"><div class="brand">flatterer 0.10 documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -101,7 +101,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">flatterer 0.9 documentation</span>
+  <span class="sidebar-brand-text">flatterer 0.10 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html">
   <input class="sidebar-search" placeholder=Search name="q">
@@ -149,6 +149,8 @@ Options:
                               command, default False
   -f, --fields TEXT           fields.csv file to use
   -o, --only-fields           Only output fields in fields.csv file
+  -b, --tables TEXT           tables.csv file to use
+  -l, --only-tables           Only output tables in tables.csv file
   -i, --inline-one-to-one     If array only has single item for all objects
                               treat as one-to-one
   -s, --schema TEXT           JSONSchema file or URL to determine field order
@@ -156,8 +158,8 @@ Options:
   -a, --path-separator TEXT   Seperator to denote new path within the input
                               JSON. Defaults to `_`
   -i, --schema-titles TEXT    Use titles from JSONSchema in the given way.
-                              Options are `full`, `slug`, `underscore_slug`. Default to
-                              not using titles.
+                              Options are `full`, `slug`, `underscore_slug`.
+                              Default to not using titles.
   --help                      Show this message and exit.
 </pre></div>
 </div>
@@ -324,11 +326,16 @@ flatterer.flatten<span class="o">(</span><span class="s1">'inputfile.json'</span
 </section>
 <section id="fields-file">
 <h2>Fields File<a class="headerlink" href="#fields-file" title="Permalink to this headline">¶</a></h2>
-<p>Path to fields csv file.  The CSV file needs the following headers:</p>
+<p>Path to fields CSV file.  The fields file can be used for:</p>
+<ul class="simple">
+<li><p>Changing the field order in output files by rearranging the rows in the correct order.</p></li>
+<li><p>Giving the fields a new name by using <code class="docutils literal notranslate"><span class="pre">field_title</span></code></p></li>
+<li><p>Removing unwanted fields when using the <a class="reference internal" href="#only-fields"><span class="std std-doc">Only Fields</span></a> option.</p></li>
+</ul>
+<p>The CSV file needs the following headers:</p>
 <ul class="simple">
 <li><p>table_name</p></li>
 <li><p>field_name</p></li>
-<li><p>field_type</p></li>
 </ul>
 <p>It has the optional heading of <code class="docutils literal notranslate"><span class="pre">field_title</span></code> which will default to the <code class="docutils literal notranslate"><span class="pre">field_name</span></code> if missing.</p>
 <p>For example:</p>
@@ -380,8 +387,8 @@ flatterer.flatten<span class="o">(</span><span class="s1">'inputfile.json'</span
 </tr>
 </tbody>
 </table></div>
-<p>It can have additional headers in the file but they will not be used.</p>
-<p>Field order in the output will the same as the row order in the the file.</p>
+<p>It can have additional headers in the file but they will not be used. This is true of columns <code class="docutils literal notranslate"><span class="pre">count</span></code> and <code class="docutils literal notranslate"><span class="pre">field_type</span></code> in the above example.</p>
+<p>Field order in the output will the same as the row order in the file.</p>
 <p><code class="docutils literal notranslate"><span class="pre">table_name</span></code> and <code class="docutils literal notranslate"><span class="pre">field_name</span></code> need to match up with the eventual structure of output. The easiest make sure of this is to edit the <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> that is in an output directory.<br/>
 You can generate just the fields.csv file by <a class="reference internal" href="#csv"><span class="std std-doc">not outputting the CSV files</span></a>.</p>
 <p>By default if there are fields in the data that are not in the <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> they will be added to the output after the defined fields.  Use <a class="reference internal" href="#only-fields"><span class="std std-doc">Only Fields</span></a> to change this behaviour so that field not in the file will be excluded.</p>
@@ -418,18 +425,83 @@ You can generate just the fields.csv file by <a class="reference internal" href=
 </div>
 </section>
 </section>
-<section id="inline-one-to-one">
-<h2>Inline One To One<a class="headerlink" href="#inline-one-to-one" title="Permalink to this headline">¶</a></h2>
-<p>When a key has an array of objects as its value, but that array only ever has single items in it, then treat it these single item as if they are a sub-object (not sub array).<br/>
-Without this set any array of objects will be treated like a one-to-many relationship and therefore have a new table associated with it.  With this set and if all arrays under a particular key only have one item in it, the child table will not be created and the values will appear in the parent table.</p>
+<section id="tables-file">
+<h2>Tables File<a class="headerlink" href="#tables-file" title="Permalink to this headline">¶</a></h2>
+<p>Path to tables CSV file.  The file can be used for:</p>
+<ul class="simple">
+<li><p>Changing the sheet order in xlsx output.</p></li>
+<li><p>Giving the tables (and xlsx sheets) a new name by using <code class="docutils literal notranslate"><span class="pre">table_title</span></code></p></li>
+<li><p>Removing unwanted tables when using the <a class="reference internal" href="#only-tables"><span class="std std-doc">Only Tables</span></a> option.</p></li>
+</ul>
+<p>The CSV file needs the following headers:</p>
+<ul class="simple">
+<li><p>table_name</p></li>
+<li><p>table_title</p></li>
+</ul>
+<p>For example:</p>
+<div class="table-wrapper"><table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>table_name</p></th>
+<th class="head"><p>table_title</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>platforms</p></td>
+<td><p>_link</p></td>
+</tr>
+<tr class="row-odd"><td><p>games</p></td>
+<td><p>_link</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>It can have additional headers in the file but they will not be used.</p>
+<p><code class="docutils literal notranslate"><span class="pre">tables_name</span></code> has to be the name that would be output by <code class="docutils literal notranslate"><span class="pre">flatterer</span></code>.  To make sure that these names are correct it is best to use the <code class="docutils literal notranslate"><span class="pre">tables.csv</span></code> that is always in the output directory as an basis for modifying the output.</p>
+<p>By default if there are tables in the data that are not in the <code class="docutils literal notranslate"><span class="pre">tabless.csv</span></code> they will be added to the output after the defined tables.  Use <a class="reference internal" href="#only-tables"><span class="std std-doc">Only Tables</span></a> to change this behaviour so that only tables in this file will be output.</p>
 <section id="id15">
 <h3>CLI Usage<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --tables tables.csv
 </pre></div>
 </div>
 </section>
 <section id="id16">
 <h3>Python Usage<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">tables</span><span class="o">=</span><span class="s1">'tables.csv'</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="only-tables">
+<h2>Only Tables<a class="headerlink" href="#only-tables" title="Permalink to this headline">¶</a></h2>
+<p>Only tables in the tables.csv file will be in the output.</p>
+<section id="id17">
+<h3>CLI Usage<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --tables tables.csv --only-tables
+</pre></div>
+</div>
+</section>
+<section id="id18">
+<h3>Python Usage<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">tables</span><span class="o">=</span><span class="s1">'tables.csv'</span><span class="p">,</span> <span class="n">only_tables</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="inline-one-to-one">
+<h2>Inline One To One<a class="headerlink" href="#inline-one-to-one" title="Permalink to this headline">¶</a></h2>
+<p>When a key has an array of objects as its value, but that array only ever has single items in it, then treat it these single item as if they are a sub-object (not sub array).<br/>
+Without this set any array of objects will be treated like a one-to-many relationship and therefore have a new table associated with it.  With this set and if all arrays under a particular key only have one item in it, the child table will not be created and the values will appear in the parent table.</p>
+<section id="id19">
+<h3>CLI Usage<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
+</pre></div>
+</div>
+</section>
+<section id="id20">
+<h3>Python Usage<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">inline_one_to_one</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -441,8 +513,8 @@ Without this set any array of objects will be treated like a one-to-many relatio
 <section id="schema">
 <h2>Schema<a class="headerlink" href="#schema" title="Permalink to this headline">¶</a></h2>
 <p>Supply a JSONSchema file to help determine field ordering of the output.  If the schema supplied starts with <code class="docutils literal notranslate"><span class="pre">http</span></code> will try and download the schema from a remote server, otherwise it is assumed to be a file-system path.</p>
-<section id="id17">
-<h3>CLI Usage<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<section id="id21">
+<h3>CLI Usage<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
 <p>For remote url:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --schema https://example.com/schema.json
 </pre></div>
@@ -452,8 +524,8 @@ Without this set any array of objects will be treated like a one-to-many relatio
 </pre></div>
 </div>
 </section>
-<section id="id18">
-<h3>Python Usage<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<section id="id22">
+<h3>Python Usage<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.json'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s1">'https://example.com/schema.json'</span><span class="p">)</span>
@@ -465,14 +537,14 @@ Without this set any array of objects will be treated like a one-to-many relatio
 <h2>Table Prefix<a class="headerlink" href="#table-prefix" title="Permalink to this headline">¶</a></h2>
 <p>Prefix to add to all table names. So if the output has a table called <code class="docutils literal notranslate"><span class="pre">mytable</span></code> and the “table prefix” is specified as <code class="docutils literal notranslate"><span class="pre">myprefix_</span></code> then the table (therefore csv file or excel sheet name) will be called <code class="docutils literal notranslate"><span class="pre">myprefix_mytable</span></code>.<br/>
 This can be useful if you are trying to namespace the output when inserting into an exiting database.</p>
-<section id="id19">
-<h3>CLI Usage<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<section id="id23">
+<h3>CLI Usage<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --table-prefix myprefix_
 </pre></div>
 </div>
 </section>
-<section id="id20">
-<h3>Python Usage<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<section id="id24">
+<h3>Python Usage<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">table_prefix</span><span class="o">=</span><span class="s1">'myprefix_'</span><span class="p">)</span>
@@ -485,14 +557,14 @@ This can be useful if you are trying to namespace the output when inserting into
 <p>By default all table and field names have <code class="docutils literal notranslate"><span class="pre">_</span></code> as the seperator which denotes a that the field after the <code class="docutils literal notranslate"><span class="pre">_</span></code> is a sub-property. For example <code class="docutils literal notranslate"><span class="pre">myObject_myField</span></code> says that <code class="docutils literal notranslate"><span class="pre">myField</span></code> exists as a property of <code class="docutils literal notranslate"><span class="pre">myObject</span></code>.</p>
 <p>However some data already has <code class="docutils literal notranslate"><span class="pre">_</span></code> in the property names.  For example if in the input data theres was an object called <code class="docutils literal notranslate"><span class="pre">my_object</span></code> and the property called <code class="docutils literal notranslate"><span class="pre">my_field</span></code> then by default the field name would be <code class="docutils literal notranslate"><span class="pre">my_object_my_field</span></code>.  This is confusing as you might expect <code class="docutils literal notranslate"><span class="pre">object</span></code> to be a property of <code class="docutils literal notranslate"><span class="pre">my</span></code> and it might cause some name clashes.</p>
 <p>To fix this you can change the path separator to whatever you like. You could choose <code class="docutils literal notranslate"><span class="pre">___</span></code> as a separator, so in the example above, the field would be called <code class="docutils literal notranslate"><span class="pre">my_object__my_field</span></code>.</p>
-<section id="id21">
-<h3>CLI Usage<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<section id="id25">
+<h3>CLI Usage<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --path-separator __
 </pre></div>
 </div>
 </section>
-<section id="id22">
-<h3>Python Usage<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<section id="id26">
+<h3>Python Usage<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">path_separoator</span><span class="o">=</span><span class="s1">'__'</span><span class="p">)</span>
@@ -509,14 +581,14 @@ This can be useful if you are trying to namespace the output when inserting into
 <li><p><code class="docutils literal notranslate"><span class="pre">underscore_slug</span></code> same as slug but uses <code class="docutils literal notranslate"><span class="pre">_</span></code> instead of <code class="docutils literal notranslate"><span class="pre">-</span></code>. The previous example the output would be <code class="docutils literal notranslate"><span class="pre">my_strange_title</span></code></p></li>
 </ul>
 <p>If this option is left out or is the empty string then it will not take the heading from JSONSchema.</p>
-<section id="id23">
-<h3>CLI Usage<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<section id="id27">
+<h3>CLI Usage<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --schema-titles underscore_slug
 </pre></div>
 </div>
 </section>
-<section id="id24">
-<h3>Python Usage<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<section id="id28">
+<h3>Python Usage<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.jl'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">schema_titles</span><span class="o">=</span><span class="s1">'underscore_slug_'</span><span class="p">)</span>
@@ -622,29 +694,39 @@ This can be useful if you are trying to namespace the output when inserting into
 <li><a class="reference internal" href="#id14">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#inline-one-to-one">Inline One To One</a><ul>
+<li><a class="reference internal" href="#tables-file">Tables File</a><ul>
 <li><a class="reference internal" href="#id15">CLI Usage</a></li>
 <li><a class="reference internal" href="#id16">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#schema">Schema</a><ul>
+<li><a class="reference internal" href="#only-tables">Only Tables</a><ul>
 <li><a class="reference internal" href="#id17">CLI Usage</a></li>
 <li><a class="reference internal" href="#id18">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#table-prefix">Table Prefix</a><ul>
+<li><a class="reference internal" href="#inline-one-to-one">Inline One To One</a><ul>
 <li><a class="reference internal" href="#id19">CLI Usage</a></li>
 <li><a class="reference internal" href="#id20">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#path-separator">Path Separator</a><ul>
+<li><a class="reference internal" href="#schema">Schema</a><ul>
 <li><a class="reference internal" href="#id21">CLI Usage</a></li>
 <li><a class="reference internal" href="#id22">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#schema-titles">Schema Titles</a><ul>
+<li><a class="reference internal" href="#table-prefix">Table Prefix</a><ul>
 <li><a class="reference internal" href="#id23">CLI Usage</a></li>
 <li><a class="reference internal" href="#id24">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#path-separator">Path Separator</a><ul>
+<li><a class="reference internal" href="#id25">CLI Usage</a></li>
+<li><a class="reference internal" href="#id26">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#schema-titles">Schema Titles</a><ul>
+<li><a class="reference internal" href="#id27">CLI Usage</a></li>
+<li><a class="reference internal" href="#id28">Python Usage</a></li>
 </ul>
 </li>
 </ul>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Change Log" href="changelog.html" /><link rel="prev" title="Option Reference" href="options.html" />
 
     <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
-        <title>Outputs - flatterer 0.9 documentation</title>
+        <title>Outputs - flatterer 0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
@@ -87,7 +87,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">flatterer 0.9 documentation</div></a>
+      <a href="index.html"><div class="brand">flatterer 0.10 documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -101,7 +101,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">flatterer 0.9 documentation</span>
+  <span class="sidebar-brand-text">flatterer 0.10 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html">
   <input class="sidebar-search" placeholder=Search name="q">
@@ -140,6 +140,7 @@
 │   └── platforms.csv
 ├── data_package.json
 ├── fields.csv
+├── tables.csv
 ├── output.xlsx
 ├── postgresql
 │   ├── postgresql_load.sql
@@ -226,6 +227,29 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">field_name</span></code>: The name of field in the table.  This will be the same as the heading line in the CSV file and XLSX sheet.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">field_type</span></code>: Type guess of the type of data within the field.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">count</span></code>: Amount of times that field appears int the JSON.</p></li>
+</ul>
+</section>
+<section id="tables-csv">
+<h2>tables.csv<a class="headerlink" href="#tables-csv" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tables.csv</span></code> contains some metadata about the output tables:</p>
+<div class="table-wrapper"><table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>table_name</p></th>
+<th class="head"><p>table_title</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>platforms</p></td>
+<td><p>platforms</p></td>
+</tr>
+<tr class="row-odd"><td><p>games</p></td>
+<td><p>platforms</p></td>
+</tr>
+</tbody>
+</table></div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">table_name</span></code>: The name of the table, which will be the same as the CSV file name without the <code class="docutils literal notranslate"><span class="pre">.csv</span></code> extension, or the XLSX sheet name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">table_title</span></code>: This will be the same as <code class="docutils literal notranslate"><span class="pre">table_name</span></code> unless <a class="reference internal" href="options.html#tables-file"><span class="std std-doc">tables.csv input</span></a> is used.</p></li>
 </ul>
 </section>
 <section id="postgresql-files">
@@ -433,6 +457,7 @@
 <li><a class="reference internal" href="#csv">CSV</a></li>
 <li><a class="reference internal" href="#xlsx">XLSX</a></li>
 <li><a class="reference internal" href="#fields-csv">fields.csv</a></li>
+<li><a class="reference internal" href="#tables-csv">tables.csv</a></li>
 <li><a class="reference internal" href="#postgresql-files">Postgresql Files</a><ul>
 <li><a class="reference internal" href="#postgresql-schema-sql">postgresql_schema.sql</a></li>
 <li><a class="reference internal" href="#postgresql-load-sql">postgresql_load.sql</a></li>

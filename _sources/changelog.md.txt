@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.10] - 2021-12-22
+
+### New
+
+- `tables.csv` input in order to control tab names. [Tables File option](https://flatterer.opendata.coop/options.html#tables-file)
+- Beginning to use logging.
+
+
+### Changed
+
+- Better handling of long excel sheet names names. See https://github.com/kindly/flatterer/issues/12
+- `field_type` no longer required in fields.csv.
+- All `_link` fields have are 0 indexed.
+- Removal of redundant `_link_<main_table>` from main table.
+- More human readable error messages.
+
+
+### Fixed
+
+- Bad characters in XLSX stripped and raise warning. 
+- Check limits on XLSX files and raise error if found.
+- Lots of edge cases handled better. See https://github.com/kindly/flatterer/issues/17
+- All errors will remove output directory instead of leaving unusable directory or partial data.
+
 ## [0.9] - 2021-12-12
  
 ### Fixed

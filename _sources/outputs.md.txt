@@ -15,6 +15,7 @@ games_dir/
 │   └── platforms.csv
 ├── data_package.json
 ├── fields.csv
+├── tables.csv
 ├── output.xlsx
 ├── postgresql
 │   ├── postgresql_load.sql
@@ -53,6 +54,18 @@ The XLSX output can be found in the output.xlsx file. It contains the same data 
 * `field_name`: The name of field in the table.  This will be the same as the heading line in the CSV file and XLSX sheet.
 * `field_type`: Type guess of the type of data within the field.  
 * `count`: Amount of times that field appears int the JSON.
+
+## tables.csv
+
+`tables.csv` contains some metadata about the output tables:
+
+|table_name|table_title|
+|----------|----------|
+|platforms |platforms |
+|games      |platforms|
+
+* `table_name`: The name of the table, which will be the same as the CSV file name without the `.csv` extension, or the XLSX sheet name.
+* `table_title`: This will be the same as `table_name` unless [tables.csv input](./options.md#tables-file) is used.
 
 ## Postgresql Files
 
