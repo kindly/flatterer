@@ -120,7 +120,6 @@ To generalize this the `_link__<table_name>` fields joins to the `_link` field o
 |platforms  |_link_games|text     |3    |_link_games|
 |platforms  |name      |text      |3    |name      |
 |games      |_link     |text     |2    | _link     |
-|games      |_link_games|text    |2    | _link_games|
 |games      |id        |number   |2    | id        |
 |games      |rating_code|text    |2    | rating_code|
 |games      |rating_name|text    |2    | rating_name|

@@ -243,7 +243,6 @@ For example:
 |platforms  |_link_games|text     |3    |_link_games|
 |platforms  |name      |text      |3    |name      |
 |games      |_link     |text     |2    | _link     |
-|games      |_link_games|text    |2    | _link_games|
 |games      |id        |number   |2    | id        |
 
 It can have additional headers in the file but they will not be used. This is true of columns `count` and `field_type` in the above example.
