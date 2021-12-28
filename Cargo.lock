@@ -192,6 +192,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "ctrlc"
+version = "3.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a19c6cedffdc8c03a3346d723eb20bd85a13362bb96dc2ac000842c6381ec7bf"
+dependencies = [
+ "nix",
+ "winapi",
+]
+
+[[package]]
 name = "deunicode"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -251,6 +261,7 @@ dependencies = [
  "anyhow",
  "clap",
  "crossbeam-channel",
+ "ctrlc",
  "env_logger 0.9.0",
  "libflatterer",
  "log",
@@ -423,15 +434,16 @@ checksum = "fbe5e23404da5b4f555ef85ebed98fb4083e55a00c317800bc2a50ede9f3d219"
 
 [[package]]
 name = "libflatterer"
-version = "0.10.2"
+version = "0.10.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4fe605912d7e5d42c9c12394b925be4a9a128c82ae582685e0ff1bb1d97c9fea"
+checksum = "b0cd4a4c5ab8ba309c62860d9d03268edcb438495af87aa8ce715084cc4014a6"
 dependencies = [
  "crossbeam-channel",
  "csv",
  "indexmap",
  "itertools",
  "jsonref",
+ "lazy_static",
  "log",
  "regex",
  "serde",
@@ -494,6 +506,28 @@ name = "memchr"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
+
+[[package]]
+name = "memoffset"
+version = "0.6.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5aa361d4faea93603064a027415f07bd8e1d5c88c9fbf68bf56a285428fd79ce"
+dependencies = [
+ "autocfg",
+]
+
+[[package]]
+name = "nix"
+version = "0.23.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9f866317acbd3a240710c63f065ffb1e4fd466259045ccb504130b7f668f35c6"
+dependencies = [
+ "bitflags",
+ "cc",
+ "cfg-if",
+ "libc",
+ "memoffset",
+]
 
 [[package]]
 name = "nom"

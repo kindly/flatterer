@@ -42,3 +42,10 @@ To build
 ```
 sudo docker run  -v $(pwd):/io flatterer-anylinux build --release
 ```
+
+## Logging
+
+Set enviroment variable `FLATTERER_LOG` to `trace` to get full debug output.
+
+
+

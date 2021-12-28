@@ -1,22 +1,32 @@
 use crossbeam_channel::bounded;
-use libflatterer::{flatten, flatten_from_jl, FlatFiles, Selector};
+use libflatterer::{flatten, flatten_from_jl, FlatFiles, Selector, TERMINATE};
 use serde_json::Value;
 use std::thread;
 
+use env_logger::Env;
 use pyo3::prelude::*;
 use pyo3::types::PyIterator;
 use std::fs::File;
 use std::io::BufReader;
-use env_logger::Env;
+use std::sync::atomic::Ordering;
 
 #[pymodule]
 fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
     #[pyfn(m)]
-    fn setup_logging(
-        _py: Python,
-        default_log_level: String,
-    ) {
-        env_logger::Builder::from_env(Env::new().filter_or("FLATTERER_LOG", &default_log_level)).init();
+    fn setup_ctrlc(_py: Python) {
+        log::debug!("ctrlc setup");
+        ctrlc::set_handler(|| {
+            log::debug!("ctrlc pressed");
+            TERMINATE.store(true, Ordering::SeqCst);
+        })
+         .expect("Error setting Ctrl-C handler");
+    }
+    #[pyfn(m)]
+    fn setup_logging(_py: Python, default_log_level: String) {
+        env_logger::Builder::from_env(Env::new().filter_or("FLATTERER_LOG", &default_log_level))
+            .format_timestamp_millis()
+            .format_target(false)
+            .init();
     }
     #[pyfn(m)]
     fn flatten_rs(
@@ -39,6 +49,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         table_prefix: String,
         path_separator: String,
         schema_titles: String,
+        log_error: bool,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir,
@@ -61,6 +72,9 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         }
 
         if let Err(err) = flat_files_res {
+            if log_error {
+                log::error!("{}", err)
+            };
             return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(
                 err.to_string(),
             ));
@@ -70,6 +84,9 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         if !fields.is_empty() {
             if let Err(err) = flat_files.use_fields_csv(fields, only_fields) {
+                if log_error {
+                    log::error!("{}", err)
+                };
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(
                     err.to_string(),
                 ));
@@ -77,6 +94,9 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         }
         if !tables.is_empty() {
             if let Err(err) = flat_files.use_tables_csv(tables, only_tables) {
+                if log_error {
+                    log::error!("{}", err)
+                };
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(
                     err.to_string(),
                 ));
@@ -90,6 +110,9 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
                 file = BufReader::new(input);
             }
             Err(err) => {
+                if log_error {
+                    log::error!("Can not open file `{}`: {}", input_file, err)
+                };
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                     "Can not open file `{}`: {}",
                     input_file,
@@ -100,6 +123,9 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         if json_lines {
             if let Err(err) = flatten_from_jl(file, flat_files) {
+                if log_error {
+                    log::error!("{}", err)
+                };
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                     "{}",
                     err
@@ -107,12 +133,16 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             };
         } else {
             if let Err(err) = flatten(file, flat_files, selectors) {
+                if log_error {
+                    log::error!("{}", err)
+                };
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                     "{}",
                     err
                 )));
             };
         };
+        log::info!("All finished with no errors!");
         Ok(())
     }
 
@@ -135,6 +165,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         table_prefix: String,
         path_separator: String,
         schema_titles: String,
+        log_error: bool,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir,
@@ -151,6 +182,9 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         );
 
         if let Err(err) = flat_files_res {
+            if log_error {
+                log::error!("{}", err)
+            };
             return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                 "{:?}",
                 err
@@ -161,6 +195,9 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         if !fields.is_empty() {
             if let Err(err) = flat_files.use_fields_csv(fields, only_fields) {
+                if log_error {
+                    log::error!("{}", err)
+                };
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                     "{}",
                     err
@@ -170,6 +207,9 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         if !tables.is_empty() {
             if let Err(err) = flat_files.use_tables_csv(tables, only_tables) {
+                if log_error {
+                    log::error!("{}", err)
+                };
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                     "{}",
                     err
@@ -216,15 +256,21 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             match serde_json::from_slice::<Value>(json_bytes) {
                 Ok(value) => {
                     if let Err(err) = sender.send(value) {
+                        if log_error {
+                            log::error!("{}", err)
+                        };
                         return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(
                             err.to_string(),
                         ));
                     }
                 }
                 Err(err) => {
+                    if log_error {
+                        log::error!("{}", err)
+                    };
                     return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(
                         err.to_string(),
-                    ))
+                    ));
                 }
             }
 
@@ -236,20 +282,27 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         match handler.join() {
             Ok(result) => {
                 if let Err(err) = result {
+                    if log_error {
+                        log::error!("{}", err)
+                    };
                     return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(
                         err.to_string(),
                     ));
                 }
             }
             Err(err) => {
+                if log_error {
+                    log::error!("{:?}", err)
+                };
                 return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
                     "{:?}",
                     err
-                )))
+                )));
             }
         }
         Ok(())
     }
 
+    log::info!("All finished with no errors!");
     Ok(())
 }

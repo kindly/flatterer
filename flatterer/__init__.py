@@ -3,7 +3,7 @@ import click
 
 import orjson
 
-from .flatterer import iterator_flatten_rs, flatten_rs, setup_logging
+from .flatterer import iterator_flatten_rs, flatten_rs, setup_logging, setup_ctrlc
 
 LOGGING_SETUP = False
 
@@ -43,6 +43,7 @@ def flatten(
     table_prefix="",
     path_separator="_",
     schema_titles="",
+    log_error=False,
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -50,7 +51,7 @@ def flatten(
         LOGGING_SETUP = True
     flatten_rs(input, output_dir, csv, xlsx,
                path, main_table_name, emit_path, json_lines, force, fields, only_fields, tables, only_tables,
-               inline_one_to_one, schema, table_prefix, path_separator, schema_titles)
+               inline_one_to_one, schema, table_prefix, path_separator, schema_titles, log_error)
 
 
 def iterator_flatten(
@@ -70,6 +71,7 @@ def iterator_flatten(
     table_prefix="",
     path_separator="_",
     schema_titles="",
+    log_error=False
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -77,7 +79,7 @@ def iterator_flatten(
         LOGGING_SETUP = True
     iterator_flatten_rs(bytes_generator(iterator), output_dir, csv, xlsx,
                         main_table_name, emit_path, force, fields, only_fields, tables,
-                        only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles)
+                        only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles, log_error)
 
 
 @click.command()
@@ -129,24 +131,29 @@ def cli(
     if not LOGGING_SETUP:
         setup_logging("info")
         LOGGING_SETUP = True
+        setup_ctrlc()
 
     if not main_table_name:
         main_table_name = input_file.split('/')[-1].split('.')[0]
 
-    flatten(input_file,
-            output_directory,
-            csv=csv,
-            xlsx=xlsx,
-            path=path,
-            main_table_name=main_table_name,
-            json_lines=json_lines,
-            force=force,
-            fields=fields,
-            only_fields=only_fields,
-            tables=tables,
-            only_tables=only_tables,
-            inline_one_to_one=inline_one_to_one,
-            schema=schema,
-            table_prefix=table_prefix,
-            path_separator=path_separator,
-            schema_titles=schema_titles)
+    try:
+        flatten(input_file,
+                output_directory,
+                csv=csv,
+                xlsx=xlsx,
+                path=path,
+                main_table_name=main_table_name,
+                json_lines=json_lines,
+                force=force,
+                fields=fields,
+                only_fields=only_fields,
+                tables=tables,
+                only_tables=only_tables,
+                inline_one_to_one=inline_one_to_one,
+                schema=schema,
+                table_prefix=table_prefix,
+                path_separator=path_separator,
+                schema_titles=schema_titles,
+                log_error=True)
+    except IOError:
+        pass

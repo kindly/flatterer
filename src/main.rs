@@ -1,10 +1,12 @@
+//use anyhow::Result;
 use anyhow::Result;
 use clap::App;
-use libflatterer::{flatten, flatten_from_jl, FlatFiles, Selector};
+use env_logger::Env;
+use libflatterer::{flatten, flatten_from_jl, FlatFiles, Selector, TERMINATE};
 use std::fs::File;
 use std::io::BufReader;
 use std::path::PathBuf;
-use env_logger::Env;
+use std::sync::atomic::Ordering;
 
 fn main() -> Result<()> {
     let matches = App::new("flatterer")
@@ -33,7 +35,15 @@ fn main() -> Result<()> {
         )
         .get_matches();
 
-    env_logger::Builder::from_env(Env::new().filter_or("FLATTERER_LOG", "info")).init();
+    env_logger::Builder::from_env(Env::new().filter_or("FLATTERER_LOG", "info"))
+        .format_timestamp_millis()
+        .format_target(false)
+        .init();
+
+    ctrlc::set_handler(|| {
+        TERMINATE.store(true, Ordering::SeqCst);
+    })
+    .expect("Error setting Ctrl-C handler");
 
     let input = matches.value_of("INPUT").unwrap(); //ok as parser will detect
     let input_path = PathBuf::from(input);
@@ -110,6 +120,7 @@ fn main() -> Result<()> {
     } else {
         flatten(input, flat_files, selectors)?;
     }
+    log::info!("All finished with no errors!");
 
     Ok(())
 }

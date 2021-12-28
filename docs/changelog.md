@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.10.1] - 2021-12-22
+
+### New
+
+- ctrlc support added.
+
+### Changed
+
+- Logging output improved.
+- Traceback not shown for CLI use.
+
+### Fixed
+
+- Occurences where output folder not being deleted.
+
 ## [0.10] - 2021-12-22
 
 ### New
