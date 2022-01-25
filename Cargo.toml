@@ -1,19 +1,19 @@
 [package]
 name = "flatterer"
-version = "0.10.1"
+version = "0.11.0"
 authors = ["David Raznick <kindly@gmail.com>"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = "2"
+clap = "3.0.12"
 crossbeam-channel="0.5"
 serde_json = { version = "1", features = ["preserve_order"] }
-pyo3 = {version = "0.14", features = ["extension-module"] }
+pyo3 = {version = "0.15.1", features = ["extension-module"] }
 anyhow={version = "1.0"}
 #libflatterer={path = "../libflatterer"}
-libflatterer={version = "0.10"}
+libflatterer={version = "0.11"}
 env_logger="0.9"
 log="0.4"
 ctrlc="3.2.1"
@@ -30,4 +30,3 @@ crate-type = ["cdylib", "rlib"]
 [[bin]]
 name = "flatterer-cli"
 path = "src/main.rs"
-

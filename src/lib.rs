@@ -1,5 +1,5 @@
 use crossbeam_channel::bounded;
-use libflatterer::{flatten, flatten_from_jl, FlatFiles, Selector, TERMINATE};
+use libflatterer::{flatten, FlatFiles, TERMINATE};
 use serde_json::Value;
 use std::thread;
 
@@ -68,7 +68,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         let mut selectors = vec![];
 
         if !path.is_empty() {
-            selectors.push(Selector::Identifier(format!("\"{}\"", path)));
+            selectors.push(path.to_string());
         }
 
         if let Err(err) = flat_files_res {
@@ -121,27 +121,16 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             }
         };
 
-        if json_lines {
-            if let Err(err) = flatten_from_jl(file, flat_files) {
-                if log_error {
-                    log::error!("{}", err)
-                };
-                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
-                    "{}",
-                    err
-                )));
+        if let Err(err) = flatten(file, flat_files, selectors, json_lines ) {
+            if log_error {
+                log::error!("{}", err)
             };
-        } else {
-            if let Err(err) = flatten(file, flat_files, selectors) {
-                if log_error {
-                    log::error!("{}", err)
-                };
-                return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
-                    "{}",
-                    err
-                )));
-            };
+            return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(format!(
+                "{}",
+                err
+            )));
         };
+
         log::info!("All finished with no errors!");
         Ok(())
     }
@@ -221,7 +210,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         let handler = thread::spawn(move || -> PyResult<()> {
             for value in receiver {
-                flat_files.process_value(value);
+                flat_files.process_value(value, vec![]);
                 if let Err(err) = flat_files.create_rows() {
                     return Err(PyErr::new::<pyo3::exceptions::PyIOError, _>(
                         err.to_string(),

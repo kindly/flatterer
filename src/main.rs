@@ -2,7 +2,7 @@
 use anyhow::Result;
 use clap::App;
 use env_logger::Env;
-use libflatterer::{flatten, flatten_from_jl, FlatFiles, Selector, TERMINATE};
+use libflatterer::{flatten, FlatFiles, TERMINATE};
 use std::fs::File;
 use std::io::BufReader;
 use std::path::PathBuf;
@@ -10,7 +10,7 @@ use std::sync::atomic::Ordering;
 
 fn main() -> Result<()> {
     let matches = App::new("flatterer")
-        .version("0.10")
+        .version("0.11")
         .author("David Raznick")
         .about("Make JSON flatterer")
         .args_from_usage(
@@ -58,7 +58,7 @@ fn main() -> Result<()> {
     let mut selectors = vec![];
 
     if let Some(path) = matches.value_of("path") {
-        selectors.push(Selector::Identifier(format!("\"{}\"", path.to_string())));
+        selectors.push(path.to_string());
     }
 
     let main_table_name: String;
@@ -115,11 +115,8 @@ fn main() -> Result<()> {
         flat_files.use_tables_csv(tables.to_string(), matches.is_present("only-tables"))?;
     };
 
-    if matches.is_present("jl") {
-        flatten_from_jl(input, flat_files)?;
-    } else {
-        flatten(input, flat_files, selectors)?;
-    }
+    flatten(input, flat_files, selectors, matches.is_present("jl"))?;
+
     log::info!("All finished with no errors!");
 
     Ok(())
