@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.11] - 2021-01-25
+
+### New
+
+- Support top level object. All list of objects are streamed and top level object data saved in main table.
+- New yaglish parser for both json stream and arrays.
+- Library has schema_guess function to tell if data is a JSON Stream or has an array of object.
+
+### Fixed
+
+- Empty objects do not make a line in output.
+
+
 ## [0.10.1] - 2021-12-22
 
 ### New
