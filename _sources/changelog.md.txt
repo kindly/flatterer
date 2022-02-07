@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.12] - 2021-02-02
+
+### New
+
+- SQLite export option
+
 ## [0.11] - 2021-01-25
 
 ### New

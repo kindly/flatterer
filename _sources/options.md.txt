@@ -14,6 +14,7 @@ Usage: flatterer [OPTIONS] INPUT_FILE OUTPUT_DIRECTORY
 Options:
   --csv / --nocsv             Output CSV files, default true
   --xlsx / --noxlsx           Output XLSX file, default false
+  --sqlite / --nosqlite       Output sqlite.db file, default false
   -m, --main-table-name TEXT  Name of main table, defaults to name of the file
                               without the extension
   -p, --path TEXT             Key name of where json array starts, default top
@@ -61,6 +62,27 @@ flatterer.flatten('inputfile.json', 'ouput_dir', csv=False)
 ## XLSX
 
 Output XLSX file in output directory `<OUTPUT_DIRECTORY>/output.xlsx`. Defaults to False
+
+
+### CLI Usage
+
+Main table name set to `games`
+
+```bash 
+flatterer --xlsx INPUT_FILE OUTPUT_DIRECTORY
+```
+
+### Python Usage
+
+```bash 
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', xlsx=True)
+```
+
+## SQLite
+
+Output SQLite file in output directory `<OUTPUT_DIRECTORY>/sqlite.db`. Defaults to False
 
 
 ### CLI Usage
