@@ -18,11 +18,11 @@
 # -- Project information -----------------------------------------------------
 
 project = 'flatterer'
-copyright = '2021, David Raznick'
+copyright = '2021-2022, David Raznick'
 author = 'David Raznick'
 
 # The full version, including alpha/beta/rc tags
-release = '0.10'
+release = '0.12'
 
 myst_heading_anchors = 3
 

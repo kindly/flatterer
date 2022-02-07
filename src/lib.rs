@@ -35,6 +35,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         output_dir: String,
         csv: bool,
         xlsx: bool,
+        sqlite: bool,
         path: String,
         main_table_name: String,
         emit_path: Vec<Vec<String>>,
@@ -49,12 +50,14 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         table_prefix: String,
         path_separator: String,
         schema_titles: String,
+        sqlite_path: String,
         log_error: bool,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir,
             csv,
             xlsx,
+            sqlite,
             force,
             main_table_name,
             emit_path,
@@ -103,6 +106,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             }
         }
 
+        if !sqlite_path.is_empty() {
+            flat_files.sqlite_path = sqlite_path
+        }
+
         let file;
 
         match File::open(&input_file) {
@@ -142,6 +149,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         output_dir: String,
         csv: bool,
         xlsx: bool,
+        sqlite: bool,
         main_table_name: String,
         emit_path: Vec<Vec<String>>,
         force: bool,
@@ -154,12 +162,14 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         table_prefix: String,
         path_separator: String,
         schema_titles: String,
+        sqlite_path: String,
         log_error: bool,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
             output_dir,
             csv,
             xlsx,
+            sqlite,
             force,
             main_table_name,
             emit_path,
@@ -204,6 +214,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
                     err
                 )));
             }
+        }
+
+        if !sqlite_path.is_empty() {
+            flat_files.sqlite_path = sqlite_path
         }
 
         let (sender, receiver) = bounded(1000);

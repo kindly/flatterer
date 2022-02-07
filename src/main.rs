@@ -21,6 +21,7 @@ fn main() -> Result<()> {
                            -c --csv                              'Output csv files (defualt but required if xlsx is selected)'
                            -n --nocsv                            'Do not output csv'
                            -x --xlsx                             'Output xlsx file'
+                           -q --sqlite                           'Output sqlite db'
                            -i --inline-one-to-one                'If array always has only one element treat relationship as one-to-one'
                            -f --fields=[file]                    'fields.csv file to determine order and name of fields.'
                            -o --only-fields                      'Use only fields in csv file and no others'
@@ -97,6 +98,7 @@ fn main() -> Result<()> {
         output_dir.to_string(),
         !matches.is_present("nocsv"),
         matches.is_present("xlsx"),
+        matches.is_present("sqlite"),
         matches.is_present("force"),
         main_table_name,
         vec![],

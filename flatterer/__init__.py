@@ -29,6 +29,7 @@ def flatten(
     output_dir,
     csv=True,
     xlsx=False,
+    sqlite=False,
     path='',
     main_table_name='main',
     emit_path=[],
@@ -43,15 +44,16 @@ def flatten(
     table_prefix="",
     path_separator="_",
     schema_titles="",
+    sqlite_path="",
     log_error=False,
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
         setup_logging("warning")
         LOGGING_SETUP = True
-    flatten_rs(input, output_dir, csv, xlsx,
+    flatten_rs(input, output_dir, csv, xlsx, sqlite,
                path, main_table_name, emit_path, json_lines, force, fields, only_fields, tables, only_tables,
-               inline_one_to_one, schema, table_prefix, path_separator, schema_titles, log_error)
+               inline_one_to_one, schema, table_prefix, path_separator, schema_titles, sqlite_path, log_error)
 
 
 def iterator_flatten(
@@ -59,6 +61,7 @@ def iterator_flatten(
     output_dir,
     csv=True,
     xlsx=False,
+    sqlite=False,
     main_table_name='main',
     emit_path=[],
     force=False,
@@ -71,20 +74,22 @@ def iterator_flatten(
     table_prefix="",
     path_separator="_",
     schema_titles="",
+    sqlite_path="",
     log_error=False
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
         setup_logging("warning")
         LOGGING_SETUP = True
-    iterator_flatten_rs(bytes_generator(iterator), output_dir, csv, xlsx,
+    iterator_flatten_rs(bytes_generator(iterator), output_dir, csv, xlsx, sqlite,
                         main_table_name, emit_path, force, fields, only_fields, tables,
-                        only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles, log_error)
+                        only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles, sqlite_path, log_error)
 
 
 @click.command()
 @click.option('--csv/--nocsv', default=True, help='Output CSV files, default true')
 @click.option('--xlsx/--noxlsx', default=False, help='Output XLSX file, default false')
+@click.option('--sqlite/--nosqlite', default=False, help='Output sqlite.db file, default false')
 @click.option('--main-table-name', '-m', default=None,
               help='Name of main table, defaults to name of the file without the extension')
 @click.option('--path', '-p', default='', help='Key name of where json array starts, default top level array')
@@ -113,6 +118,7 @@ def cli(
     output_directory,
     csv=True,
     xlsx=False,
+    sqlite=False,
     path='',
     main_table_name=None,
     json_lines=False,
@@ -141,6 +147,7 @@ def cli(
                 output_directory,
                 csv=csv,
                 xlsx=xlsx,
+                sqlite=sqlite,
                 path=path,
                 main_table_name=main_table_name,
                 json_lines=json_lines,
