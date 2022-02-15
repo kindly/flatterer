@@ -45,6 +45,7 @@ def flatten(
     path_separator="_",
     schema_titles="",
     sqlite_path="",
+    preview=0,
     log_error=False,
 ):
     global LOGGING_SETUP
@@ -52,8 +53,9 @@ def flatten(
         setup_logging("warning")
         LOGGING_SETUP = True
     flatten_rs(input, output_dir, csv, xlsx, sqlite,
-               path, main_table_name, emit_path, json_lines, force, fields, only_fields, tables, only_tables,
-               inline_one_to_one, schema, table_prefix, path_separator, schema_titles, sqlite_path, log_error)
+               path, main_table_name, emit_path, json_lines, force, fields, only_fields, tables, 
+               only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles, 
+               sqlite_path, preview, log_error)
 
 
 def iterator_flatten(
@@ -75,6 +77,7 @@ def iterator_flatten(
     path_separator="_",
     schema_titles="",
     sqlite_path="",
+    preview=0,
     log_error=False
 ):
     global LOGGING_SETUP
@@ -83,7 +86,8 @@ def iterator_flatten(
         LOGGING_SETUP = True
     iterator_flatten_rs(bytes_generator(iterator), output_dir, csv, xlsx, sqlite,
                         main_table_name, emit_path, force, fields, only_fields, tables,
-                        only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles, sqlite_path, log_error)
+                        only_tables, inline_one_to_one, schema, table_prefix, path_separator,
+                        schema_titles, sqlite_path, preview, log_error)
 
 
 @click.command()
@@ -110,7 +114,9 @@ def iterator_flatten(
 @click.option('--path-separator', '-a', default="_",
               help='Seperator to denote new path within the input JSON. Defaults to `_`')
 @click.option('--schema-titles', '-h', default="",
-              help='Use titles from JSONSchema in the given way. Options are `full`, `slug`, `underscore_slug`. Default to not using titles.')
+              help='Use titles from JSONSchema in the given way. Options are `full`, `slug`, `underscore_slug`. Default to not using titles')
+@click.option('--preview', '-w', default=0,
+              help='Only output this `preview` amount of lines in final results')
 @click.argument('input_file')
 @click.argument('output_directory')
 def cli(
@@ -131,7 +137,8 @@ def cli(
     schema="",
     table_prefix="",
     path_separator="_",
-    schema_titles=""
+    schema_titles="",
+    preview=0
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -161,6 +168,7 @@ def cli(
                 table_prefix=table_prefix,
                 path_separator=path_separator,
                 schema_titles=schema_titles,
+                preview=preview,
                 log_error=True)
     except IOError:
         pass

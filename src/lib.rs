@@ -51,6 +51,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         path_separator: String,
         schema_titles: String,
         sqlite_path: String,
+        preview: usize,
         log_error: bool,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
@@ -110,6 +111,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             flat_files.sqlite_path = sqlite_path
         }
 
+        if preview > 0 {
+            flat_files.preview = preview
+        }
+
         let file;
 
         match File::open(&input_file) {
@@ -163,6 +168,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         path_separator: String,
         schema_titles: String,
         sqlite_path: String,
+        preview: usize,
         log_error: bool,
     ) -> PyResult<()> {
         let flat_files_res = FlatFiles::new(
@@ -218,6 +224,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         if !sqlite_path.is_empty() {
             flat_files.sqlite_path = sqlite_path
+        }
+
+        if preview > 0 {
+            flat_files.preview = preview
         }
 
         let (sender, receiver) = bounded(1000);

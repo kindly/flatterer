@@ -35,6 +35,8 @@ Options:
   -i, --schema-titles TEXT    Use titles from JSONSchema in the given way.
                               Options are `full`, `slug`, `underscore_slug`.
                               Default to not using titles.
+  -w, --preview INTEGER       Only output this `preview` amount of lines in
+                              final results
   --help                      Show this message and exit.
 ```
 
@@ -479,4 +481,24 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --schema-titles underscore_slug
 import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', schema_titles='underscore_slug_')
+```
+
+## Preview
+
+The number of rows written in final files. All statistics in `fields.csv` and `data_package.json` will show counts related to *all* the data.
+
+### CLI Usage
+
+Only output first 10 lines of all the tables.
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --preview 10
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', preview=10)
 ```
