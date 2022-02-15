@@ -161,6 +161,8 @@ Options:
   -i, --schema-titles TEXT    Use titles from JSONSchema in the given way.
                               Options are `full`, `slug`, `underscore_slug`.
                               Default to not using titles.
+  -w, --preview INTEGER       Only output this `preview` amount of lines in
+                              final results
   --help                      Show this message and exit.
 </pre></div>
 </div>
@@ -610,6 +612,25 @@ This can be useful if you are trying to namespace the output when inserting into
 </div>
 </section>
 </section>
+<section id="preview">
+<h2>Preview<a class="headerlink" href="#preview" title="Permalink to this headline">¶</a></h2>
+<p>The number of rows written in final files. All statistics in <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">data_package.json</span></code> will show counts related to <em>all</em> the data.</p>
+<section id="id31">
+<h3>CLI Usage<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
+<p>Only output first 10 lines of all the tables.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --preview <span class="m">10</span>
+</pre></div>
+</div>
+</section>
+<section id="id32">
+<h3>Python Usage<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.json'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">preview</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 
       </article>
@@ -746,6 +767,11 @@ This can be useful if you are trying to namespace the output when inserting into
 <li><a class="reference internal" href="#schema-titles">Schema Titles</a><ul>
 <li><a class="reference internal" href="#id29">CLI Usage</a></li>
 <li><a class="reference internal" href="#id30">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#preview">Preview</a><ul>
+<li><a class="reference internal" href="#id31">CLI Usage</a></li>
+<li><a class="reference internal" href="#id32">Python Usage</a></li>
 </ul>
 </li>
 </ul>
