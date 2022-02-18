@@ -147,10 +147,6 @@ def flatten(
 
 
 def iterator_flatten(*args, **kw):
-    global LOGGING_SETUP
-    if not LOGGING_SETUP:
-        setup_logging("warning")
-        LOGGING_SETUP = True
     flatten(*args, **kw)
 
 
