@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.12.4] - 2021-02-18
+
+### Changed
+
+- `flatten` python function now accepts iterator
+- Docs for `flatten`
+- Tests for `flatten`
+- iterator_flatten now deprecated as it is just a subset of `flatten'
+
 ## [0.12.3] - 2021-02-15
 
 ### Fixed

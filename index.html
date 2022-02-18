@@ -110,6 +110,7 @@
 </form><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="library.html">Python Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -175,11 +176,22 @@
 </section>
 <section id="running-flatterer">
 <h3>Running Flatterer<a class="headerlink" href="#running-flatterer" title="Permalink to this headline">¶</a></h3>
+<section id="cli">
+<h4>CLI<a class="headerlink" href="#cli" title="Permalink to this headline">¶</a></h4>
 <p>Run the above file with flatterer.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer games.json games_dir
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="options.html#option-reference"><span class="std std-doc">Option Reference</span></a> for details of additional command line options.</p>
+</section>
+<section id="as-python-libarary">
+<h4>As python libarary<a class="headerlink" href="#as-python-libarary" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'games.json'</span><span class="p">,</span> <span class="s1">'games_dir'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="library.html#python-library"><span class="std std-doc">Python Library</span></a> for details of additional command line options.</p>
+</section>
 </section>
 <section id="output-files">
 <h3>Output Files<a class="headerlink" href="#output-files" title="Permalink to this headline">¶</a></h3>
@@ -394,7 +406,11 @@ After editing this file then you can rerun the transform:</p>
 <li><a class="reference internal" href="#introduction">Introduction</a><ul>
 <li><a class="reference internal" href="#install">Install</a></li>
 <li><a class="reference internal" href="#example-json">Example JSON</a></li>
-<li><a class="reference internal" href="#running-flatterer">Running Flatterer</a></li>
+<li><a class="reference internal" href="#running-flatterer">Running Flatterer</a><ul>
+<li><a class="reference internal" href="#cli">CLI</a></li>
+<li><a class="reference internal" href="#as-python-libarary">As python libarary</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#output-files">Output Files</a><ul>
 <li><a class="reference internal" href="#main-table">Main Table</a></li>
 <li><a class="reference internal" href="#one-to-many-table">One To Many Table</a></li>
