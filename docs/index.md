@@ -51,6 +51,8 @@ Say you have a JSON data like this named `games.json`:
 
 ### Running Flatterer
 
+#### CLI
+
 Run the above file with flatterer.
 
 ```bash
@@ -59,9 +61,16 @@ flatterer games.json games_dir
 
 See [](./options.md#option-reference) for details of additional command line options.
 
+#### As python libarary
+
+```python
+import flatterer
+output = flatterer.flatten('games.json', 'games_dir')
+```
+
+See [](./library.md#python-library) for details of additional command line options.
 
 ### Output Files
-
 
 By running the above you will get the following files:
 
@@ -144,6 +153,7 @@ This can be useful for renameing columns, rearranging the field order or if you 
 ```{toctree}
 :hidden:
 options
+library
 outputs
 changelog
 development
