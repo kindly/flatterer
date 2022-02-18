@@ -136,29 +136,30 @@
 <span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'games.json'</span><span class="p">,</span> <span class="s1">'games_dir'</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The first argument in this case is a string which is the relative path to the JSON file.  However it is also possible to pass an iterator of objects as the first argument.
-i.e</p>
+<p>If the first argument to <code class="docutils literal notranslate"><span class="pre">flatten</span></code> is a string (as in the above example), it represents the path to the input JSON file.  However, it is also possible to supply an iterator of python dicts:</p>
+<p>i.e</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
-<span class="n">list_of_objects</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">},</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">}]</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">list_of_objects</span><span class="p">,</span> <span class="n">sqlite</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">xlsx</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">list_of_objects</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">},</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">}]</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">list_of_objects</span><span class="p">,</span> <span class="s1">'games_dir'</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For more complicated cases where you want a stream of data it is possible make a generator to feed data into flatterer.  This example uses <code class="docutils literal notranslate"><span class="pre">ijson</span></code> to stream all objecs from an array.</p>
+<p>For more complicated cases, where you want a stream of data, it is possible make a generator to feed data into flatterer.  This example uses <code class="docutils literal notranslate"><span class="pre">ijson</span></code> to stream all objects from a JSON array in a file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="k">def</span> <span class="nf">array_item_generator</span><span class="p">():</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'fixtures/basic.json'</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ijson</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="s1">'item'</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ijson</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">'item'</span><span class="p">):</span>
             <span class="o">//</span> <span class="n">you</span> <span class="n">could</span> <span class="n">manipulate</span> <span class="n">items</span> <span class="n">to</span> <span class="n">modify</span> <span class="n">data</span> <span class="k">as</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">going</span> <span class="ow">in</span><span class="o">.</span>
             <span class="k">yield</span> <span class="n">item</span>
 
 <span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">array_item_generator</span><span class="p">(),</span> <span class="s1">'games_dir'</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This can be useful if you need to modify the data before it is processed or if you are streaming data from a non file source (such as a database).</p>
+<p>This can be useful if you need to modify the data before it is processed, or if you are streaming data from a non-file source such as a database.</p>
+<p>All other options are the same as the command line tool described in <span class="xref myst"></span>.</p>
 <section id="output">
 <h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">output</span></code> is a dict which contains metadata about the conversion:</p>
+<p>The output from running <code class="docutils literal notranslate"><span class="pre">flatten</span></code> is a dict which contains metadata about the conversion:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'games.json'</span><span class="p">,</span> <span class="s1">'games_dir'</span><span class="p">,</span> <span class="n">sqlite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlsx</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
 <span class="go">{</span>
@@ -174,7 +175,7 @@ i.e</p>
 <span class="go">}</span>
 </pre></div>
 </div>
-<p>So output[‘fields’] contains a pandas dataframe with information about the fields generated by flatterer:</p>
+<p>So output[‘fields’] contains a pandas DataFrame with information about the fields generated by flatterer:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">'fields'</span><span class="p">])</span>
 <span class="go">   table_name   field_name field_type  field_title  count</span>
 <span class="go">0        main        _link       text        _link      2</span>
@@ -202,11 +203,11 @@ i.e</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">output['data']</span></code> contains the locations of the CSV files if <code class="docutils literal notranslate"><span class="pre">csv=False</span></code> is not set.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">output['sqlite']</span></code> contains the location of the sqlite database if <code class="docutils literal notranslate"><span class="pre">sqlite=True</span></code> is set.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">output['xlsx']</span></code> contains the locatin of the sqlite database if <code class="docutils literal notranslate"><span class="pre">=True</span></code> is set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output['xlsx']</span></code> contains the locatin of the xlsx file if <code class="docutils literal notranslate"><span class="pre">xlsx=True</span></code> is set.</p></li>
 </ul>
 </section>
-<section id="outputting-pandas-dataframes">
-<h3>Outputting pandas dataframes<a class="headerlink" href="#outputting-pandas-dataframes" title="Permalink to this headline">¶</a></h3>
+<section id="creating-pandas-dataframes">
+<h3>Creating pandas DataFrames<a class="headerlink" href="#creating-pandas-dataframes" title="Permalink to this headline">¶</a></h3>
 <p>You can do this by setting <code class="docutils literal notranslate"><span class="pre">dataframe=True</span></code></p>
 <p>This creates DataFrames for all tables generated. This option is for the python library only.</p>
 <p><strong>Warning: This will cause issues with large datasets as the DataFrames will be put in memory</strong></p>
@@ -292,7 +293,7 @@ i.e</p>
 <li><a class="reference internal" href="#">Python Library</a><ul>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
 <li><a class="reference internal" href="#output">Output</a></li>
-<li><a class="reference internal" href="#outputting-pandas-dataframes">Outputting pandas dataframes</a></li>
+<li><a class="reference internal" href="#creating-pandas-dataframes">Creating pandas DataFrames</a></li>
 </ul>
 </li>
 </ul>
