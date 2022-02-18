@@ -1,7 +1,7 @@
 [project]
 name="flatterer"
 description = "Opinionated JSON to CSV converter"
-dependencies = ["orjson", "ijson", "click"]
+dependencies = ["orjson", "ijson", "click", "pandas"]
 readme="README.md"
 repository="https://github.com/kindly/flatterer"
 homepage="https://flatterer.opendata.coop/index.html"

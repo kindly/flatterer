@@ -1,12 +1,42 @@
 import decimal
 import click
+import os.path
+import shutil
+import tempfile
 
 import orjson
+import pandas
 
 from .flatterer import iterator_flatten_rs, flatten_rs, setup_logging, setup_ctrlc
 
 LOGGING_SETUP = False
 
+
+def pretty_dict(output, indent=0, key=""):
+    indent_str = " " * indent
+    if key:
+        key = f'"{key}": '
+    yield indent_str + key + "{"
+
+    for key, value in output.items():
+        if isinstance(value, dict):
+            yield from pretty_dict(value, indent+4, key)
+            continue
+        value_str = f'File Path - {value}'
+        if isinstance(value, pandas.DataFrame):
+            fields = ", ".join(value.keys())
+            if len(fields) > 40:
+                fields = f'{fields[:40]}... ({len(value.keys())} fields)'
+
+            value_str = "DataFrame - " + fields
+        yield f'{indent_str}    "{key}": "{value_str}"'
+
+    yield indent_str + "}"
+
+
+class PrettyDict(dict):
+    def __repr__(self):
+        return "\n".join(pretty_dict(self))
 
 def default(obj):
     if isinstance(obj, decimal.Decimal):
@@ -26,10 +56,11 @@ def bytes_generator(iterator):
 
 def flatten(
     input,
-    output_dir,
+    output_dir='',
     csv=True,
     xlsx=False,
     sqlite=False,
+    dataframe=False,
     path='',
     main_table_name='main',
     emit_path=[],
@@ -52,42 +83,75 @@ def flatten(
     if not LOGGING_SETUP:
         setup_logging("warning")
         LOGGING_SETUP = True
-    flatten_rs(input, output_dir, csv, xlsx, sqlite,
-               path, main_table_name, emit_path, json_lines, force, fields, only_fields, tables, 
-               only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles, 
-               sqlite_path, preview, log_error)
+    
+    using_tmp = False
+    
+    if not output_dir:
+        if not dataframe:
+            raise AttributeError("Please set an `output_dir` or set `dataframe=True`")
+        output_dir = tempfile.mkdtemp(prefix="flatterer-")
+        force = True
+        using_tmp = True
+    
+    if dataframe:
+        csv = True
+    
+    try:
+        try:
+            iter(input)
+            is_iterator = True
+        except typeError:
+            is_iterator = False
+        
+        if isinstance(input, str):
+            flatten_rs(input, output_dir, csv, xlsx, sqlite,
+                    path, main_table_name, emit_path, json_lines, force, fields, only_fields, tables, 
+                    only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles, 
+                    sqlite_path, preview, log_error)
+        elif is_iterator:
+            if path:
+                raise AttributeError("path not allowed when supplying ")
+            iterator_flatten_rs(bytes_generator(input), output_dir, csv, xlsx, sqlite,
+                                main_table_name, emit_path, force, fields, only_fields, tables,
+                                only_tables, inline_one_to_one, schema, table_prefix, path_separator,
+                                schema_titles, sqlite_path, preview, log_error)
+        else:
+            raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
+
+        output = PrettyDict(
+            fields=pandas.read_csv(os.path.join(output_dir, 'fields.csv')),
+            tables=pandas.read_csv(os.path.join(output_dir, 'tables.csv')),
+            data=PrettyDict()
+        )
+
+        if csv:
+            for table in output['tables']['table_title']:
+                csv_path = os.path.join(output_dir, 'csv', table + '.csv')
+                if dataframe:
+                    output['data'][table] = pandas.read_csv(csv_path)
+                else:
+                    output['data'][table] = csv_path
+        
+        if sqlite:
+            output['sqlite'] = os.path.join(output_dir, 'sqlite.db')
+
+        if xlsx:
+            output['xlsx'] = os.path.join(output_dir, 'output.xlsx')
+
+        return output
+
+    finally:
+        if using_tmp:
+            shutil.rmtree(output_dir)
 
 
-def iterator_flatten(
-    iterator,
-    output_dir,
-    csv=True,
-    xlsx=False,
-    sqlite=False,
-    main_table_name='main',
-    emit_path=[],
-    force=False,
-    fields='',
-    only_fields=False,
-    tables='',
-    only_tables=False,
-    inline_one_to_one=False,
-    schema="",
-    table_prefix="",
-    path_separator="_",
-    schema_titles="",
-    sqlite_path="",
-    preview=0,
-    log_error=False
-):
+
+def iterator_flatten(*args, **kw):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
         setup_logging("warning")
         LOGGING_SETUP = True
-    iterator_flatten_rs(bytes_generator(iterator), output_dir, csv, xlsx, sqlite,
-                        main_table_name, emit_path, force, fields, only_fields, tables,
-                        only_tables, inline_one_to_one, schema, table_prefix, path_separator,
-                        schema_titles, sqlite_path, preview, log_error)
+    flatten(*args, **kw)
 
 
 @click.command()

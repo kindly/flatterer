@@ -2,7 +2,7 @@
   {
     "id": 1,
     "developer": [
-      {"name":"deva"},
+      {"name":"deva"}
     ],
     "platforms": [
       {"name":"PC"}
@@ -17,7 +17,7 @@
   {
     "id": 2,
     "developer": [
-      {"name":"devb"},
+      {"name":"devb"}
     ],
     "platforms": [
       {"name":"Xbox"},
