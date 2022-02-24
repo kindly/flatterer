@@ -110,7 +110,7 @@ def flatten(
                     sqlite_path, preview, log_error)
         elif is_iterator:
             if path:
-                raise AttributeError("path not allowed when supplying ")
+                raise AttributeError("path not allowed when supplying an iterator")
             iterator_flatten_rs(bytes_generator(input), output_dir, csv, xlsx, sqlite,
                                 main_table_name, emit_path, force, fields, only_fields, tables,
                                 only_tables, inline_one_to_one, schema, table_prefix, path_separator,
