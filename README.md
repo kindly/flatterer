@@ -1,5 +1,7 @@
 # Flatterer. Making JSON flatterer
 
+<img width="400" src="./docs/_static/flatterer.svg">
+
 [Full Doucmentation](http://flatterer.opendata.coop/)
 
 ## Introduction
