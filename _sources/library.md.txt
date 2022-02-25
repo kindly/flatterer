@@ -32,7 +32,7 @@ output = flatterer.flatten(array_item_generator(), 'games_dir')
 
 This can be useful if you need to modify the data before it is processed, or if you are streaming data from a non-file source such as a database.
 
-All other options are the same as the command line tool described in [](options#option-reference).
+All other options are the same as the command line tool described in [](options.md#option-reference).
 
 ### Output
 
