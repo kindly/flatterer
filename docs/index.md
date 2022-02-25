@@ -1,5 +1,7 @@
 # Flatterer. Making JSON flatterer
 
+<img width="500" href="#" src="./_static/flatterer-with-text.svg">
+
 ## Introduction
 
 An opinionated JSON to CSV/XLSX converter which tries to make a useful relational output for data analysis.
@@ -68,7 +70,7 @@ import flatterer
 output = flatterer.flatten('games.json', 'games_dir')
 ```
 
-See [](./library.md#python-library) for details of additional command line options.
+See [](./library.md#python-library) for more details.
 
 ### Output Files
 
