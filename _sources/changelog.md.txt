@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [0.12.6] - 2021-02-26
+
+### Fixed
+
+- list of JSON strings supplied to `flatten` fixed.
+- datapackage.json named correctly.
+
 ## [0.12.4] - 2021-02-18
 
 ### Changed
