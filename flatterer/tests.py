@@ -61,3 +61,16 @@ class TestBasic(unittest.TestCase):
         output = flatterer.flatten(item_list, dataframe=True)
         self.check_output(output)
 
+    def test_python_list_of_strings(self):
+        with open('fixtures/basic.json') as f:
+            item_list = json.load(f)
+        string_list = [json.dumps(item) for item in item_list]
+        output = flatterer.flatten(string_list, dataframe=True)
+        self.check_output(output)
+
+    def test_python_list_of_bytes(self):
+        with open('fixtures/basic.json') as f:
+            item_list = json.load(f)
+        bytes_list = [json.dumps(item).encode() for item in item_list]
+        output = flatterer.flatten(bytes_list, dataframe=True)
+        self.check_output(output)

@@ -38,6 +38,7 @@ class PrettyDict(dict):
     def __repr__(self):
         return "\n".join(pretty_dict(self))
 
+
 def default(obj):
     if isinstance(obj, decimal.Decimal):
         return str(obj)
@@ -49,7 +50,7 @@ def bytes_generator(iterator):
         if isinstance(item, bytes):
             yield item
         if isinstance(item, str):
-            yield str.encode()
+            yield item.encode('utf-8')
         if isinstance(item, dict):
             yield orjson.dumps(item, default=default)
 
