@@ -127,7 +127,7 @@ def flatten(
 
         if csv:
             for table in output['tables']['table_title']:
-                csv_path = os.path.join(output_dir, 'csv', table + '.csv')
+                csv_path = os.path.join(output_dir, 'csv', str(table) + '.csv')
                 if dataframe:
                     output['data'][table] = pandas.read_csv(csv_path)
                 else:
