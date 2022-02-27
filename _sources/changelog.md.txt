@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.12.7] - 2021-02-27
+
+### Fixed
+
+- main_table_name was number caused exception
+
+
 ## [0.12.6] - 2021-02-26
 
 ### Fixed
