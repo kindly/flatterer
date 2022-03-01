@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.12.8] - 2021-03-01
+
+### Changed
+
+- SQLite export not has indexes and foreign key contraints.
+
+
 ## [0.12.7] - 2021-02-27
 
 ### Fixed
