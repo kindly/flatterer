@@ -2,12 +2,12 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="127mm"
-   height="96mm"
-   viewBox="0 0 127 96"
+   width="93mm"
+   height="95mm"
+   viewBox="0 0 93 95"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    sodipodi:docname="flatterer.svg"
    inkscape:export-filename="/home/david/projects/jsonlinesrust/docs/_static/flatterer.png"
    inkscape:export-xdpi="96"
@@ -15,7 +15,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#">
   <sodipodi:namedview
      id="namedview7"
      pagecolor="#ffffff"
@@ -28,14 +30,15 @@
      showgrid="false"
      height="147mm"
      inkscape:zoom="0.82466874"
-     inkscape:cx="64.874534"
-     inkscape:cy="282.53769"
+     inkscape:cx="375.90851"
+     inkscape:cy="230.39554"
      inkscape:window-width="1920"
-     inkscape:window-height="1014"
+     inkscape:window-height="1007"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="text81817"
+     width="128mm" />
   <defs
      id="defs2" />
   <g
@@ -43,30 +46,46 @@
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline">
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:72.3232px;line-height:125%;font-family:'Source Code Variable';-inkscape-font-specification:'Source Code Variable';letter-spacing:0px;word-spacing:0px;display:inline;fill:#aaccff;fill-opacity:1;stroke:none;stroke-width:0.67803px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-74.598274"
-       y="34.535927"
+    <g
+       aria-label="}"
+       transform="matrix(-1.0320499,0.0103059,0.00139777,-0.96895936,0,0)"
        id="text1815-3-7"
-       transform="rotate(-129.87291)"><tspan
-         sodipodi:role="line"
-         id="tspan1813-6-5"
-         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:72.3232px;font-family:'Source Code Variable';-inkscape-font-specification:'Source Code Variable Light';fill:#aaccff;stroke-width:0.67803px"
-         x="-74.598274"
-         y="34.535927">}</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:72.3232px;line-height:125%;font-family:'Source Code Variable';-inkscape-font-specification:'Source Code Variable';letter-spacing:0px;word-spacing:0px;display:inline;fill:#aaccff;fill-opacity:1;stroke:none;stroke-width:0.67803px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="75.724907"
-       y="5.1853352"
-       id="text1815-3-7-5"
-       transform="rotate(50.12709)"><tspan
-         sodipodi:role="line"
-         id="tspan1813-6-5-6"
-         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:72.3232px;font-family:'Source Code Variable';-inkscape-font-specification:'Source Code Variable Light';fill:#aaccff;stroke-width:0.67803px"
-         x="75.724907"
-         y="5.1853352">}</tspan></text>
+       style="font-size:29.9735px;line-height:125%;font-family:'Source Code Variable';-inkscape-font-specification:'Source Code Variable';letter-spacing:0px;word-spacing:0px;display:inline;fill:#aaccff;stroke-width:0.281001px">
+      <path
+         d="m -30.404882,-19.799707 h 1.828383 c 3.776661,0 5.545098,-0.899205 5.545098,-3.986475 0,-2.158092 -0.269762,-3.746687 -0.269762,-5.784885 0,-1.138993 0.779311,-2.30796 4.316184,-2.337933 v -1.528649 c -3.536873,-0.02997 -4.316184,-1.19894 -4.316184,-2.337933 0,-1.88833 0.269762,-3.716714 0.269762,-5.784885 0,-3.087271 -1.768437,-4.016449 -5.545098,-4.016449 h -1.828383 v 1.438728 h 1.558622 c 3.027323,0 3.746687,0.749337 3.746687,2.727588 0,1.70849 -0.179841,3.536873 -0.179841,5.425204 0,1.918304 0.59947,2.877456 2.697615,3.237138 v 0.119894 c -2.098145,0.359682 -2.697615,1.348807 -2.697615,3.267111 0,2.038198 0.179841,3.59682 0.179841,5.425203 0,1.978251 -0.719364,2.727589 -3.746687,2.727589 h -1.558622 z"
+         id="path897" />
+    </g>
+    <g
+       aria-label="}"
+       transform="matrix(1.0320499,-0.0103059,-0.00139777,0.96895936,0,0)"
+       id="text1815-3-7-6"
+       style="font-size:32.4138px;line-height:125%;font-family:'Source Code Variable';-inkscape-font-specification:'Source Code Variable';letter-spacing:0px;word-spacing:0px;display:inline;fill:#aaccff;stroke-width:0.30388px">
+      <path
+         d="m 51.857171,81.424242 h 1.977241 c 4.084139,0 5.996553,-0.972414 5.996553,-4.311035 0,-2.333793 -0.291724,-4.051725 -0.291724,-6.255863 0,-1.231724 0.842759,-2.495863 4.667587,-2.528276 V 66.675964 C 60.382,66.64355 59.539241,65.379412 59.539241,64.147687 c 0,-2.042069 0.291724,-4.019311 0.291724,-6.255863 0,-3.338621 -1.912414,-4.343449 -5.996553,-4.343449 h -1.977241 v 1.555862 h 1.685517 c 3.273794,0 4.051725,0.810345 4.051725,2.949656 0,1.847587 -0.194483,3.824828 -0.194483,5.866898 0,2.074483 0.648276,3.111725 2.917242,3.50069 v 0.129655 c -2.268966,0.388966 -2.917242,1.458621 -2.917242,3.533104 0,2.204139 0.194483,3.889656 0.194483,5.866898 0,2.139311 -0.777931,2.949656 -4.051725,2.949656 h -1.685517 z"
+         id="path918" />
+    </g>
+    <g
+       aria-label="flatterer"
+       id="text81817"
+       style="font-size:25.4px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;letter-spacing:0px;word-spacing:0px;fill:#5599ff;stroke-width:0.264583px" />
+    <g
+       aria-label="]"
+       transform="matrix(-1.0320499,0.0103059,0.00139777,-0.96895936,0,0)"
+       id="text1815-3-7-9"
+       style="font-size:29.9735px;line-height:125%;font-family:'Source Code Variable';-inkscape-font-specification:'Source Code Variable';letter-spacing:0px;word-spacing:0px;display:inline;fill:#aaccff;stroke-width:0.281001px">
+      <path
+         d="m -19.894123,-20.059266 h 8.272686 v -25.77721 h -8.272686 v 1.438728 h 6.324408 v 22.929727 h -6.324408 z"
+         id="path876" />
+    </g>
+    <g
+       aria-label="]"
+       transform="matrix(1.0320499,-0.0103059,-0.00139777,0.96895936,0,0)"
+       id="text1815-3-7-9-2"
+       style="font-size:29.9735px;line-height:125%;font-family:'Source Code Variable';-inkscape-font-specification:'Source Code Variable';letter-spacing:0px;word-spacing:0px;display:inline;fill:#aaccff;stroke-width:0.281001px">
+      <path
+         d="m 64.815058,80.141429 h 8.272686 v -25.77721 h -8.272686 v 1.438728 h 6.324408 v 22.929727 h -6.324408 z"
+         id="path939" />
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -75,7 +94,7 @@
      style="display:inline">
     <g
        id="g76057"
-       transform="translate(9.6467343,-12.589674)"
+       transform="translate(-7.2865999,-13.648008)"
        style="fill:#5599ff">
       <g
          id="g67283"
@@ -114,4 +133,27 @@
          x="-12.720803"
          y="81.148643" /></text>
   </g>
+  <metadata
+     id="metadata839">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
 </svg>
