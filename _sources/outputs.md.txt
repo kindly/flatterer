@@ -13,7 +13,7 @@ games_dir/
 ├── csv
 │   ├── games.csv
 │   └── platforms.csv
-├── data_package.json
+├── datapackage.json
 ├── fields.csv
 ├── tables.csv
 ├── output.xlsx
@@ -143,7 +143,7 @@ and can be run by:
 cat games_dir/sqlite/sqlite_load.sql | sqlite3 my_database.db
 ```
 
-## data_package.json
+## datapackage.json
 
 Contains metadata in the [Tabular Datapackge Spec](https://specs.frictionlessdata.io/tabular-data-package/#language). I looks like:
 

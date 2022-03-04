@@ -83,7 +83,7 @@ games_dir/
 ├── csv
 │   ├── games.csv
 │   └── platforms.csv
-├── data_package.json
+├── datapackage.json
 ├── fields.csv
 └── ...
 ```
@@ -148,7 +148,7 @@ flatterer games.json new_games_dir -f myfields.csv --only-fields
 
 This can be useful for renameing columns, rearranging the field order or if you want to remove some fields the `--only-fields` flag will only include the fields in the edited file.
 
-`data_package.json` contains metadata in the [Tabular Datapackge Spec](https://specs.frictionlessdata.io/tabular-data-package/#language)
+`datapackage.json` contains metadata in the [Tabular Datapackge Spec](https://specs.frictionlessdata.io/tabular-data-package/#language)
 
 [More information on the output formats.](./outputs.md#outputs)
 
