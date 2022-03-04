@@ -485,7 +485,7 @@ flatterer.flatten('inputfile.jl', 'ouput_dir', schema_titles='underscore_slug_')
 
 ## Preview
 
-The number of rows written in final files. All statistics in `fields.csv` and `data_package.json` will show counts related to *all* the data.
+The number of rows written in final files. All statistics in `fields.csv` and `datapackage.json` will show counts related to *all* the data.
 
 ### CLI Usage
 
