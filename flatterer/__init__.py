@@ -41,7 +41,7 @@ class PrettyDict(dict):
 
 def default(obj):
     if isinstance(obj, decimal.Decimal):
-        return str(obj)
+        return float(obj)
     raise TypeError
 
 

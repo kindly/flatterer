@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": 1.0,
     "developer": [
       {"name":"deva"}
     ],
@@ -15,7 +15,7 @@
     "title": "A Game"
   },
   {
-    "id": 2,
+    "id": 2.0,
     "developer": [
       {"name":"devb"}
     ],
