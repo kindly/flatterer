@@ -1,7 +1,6 @@
-//use anyhow::Result;
-use anyhow::Result;
-use clap::App;
+use clap::{arg, Command};
 use env_logger::Env;
+use eyre::Result;
 use libflatterer::{flatten, FlatFiles, TERMINATE};
 use std::fs::File;
 use std::io::BufReader;
@@ -9,31 +8,31 @@ use std::path::PathBuf;
 use std::sync::atomic::Ordering;
 
 fn main() -> Result<()> {
-    let matches = App::new("flatterer")
-        .version("0.11")
+    let matches = Command::new("flatterer")
+        .version("0.12")
         .author("David Raznick")
         .about("Make JSON flatterer")
-        .args_from_usage(
-                           "<INPUT>                              'Sets the input file to use'
-                           <OUT_DIR>                             'Sets the output directory'
-                           -p --path=[path]                      'Key where array lives, leave if array is at root'
-                           -j --jl                               'Treat input as JSON Lines, path will be ignored'
-                           -c --csv                              'Output csv files (defualt but required if xlsx is selected)'
-                           -n --nocsv                            'Do not output csv'
-                           -x --xlsx                             'Output xlsx file'
-                           -q --sqlite                           'Output sqlite db'
-                           -i --inline-one-to-one                'If array always has only one element treat relationship as one-to-one'
-                           -f --fields=[file]                    'fields.csv file to determine order and name of fields.'
-                           -o --only-fields                      'Use only fields in csv file and no others'
-                           -b --tables=[file]                    'tables.csv file to determine name and order of tables.'
-                           -l --only-tables                      'Use only tables in csv file and no others'
-                           -m --main=[main]                      'Table name of top level object'
-                           -s --schema=[schema]                  'Link to remote or local JSONSchema to help out with field ordering and naming'
-                           -t --table-prefix=[table-prefix]      'Prefix to add to all table names'
-                           -a --path-separator=[path-separator]  'Seperator to denote new path within the input JSON. Defaults to `_`'
-                           -h --schema-titles=[schema-titles]    'Use titles from JSONSchema in the given way. Options are `full`, `slug`, `underscore_slug`. Default to not using titles..'
-                           --force                               'Delete output directory if it exist'",
-        )
+        .args(&[
+            arg!("<INPUT>                               'Sets the input file to use'"),
+            arg!("<OUT_DIR>                             'Sets the output directory'"),
+            arg!("-p --path=[path]                      'Key where array lives, leave if array is at root'"),
+            arg!("-j --jl                               'Treat input as JSON Lines, path will be ignored'"),
+            arg!("-c --csv                              'Output csv files (defualt but required if xlsx is selected)'"),
+            arg!("-n --nocsv                            'Do not output csv'"),
+            arg!("-x --xlsx                             'Output xlsx file'"),
+            arg!("-q --sqlite                           'Output sqlite db'"),
+            arg!("-i --inline-one-to-one                'If array always has only one element treat relationship as one-to-one'"),
+            arg!("-f --fields=[file]                    'fields.csv file to determine order and name of fields.'"),
+            arg!("-o --only-fields                      'Use only fields in csv file and no others'"),
+            arg!("-b --tables=[file]                    'tables.csv file to determine name and order of tables.'"),
+            arg!("-l --only-tables                      'Use only tables in csv file and no others'"),
+            arg!("-m --main=[main]                      'Table name of top level object'"),
+            arg!("-s --schema=[schema]                  'Link to remote or local JSONSchema to help out with field ordering and naming'"),
+            arg!("-t --table-prefix=[table-prefix]      'Prefix to add to all table names'"),
+            arg!("-a --path-separator=[path-separator]  'Seperator to denote new path within the input JSON. Defaults to `_`'"),
+            arg!("-h --schema-titles=[schema-titles]    'Use titles from JSONSchema in the given way. Options are `full`, `slug`, `underscore_slug`. Default to not using titles..'"),
+            arg!("--force                               'Delete output directory if it exist'"),
+        ])
         .get_matches();
 
     env_logger::Builder::from_env(Env::new().filter_or("FLATTERER_LOG", "info"))

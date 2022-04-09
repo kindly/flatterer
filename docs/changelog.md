@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.12.11] - 2021-04-09
+
+### Changed
+
+- Clearer errors when error happens in rust. BREAKING CHANGE, if catching certain error types in python these may have changed.
+- datapackage output now has forign keys.
+
+
 ## [0.12.10] - 2021-03-21
 
 ### Fixed
