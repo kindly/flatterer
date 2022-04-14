@@ -298,7 +298,7 @@ checksum = "7360491ce676a36bf9bb3c56c1aa791658183a54d2744120f27285738d90465a"
 
 [[package]]
 name = "flatterer"
-version = "0.12.11"
+version = "0.12.12"
 dependencies = [
  "clap 3.1.8",
  "crossbeam-channel",
