@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.12.12] - 2021-04-28
+
+### New
+
+- Threads option, so that can be run on all cores. Works best with ndjson input.
+- Parquet export option.
+
+### Changed
+
+- BREAKING: `json-lines` option renamed to `ndjson` 
+- New `json-stream` option that works in same way as the old json-lines option and accepts concatonated json.
+
 ## [0.12.12] - 2021-04-15
 
 ### Changed

@@ -189,7 +189,7 @@ def iterator_flatten(*args, **kw):
 @click.option('--preview', '-w', default=0,
               help='Only output this `preview` amount of lines in final results')
 @click.option('--threads', default=1,
-              help='number of threads')
+              help='Number of threads, default 1, 0 means use number of CPUs')
 @click.argument('input_file')
 @click.argument('output_directory')
 def cli(

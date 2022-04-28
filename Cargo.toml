@@ -1,6 +1,6 @@
 [package]
 name = "flatterer"
-version = "0.12.12"
+version = "0.13.0"
 authors = ["David Raznick <kindly@gmail.com>"]
 edition = "2021"
 
@@ -12,8 +12,8 @@ crossbeam-channel="0.5"
 serde_json = { version = "1", features = ["preserve_order"] }
 pyo3 = {version = "0.16.3", features = ["extension-module", "eyre"] }
 eyre={version = "0.6.8"}
-libflatterer={path = "../libflatterer"}
-#libflatterer={version = "0.12.9"}
+#libflatterer={path = "../libflatterer"}
+libflatterer={version = "0.13"}
 env_logger="0.9"
 log="0.4"
 ctrlc="3.2.1"
