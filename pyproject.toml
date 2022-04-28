@@ -6,6 +6,7 @@ readme="README.md"
 repository="https://github.com/kindly/flatterer"
 homepage="https://flatterer.opendata.coop/index.html"
 documentation="https://flatterer.opendata.coop/index.html"
+license = {text= "MIT"}
 
 [build-system]
 requires = ["maturin>=0.11,<0.12"]

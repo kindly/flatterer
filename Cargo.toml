@@ -3,6 +3,7 @@ name = "flatterer"
 version = "0.13.0"
 authors = ["David Raznick <kindly@gmail.com>"]
 edition = "2021"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
