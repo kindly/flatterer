@@ -61,23 +61,27 @@ def flatten(
     csv=True,
     xlsx=False,
     sqlite=False,
+    parquet=False,
     dataframe=False,
-    path='',
+    path=[],
     main_table_name='main',
-    emit_path=[],
-    json_lines=False,
+    emit_obj=[],
+    ndjson=False,
+    json_stream=False,
     force=False,
-    fields='',
+    fields_csv='',
     only_fields=False,
-    tables='',
+    tables_csv='',
     only_tables=False,
     inline_one_to_one=False,
     schema="",
+    id_prefix="",
     table_prefix="",
     path_separator="_",
     schema_titles="",
     sqlite_path="",
     preview=0,
+    threads=1,
     log_error=False,
 ):
     global LOGGING_SETUP
@@ -101,21 +105,24 @@ def flatten(
         try:
             iter(input)
             is_iterator = True
-        except typeError:
+        except TypeError:
             is_iterator = False
         
         if isinstance(input, str):
-            flatten_rs(input, output_dir, csv, xlsx, sqlite,
-                    path, main_table_name, emit_path, json_lines, force, fields, only_fields, tables, 
-                    only_tables, inline_one_to_one, schema, table_prefix, path_separator, schema_titles, 
-                    sqlite_path, preview, log_error)
+            flatten_rs(input, output_dir, csv, xlsx, sqlite, parquet,
+                       main_table_name, tables_csv, only_tables, fields_csv, only_fields,
+                       inline_one_to_one, path_separator, preview, 
+                       table_prefix, id_prefix, emit_obj, force,  
+                       schema, schema_titles, path, json_stream, ndjson, 
+                       sqlite_path, threads, log_error)
         elif is_iterator:
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
-            iterator_flatten_rs(bytes_generator(input), output_dir, csv, xlsx, sqlite,
-                                main_table_name, emit_path, force, fields, only_fields, tables,
-                                only_tables, inline_one_to_one, schema, table_prefix, path_separator,
-                                schema_titles, sqlite_path, preview, log_error)
+            iterator_flatten_rs(bytes_generator(input), output_dir, csv, xlsx, sqlite, parquet,
+                       main_table_name, tables_csv, only_tables, fields_csv, only_fields,
+                       inline_one_to_one, path_separator, preview, 
+                       table_prefix, id_prefix, emit_obj, force,  
+                       schema, schema_titles, sqlite_path, threads, log_error)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 
@@ -155,11 +162,14 @@ def iterator_flatten(*args, **kw):
 @click.option('--csv/--nocsv', default=True, help='Output CSV files, default true')
 @click.option('--xlsx/--noxlsx', default=False, help='Output XLSX file, default false')
 @click.option('--sqlite/--nosqlite', default=False, help='Output sqlite.db file, default false')
+@click.option('--parquet/--noparquet', default=False, help='Output directory of parquet files, default false')
 @click.option('--main-table-name', '-m', default=None,
               help='Name of main table, defaults to name of the file without the extension')
 @click.option('--path', '-p', default='', help='Key name of where json array starts, default top level array')
-@click.option('--json-lines', '-j', is_flag=True, default=False,
-              help='Is file a jsonlines file, default false')
+@click.option('--ndjson', '-j', is_flag=True, default=False,
+              help='Is file a new line delemited JSON file, default false')
+@click.option('--json-stream', is_flag=True, default=False,
+              help='File contains stream of json object, default false')
 @click.option('--force', is_flag=True, default=False,
               help='Delete output directory if it exists, then run command, default False')
 @click.option('--fields', '-f', default="", help='fields.csv file to use')
@@ -178,6 +188,8 @@ def iterator_flatten(*args, **kw):
               help='Use titles from JSONSchema in the given way. Options are `full`, `slug`, `underscore_slug`. Default to not using titles')
 @click.option('--preview', '-w', default=0,
               help='Only output this `preview` amount of lines in final results')
+@click.option('--threads', default=1,
+              help='number of threads')
 @click.argument('input_file')
 @click.argument('output_directory')
 def cli(
@@ -186,9 +198,11 @@ def cli(
     csv=True,
     xlsx=False,
     sqlite=False,
+    parquet=False,
     path='',
     main_table_name=None,
-    json_lines=False,
+    ndjson=False,
+    json_stream=False,
     force=False,
     fields="",
     only_fields=False,
@@ -199,7 +213,8 @@ def cli(
     table_prefix="",
     path_separator="_",
     schema_titles="",
-    preview=0
+    preview=0,
+    threads=1,
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -209,6 +224,10 @@ def cli(
 
     if not main_table_name:
         main_table_name = input_file.split('/')[-1].split('.')[0]
+    
+    path_list = []
+    if path:
+        path_list.append(path)
 
     try:
         flatten(input_file,
@@ -216,13 +235,15 @@ def cli(
                 csv=csv,
                 xlsx=xlsx,
                 sqlite=sqlite,
-                path=path,
+                parquet=parquet,
+                path=path_list,
                 main_table_name=main_table_name,
-                json_lines=json_lines,
+                ndjson=ndjson,
+                json_stream=json_stream,
                 force=force,
-                fields=fields,
+                fields_csv=fields,
                 only_fields=only_fields,
-                tables=tables,
+                tables_csv=tables,
                 only_tables=only_tables,
                 inline_one_to_one=inline_one_to_one,
                 schema=schema,
@@ -230,6 +251,7 @@ def cli(
                 path_separator=path_separator,
                 schema_titles=schema_titles,
                 preview=preview,
+                threads=threads,
                 log_error=True)
     except IOError:
         pass

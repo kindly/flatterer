@@ -5,10 +5,15 @@ import flatterer
 import ijson
 import pandas
 
-def jl_item_generator():
-    with open('fixtures/basic.jl', 'rb') as f:
+def jl_item_generator(filename):
+    with open(filename, 'rb') as f:
         for item in ijson.items(f,'', multiple_values=True):
             yield item
+
+def line_generator(filename):
+    with open(filename, 'rb') as f:
+        for line in f:
+            yield line
 
 def array_item_generator():
     with open('fixtures/basic.json', 'rb') as f:
@@ -44,12 +49,16 @@ class TestBasic(unittest.TestCase):
         self.check_output(output)
 
     def test_jsonlines(self):
-        output = flatterer.flatten('fixtures/basic.jl', dataframe=True, json_lines=True)
+        output = flatterer.flatten('fixtures/basic.jl', dataframe=True, json_stream=True)
         self.check_output(output)
 
-    def test_jl_iterator(self):
-        output = flatterer.flatten(jl_item_generator(), dataframe=True)
+    def test_jl_iterator_basic(self):
+        output = flatterer.flatten(jl_item_generator('fixtures/basic.jl'), dataframe=True)
         self.check_output(output)
+
+    def test_jl_iterator_large(self):
+        output = flatterer.flatten(line_generator('fixtures/daily_16.json'), force=True, threads=0, dataframe=True)
+        self.assertEqual(len(output['data']['main']), 4999)
 
     def test_array_iterator(self):
         output = flatterer.flatten(array_item_generator(), dataframe=True)
