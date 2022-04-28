@@ -15,6 +15,7 @@ Options:
   --csv / --nocsv             Output CSV files, default true
   --xlsx / --noxlsx           Output XLSX file, default false
   --sqlite / --nosqlite       Output sqlite.db file, default false
+  --parquet / --noparquet     Output directory of parquet files, default false
   -m, --main-table-name TEXT  Name of main table, defaults to name of the file
                               without the extension
   -p, --path TEXT             Key name of where json array starts, default top
@@ -37,72 +38,51 @@ Options:
                               Default to not using titles.
   -w, --preview INTEGER       Only output this `preview` amount of lines in
                               final results
+  --threads INTEGER           Number of threads, default 1, 0 means use number
+                              of CPUs
   --help                      Show this message and exit.
 ```
 
-## CSV
+## Output Formats
 
-Output CSV files in output directory `<OUTPUT_DIRECTORY>/csv/`.
-Defaults to True
-
+**CSV:**  Defaults to outputing CSV in output directory `<OUTPUT_DIRECTORY>/csv/`.
+**XLSX:**  Output xlsx file to `<OUTPUT_DIRECTORY>/output.xlsx`.
+**SQLITE:**  Output sqlite file to  `<OUTPUT_DIRECTORY>/sqlite.db`.
+**PARQUET:**  Output parquet files in `<OUTPUT_DIRECTORY>/parquet/`.
 
 ### CLI Usage
 
+Stop CSV output:
 ```bash 
 flatterer --nocsv INPUT_FILE OUTPUT_DIRECTORY
 ```
 
-### Python Usage
-
-```bash 
-import flatterer
-
-flatterer.flatten('inputfile.json', 'ouput_dir', csv=False)
-```
-
-
-## XLSX
-
-Output XLSX file in output directory `<OUTPUT_DIRECTORY>/output.xlsx`. Defaults to False
-
-
-### CLI Usage
-
-Main table name set to `games`
-
+xlsx output:
 ```bash 
 flatterer --xlsx INPUT_FILE OUTPUT_DIRECTORY
 ```
 
-### Python Usage
+sqlite output:
 
 ```bash 
-import flatterer
-
-flatterer.flatten('inputfile.json', 'ouput_dir', xlsx=True)
+flatterer --sqlite INPUT_FILE OUTPUT_DIRECTORY
 ```
 
-## SQLite
-
-Output SQLite file in output directory `<OUTPUT_DIRECTORY>/sqlite.db`. Defaults to False
-
-
-### CLI Usage
-
-Main table name set to `games`
+parquet output:
 
 ```bash 
-flatterer --xlsx INPUT_FILE OUTPUT_DIRECTORY
+flatterer --parquet INPUT_FILE OUTPUT_DIRECTORY
 ```
 
 ### Python Usage
 
+Export sqlite, xlsx, and parquet but not CSV.
+
 ```bash 
 import flatterer
 
-flatterer.flatten('inputfile.json', 'ouput_dir', xlsx=True)
+flatterer.flatten('inputfile.json', 'ouput_dir', csv=False, sqlite=True, xlsx=True, parquet=True)
 ```
-
 
 ## Main Table Name
 
@@ -126,12 +106,11 @@ import flatterer
 flatterer.flatten('inputfile.json', 'ouput_dir', main_table_name='games')
 ```
 
-
 ## Path to JSON Array
 
 Name of the object key where array of objects exists. Defaults to analysing the top level array.
 
-Will not work with [](#json-lines) option.
+Will not work with [](#json-stream) or [](#ndjson) option.
 
 By default will work with:
 
@@ -182,18 +161,34 @@ flatterer.flatten('inputfile.json', 'ouput_dir', path='games')
 ```
 
 
-## JSON Lines
+## New Line Delemited JSON (NDJSON)
 
-Make flatterer accept new-line-delimeted JSON as well as any stream supported by [serde_json](https://docs.serde.rs/serde_json/struct.StreamDeserializer.html). eg:
-
+Input file is new line delimeted JSON.  This is the fastest input type as each line can be parsed in its own thread using `--threads`. 
 
 ```json
 {"id": 1, "title": "A Game",  "releaseDate": "2015-01-01"}
 {"id": 2,  "title": "B Game",  "releaseDate": "2016-01-01"}
-
 ```  
 
-OR 
+Will not work with [](#path-to-json-array) option.
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --ndjson
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', ndjson=True)
+```
+
+## JSON Stream
+
+Input file is stream of json objects, sometimes called Concatonated JSON.  Each object does not need to be on its own line. 
 
 ```json
 {
@@ -214,7 +209,7 @@ Will not work with [](#path-to-json-array) option.
 ### CLI Usage
 
 ```bash 
-flatterer INPUT_FILE OUTPUT_DIRECTORY --json-lines
+flatterer INPUT_FILE OUTPUT_DIRECTORY --json-stream
 ```
 
 ### Python Usage
@@ -222,7 +217,7 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --json-lines
 ```python
 import flatterer
 
-flatterer.flatten('inputfile.jl', 'ouput_dir', json_lines=True)
+flatterer.flatten('inputfile.jl', 'ouput_dir', json_stream=True)
 ```
 
 ## Force
@@ -501,4 +496,30 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --preview 10
 import flatterer
 
 flatterer.flatten('inputfile.json', 'ouput_dir', preview=10)
+```
+
+## Threads
+
+The number of threads used to process the data. Default to 1. If set to 0 will use amount of CPUs.
+
+Works best with new line delimited JSON `--ndjson` as JSON parsing can then be done by each thread. This can about a x3 times improvement with 6 threads if you have that many CPU cores. Without `--ndjson` makes only about x1.24 improvement on 2 threads and not worth going over 2 as it will not lead to performance improvement.
+
+Will not work with XLSX output.
+
+**Warning:** May have issues with inline-one-to-one as each thread will determine what should be inlined.
+
+### CLI Usage
+
+Only output first 10 lines of all the tables.
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --threads 0
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', threads=10)
 ```
