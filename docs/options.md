@@ -46,8 +46,11 @@ Options:
 ## Output Formats
 
 **CSV:**  Defaults to outputing CSV in output directory `<OUTPUT_DIRECTORY>/csv/`.
+
 **XLSX:**  Output xlsx file to `<OUTPUT_DIRECTORY>/output.xlsx`.
+
 **SQLITE:**  Output sqlite file to  `<OUTPUT_DIRECTORY>/sqlite.db`.
+
 **PARQUET:**  Output parquet files in `<OUTPUT_DIRECTORY>/parquet/`.
 
 ### CLI Usage
