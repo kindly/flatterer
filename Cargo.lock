@@ -420,6 +420,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "datapackage_convert"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5eeca545f6b4547afbb62b0e4e5fbaf4be2673d1ec4ed6db30cfb8deecf5bf8d"
+dependencies = [
+ "arrow",
+ "csv",
+ "lazy_static",
+ "minijinja",
+ "parquet",
+ "petgraph",
+ "regex",
+ "rusqlite",
+ "serde_json",
+ "snafu 0.7.0",
+ "tempfile",
+ "typed-builder",
+ "walkdir",
+ "xlsxwriter",
+ "zip",
+]
+
+[[package]]
 name = "deunicode"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -545,12 +568,12 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.13.0"
+version = "0.13.1"
 dependencies = [
  "clap 3.1.8",
  "crossbeam-channel",
  "ctrlc",
- "datapackage_convert",
+ "datapackage_convert 0.3.0",
  "env_logger 0.9.0",
  "eyre",
  "libflatterer",
@@ -854,13 +877,13 @@ checksum = "fbe5e23404da5b4f555ef85ebed98fb4083e55a00c317800bc2a50ede9f3d219"
 
 [[package]]
 name = "libflatterer"
-version = "0.13.0"
+version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "841550652cd83fc342fc50b86f899772d4a57992ffbfb6fc92978aa4f3bbf4ef"
+checksum = "454ea5758010d9b1b645ab6b77d8dfa310aebaa4fb8434ed67278a43d97f6962"
 dependencies = [
  "crossbeam-channel",
  "csv",
- "datapackage_convert",
+ "datapackage_convert 0.4.0",
  "indexmap",
  "itertools",
  "jsonref",
@@ -1398,9 +1421,9 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d07a8629359eb56f1e2fb1652bb04212c072a87ba68546a04065d525673ac461"
+checksum = "d83f127d94bdbcda4c8cc2e50f6f84f4b611f69c902699ca385a39c3a75f9ff1"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -1415,9 +1438,9 @@ checksum = "6c230d73fb8d8c1b9c0b3135c5142a8acee3a0558fb8db5cf1cb65f8d7862132"
 
 [[package]]
 name = "regex-syntax"
-version = "0.6.25"
+version = "0.6.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f497285884f3fcff424ffc933e56d7cbca511def0c9831a7f9b5f6153e3cc89b"
+checksum = "49b3de9ec5dc0a3417da371aab17d729997c15010e7fd24ff707773a33bddb64"
 
 [[package]]
 name = "remove_dir_all"

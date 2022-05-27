@@ -507,13 +507,9 @@ The number of threads used to process the data. Default to 1. If set to 0 will u
 
 Works best with new line delimited JSON `--ndjson` as JSON parsing can then be done by each thread. This can about a x3 times improvement with 6 threads if you have that many CPU cores. Without `--ndjson` makes only about x1.24 improvement on 2 threads and not worth going over 2 as it will not lead to performance improvement.
 
-Will not work with XLSX output.
-
 **Warning:** May have issues with inline-one-to-one as each thread will determine what should be inlined.
 
 ### CLI Usage
-
-Only output first 10 lines of all the tables.
 
 ```bash 
 flatterer INPUT_FILE OUTPUT_DIRECTORY --threads 0
