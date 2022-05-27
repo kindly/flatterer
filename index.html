@@ -133,8 +133,18 @@
 <a class="reference internal image-reference" href="_images/flatterer-with-text.svg"><img alt="_images/flatterer-with-text.svg" src="_images/flatterer-with-text.svg" width="500"/></a>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>An opinionated JSON to CSV/XLSX converter which tries to make a useful relational output for data analysis.</p>
-<p>It aims to be fast and memory efficient.</p>
+<p>An opinionated JSON to CSV/XLSX/SQLITE/PARQUET converter which tries to make a useful relational output for data analysis.</p>
+</section>
+<section id="rationale">
+<h2>Rationale<a class="headerlink" href="#rationale" title="Permalink to this headline">¶</a></h2>
+<p>When recieving a JSON file where the structure is deeply nested or not well specified, it is hard to determine what the data contains. Also, even after knowing the JSON structure, it requires a lot of time to work out how to flatten the JSON into a relational structure to do data analyisis on and to be part of a data pipeline.</p>
+<p>Flatterer aims to be the first tool to go to when faced with the above problem.  It may not be the tool that you end up using to flatten the JSON in your data pipeline, as hand written flattening may be required, but it could be.  It has many benifits over most hand written approaches:</p>
+<ul class="simple">
+<li><p>It is fast, written in rust but with python bindings for ease of use.  It can be 10x faster than hand written python flattening.</p></li>
+<li><p>Memory efficient.  Uses a custom streaming JSON parser to mean that long list of objects nested with the JSON will be streamed, so not much data needs to be loaded into memory at once.</p></li>
+<li><p>Fast memory efficient output to CSV/XLSX/SQLITE/PARQUET</p></li>
+<li><p>Uses best practice that has been learnt from flattening JSON countless times, such as generating keys to link one-to-many tables to their parents.</p></li>
+</ul>
 <section id="install">
 <h3>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install flatterer
@@ -404,7 +414,8 @@ After editing this file then you can rerun the transform:</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Flatterer. Making JSON flatterer</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#rationale">Rationale</a><ul>
 <li><a class="reference internal" href="#install">Install</a></li>
 <li><a class="reference internal" href="#example-json">Example JSON</a></li>
 <li><a class="reference internal" href="#running-flatterer">Running Flatterer</a><ul>

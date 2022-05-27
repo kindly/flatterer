@@ -130,8 +130,8 @@
         </label>
         <section class="tex2jax_ignore mathjax_ignore" id="outputs">
 <h1>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h1>
-<p>Both CSV and XLSX data can be produced with the following.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer games.json games_dir --xlsx --csv
+<p>All of CSV, XLSX, PARQUET and SQLITE data can be produced with the following.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer games.json games_dir --xlsx --csv --sqlite --parquet
 </pre></div>
 </div>
 <p>This will create the directory structure:</p>
@@ -139,9 +139,13 @@
 ├── csv
 │   ├── games.csv
 │   └── platforms.csv
+├── parquet
+│   ├── games.parquet
+│   └── platforms.parquet
 ├── datapackage.json
 ├── fields.csv
 ├── tables.csv
+├── sqlite.db
 ├── output.xlsx
 ├── postgresql
 │   ├── postgresql_load.sql
@@ -157,7 +161,15 @@
 </section>
 <section id="xlsx">
 <h2>XLSX<a class="headerlink" href="#xlsx" title="Permalink to this headline">¶</a></h2>
-<p>The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a tab per table.</p>
+<p>The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a tab per table.  Tab names are truncated to not go over the allowed limit.</p>
+</section>
+<section id="sqlite">
+<h2>SQLITE<a class="headerlink" href="#sqlite" title="Permalink to this headline">¶</a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">sqlite.db</span></code> is created in the output directory each csv file is put in its own table.</p>
+</section>
+<section id="parquet">
+<h2>PARQUET<a class="headerlink" href="#parquet" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">parquet</span></code> directory contains a parquet file representing a relational table.</p>
 </section>
 <section id="fields-csv">
 <h2>fields.csv<a class="headerlink" href="#fields-csv" title="Permalink to this headline">¶</a></h2>
@@ -457,6 +469,8 @@
 <li><a class="reference internal" href="#">Outputs</a><ul>
 <li><a class="reference internal" href="#csv">CSV</a></li>
 <li><a class="reference internal" href="#xlsx">XLSX</a></li>
+<li><a class="reference internal" href="#sqlite">SQLITE</a></li>
+<li><a class="reference internal" href="#parquet">PARQUET</a></li>
 <li><a class="reference internal" href="#fields-csv">fields.csv</a></li>
 <li><a class="reference internal" href="#tables-csv">tables.csv</a></li>
 <li><a class="reference internal" href="#postgresql-files">Postgresql Files</a><ul>

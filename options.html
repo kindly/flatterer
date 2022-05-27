@@ -173,10 +173,10 @@ Options:
 </section>
 <section id="output-formats">
 <h2>Output Formats<a class="headerlink" href="#output-formats" title="Permalink to this headline">¶</a></h2>
-<p><strong>CSV:</strong>  Defaults to outputing CSV in output directory <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/csv/</span></code>.
-<strong>XLSX:</strong>  Output xlsx file to <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/output.xlsx</span></code>.
-<strong>SQLITE:</strong>  Output sqlite file to  <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/sqlite.db</span></code>.
-<strong>PARQUET:</strong>  Output parquet files in <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/parquet/</span></code>.</p>
+<p><strong>CSV:</strong>  Defaults to outputing CSV in output directory <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/csv/</span></code>.</p>
+<p><strong>XLSX:</strong>  Output xlsx file to <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/output.xlsx</span></code>.</p>
+<p><strong>SQLITE:</strong>  Output sqlite file to  <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/sqlite.db</span></code>.</p>
+<p><strong>PARQUET:</strong>  Output parquet files in <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/parquet/</span></code>.</p>
 <section id="cli-usage">
 <h3>CLI Usage<a class="headerlink" href="#cli-usage" title="Permalink to this headline">¶</a></h3>
 <p>Stop CSV output:</p>
@@ -635,11 +635,9 @@ This can be useful if you are trying to namespace the output when inserting into
 <h2>Threads<a class="headerlink" href="#threads" title="Permalink to this headline">¶</a></h2>
 <p>The number of threads used to process the data. Default to 1. If set to 0 will use amount of CPUs.</p>
 <p>Works best with new line delimited JSON <code class="docutils literal notranslate"><span class="pre">--ndjson</span></code> as JSON parsing can then be done by each thread. This can about a x3 times improvement with 6 threads if you have that many CPU cores. Without <code class="docutils literal notranslate"><span class="pre">--ndjson</span></code> makes only about x1.24 improvement on 2 threads and not worth going over 2 as it will not lead to performance improvement.</p>
-<p>Will not work with XLSX output.</p>
 <p><strong>Warning:</strong> May have issues with inline-one-to-one as each thread will determine what should be inlined.</p>
 <section id="id31">
 <h3>CLI Usage<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
-<p>Only output first 10 lines of all the tables.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer INPUT_FILE OUTPUT_DIRECTORY --threads <span class="m">0</span>
 </pre></div>
 </div>

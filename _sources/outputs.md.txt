@@ -1,9 +1,9 @@
 # Outputs
 
-Both CSV and XLSX data can be produced with the following.
+All of CSV, XLSX, PARQUET and SQLITE data can be produced with the following.
 
 ```bash
-flatterer games.json games_dir --xlsx --csv
+flatterer games.json games_dir --xlsx --csv --sqlite --parquet
 ```
 
 This will create the directory structure:
@@ -13,9 +13,13 @@ games_dir/
 ├── csv
 │   ├── games.csv
 │   └── platforms.csv
+├── parquet
+│   ├── games.parquet
+│   └── platforms.parquet
 ├── datapackage.json
 ├── fields.csv
 ├── tables.csv
+├── sqlite.db
 ├── output.xlsx
 ├── postgresql
 │   ├── postgresql_load.sql
@@ -31,7 +35,16 @@ The `csv` directory contains a CSV file representing a relational table.  A new 
 
 ## XLSX
 
-The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a tab per table.
+The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a tab per table.  Tab names are truncated to not go over the allowed limit.
+
+## SQLITE
+
+A `sqlite.db` is created in the output directory each csv file is put in its own table.
+
+## PARQUET
+
+The `parquet` directory contains a parquet file representing a relational table. 
+
 
 ## fields.csv
 
