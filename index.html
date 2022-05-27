@@ -137,8 +137,8 @@
 </section>
 <section id="rationale">
 <h2>Rationale<a class="headerlink" href="#rationale" title="Permalink to this headline">¶</a></h2>
-<p>When recieving a JSON file where the structure is deeply nested or not well specified, it is hard to determine what the data contains. Also, even after knowing the JSON structure, it requires a lot of time to work out how to flatten the JSON into a relational structure to do data analyisis on and to be part of a data pipeline.</p>
-<p>Flatterer aims to be the first tool to go to when faced with the above problem.  It may not be the tool that you end up using to flatten the JSON in your data pipeline, as hand written flattening may be required, but it could be.  It has many benifits over most hand written approaches:</p>
+<p>When receiving a JSON file where the structure is deeply nested or not well specified, it is hard to determine what the data contains. Also, even after knowing the JSON structure, it requires a lot of time to work out how to flatten the JSON into a relational structure to do data analysis on and to be part of a data pipeline.</p>
+<p>Flatterer aims to be the first tool to go to when faced with the above problem.  It may not be the tool that you end up using to flatten the JSON in your data pipeline, as hand written flattening may be required, but it could be.  It has many benefits over most hand written approaches:</p>
 <ul class="simple">
 <li><p>It is fast, written in rust but with python bindings for ease of use.  It can be 10x faster than hand written python flattening.</p></li>
 <li><p>Memory efficient.  Uses a custom streaming JSON parser to mean that long list of objects nested with the JSON will be streamed, so not much data needs to be loaded into memory at once.</p></li>
@@ -195,8 +195,8 @@
 </div>
 <p>See <a class="reference internal" href="options.html#option-reference"><span class="std std-doc">Option Reference</span></a> for details of additional command line options.</p>
 </section>
-<section id="as-python-libarary">
-<h4>As python libarary<a class="headerlink" href="#as-python-libarary" title="Permalink to this headline">¶</a></h4>
+<section id="as-python-library">
+<h4>As python library<a class="headerlink" href="#as-python-library" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'games.json'</span><span class="p">,</span> <span class="s1">'games_dir'</span><span class="p">)</span>
 </pre></div>
@@ -283,7 +283,7 @@ Sub-object properties are separated by ‘_’.</p>
 <h4>Link Fields<a class="headerlink" href="#link-fields" title="Permalink to this headline">¶</a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">_link</span></code> is the primary key for the <code class="docutils literal notranslate"><span class="pre">platforms</span></code> table too.  Every table except <code class="docutils literal notranslate"><span class="pre">games</span></code> table, contains a <code class="docutils literal notranslate"><span class="pre">_link_games</span></code> field to easily join to the main <code class="docutils literal notranslate"><span class="pre">games</span></code> table.</p>
 <p>If there was a sub-array of <code class="docutils literal notranslate"><span class="pre">platforms</span></code> then that would have <code class="docutils literal notranslate"><span class="pre">_link</span></code>,  <code class="docutils literal notranslate"><span class="pre">_link_games</span></code> and  <code class="docutils literal notranslate"><span class="pre">_link_platforms</span></code> fields.</p>
-<p>To generalize this the <code class="docutils literal notranslate"><span class="pre">_link__&lt;table_name&gt;</span></code> fields joins to the <code class="docutils literal notranslate"><span class="pre">_link</span></code> field of <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;</span></code> i.e the <code class="docutils literal notranslate"><span class="pre">_link__&lt;table_name&gt;</span></code> are the foreign keys refrencing <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;._link</span></code>.</p>
+<p>To generalize this the <code class="docutils literal notranslate"><span class="pre">_link__&lt;table_name&gt;</span></code> fields joins to the <code class="docutils literal notranslate"><span class="pre">_link</span></code> field of <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;</span></code> i.e the <code class="docutils literal notranslate"><span class="pre">_link__&lt;table_name&gt;</span></code> are the foreign keys referencing <code class="docutils literal notranslate"><span class="pre">&lt;table_name&gt;._link</span></code>.</p>
 </section>
 <section id="fields-csv">
 <h4>Fields CSV<a class="headerlink" href="#fields-csv" title="Permalink to this headline">¶</a></h4>
@@ -354,7 +354,7 @@ Sub-object properties are separated by ‘_’.</p>
 </tr>
 </tbody>
 </table></div>
-<p>The <code class="docutils literal notranslate"><span class="pre">field_type</span></code> column contains a type guess useful for inserting into a database. The <code class="docutils literal notranslate"><span class="pre">field_title</span></code> is the column heading in the CSV file or XLSX sheet, which is initally the same as the field_name.
+<p>The <code class="docutils literal notranslate"><span class="pre">field_type</span></code> column contains a type guess useful for inserting into a database. The <code class="docutils literal notranslate"><span class="pre">field_title</span></code> is the column heading in the CSV file or XLSX sheet, which is initially the same as the field_name.
 After editing this file then you can rerun the transform:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer games.json new_games_dir -f myfields.csv --only-fields
 </pre></div>
@@ -420,7 +420,7 @@ After editing this file then you can rerun the transform:</p>
 <li><a class="reference internal" href="#example-json">Example JSON</a></li>
 <li><a class="reference internal" href="#running-flatterer">Running Flatterer</a><ul>
 <li><a class="reference internal" href="#cli">CLI</a></li>
-<li><a class="reference internal" href="#as-python-libarary">As python libarary</a></li>
+<li><a class="reference internal" href="#as-python-library">As python library</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#output-files">Output Files</a><ul>
