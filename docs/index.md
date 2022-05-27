@@ -8,9 +8,9 @@ An opinionated JSON to CSV/XLSX/SQLITE/PARQUET converter which tries to make a u
 
 ## Rationale
 
-When recieving a JSON file where the structure is deeply nested or not well specified, it is hard to determine what the data contains. Also, even after knowing the JSON structure, it requires a lot of time to work out how to flatten the JSON into a relational structure to do data analyisis on and to be part of a data pipeline. 
+When receiving a JSON file where the structure is deeply nested or not well specified, it is hard to determine what the data contains. Also, even after knowing the JSON structure, it requires a lot of time to work out how to flatten the JSON into a relational structure to do data analysis on and to be part of a data pipeline. 
 
-Flatterer aims to be the first tool to go to when faced with the above problem.  It may not be the tool that you end up using to flatten the JSON in your data pipeline, as hand written flattening may be required, but it could be.  It has many benifits over most hand written approaches:
+Flatterer aims to be the first tool to go to when faced with the above problem.  It may not be the tool that you end up using to flatten the JSON in your data pipeline, as hand written flattening may be required, but it could be.  It has many benefits over most hand written approaches:
 
 * It is fast, written in rust but with python bindings for ease of use.  It can be 10x faster than hand written python flattening.
 * Memory efficient.  Uses a custom streaming JSON parser to mean that long list of objects nested with the JSON will be streamed, so not much data needs to be loaded into memory at once.
@@ -73,7 +73,7 @@ flatterer games.json games_dir
 
 See [](./options.md#option-reference) for details of additional command line options.
 
-#### As python libarary
+#### As python library
 
 ```python
 import flatterer
@@ -131,7 +131,7 @@ Sub-object properties are separated by '_'.
 
 If there was a sub-array of `platforms` then that would have `_link`,  `_link_games` and  `_link_platforms` fields. 
 
-To generalize this the `_link__<table_name>` fields joins to the `_link` field of `<table_name>` i.e the `_link__<table_name>` are the foreign keys refrencing `<table_name>._link`.
+To generalize this the `_link__<table_name>` fields joins to the `_link` field of `<table_name>` i.e the `_link__<table_name>` are the foreign keys referencing `<table_name>._link`.
 
 #### Fields CSV
 
@@ -149,7 +149,7 @@ To generalize this the `_link__<table_name>` fields joins to the `_link` field o
 |games      |releaseDate|date    |2    | releaseDate|
 |games      |title     |text     |2    | title     |
 
-The `field_type` column contains a type guess useful for inserting into a database. The `field_title` is the column heading in the CSV file or XLSX sheet, which is initally the same as the field_name.
+The `field_type` column contains a type guess useful for inserting into a database. The `field_title` is the column heading in the CSV file or XLSX sheet, which is initially the same as the field_name.
 After editing this file then you can rerun the transform:
 
 ```bash
