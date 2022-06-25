@@ -568,7 +568,7 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "clap 3.1.8",
  "crossbeam-channel",
@@ -578,6 +578,7 @@ dependencies = [
  "eyre",
  "libflatterer",
  "log",
+ "multi_reader",
  "num_cpus",
  "pyo3",
  "serde_json",
@@ -877,9 +878,9 @@ checksum = "fbe5e23404da5b4f555ef85ebed98fb4083e55a00c317800bc2a50ede9f3d219"
 
 [[package]]
 name = "libflatterer"
-version = "0.13.1"
+version = "0.13.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "454ea5758010d9b1b645ab6b77d8dfa310aebaa4fb8434ed67278a43d97f6962"
+checksum = "b772071ab6d28e329a820b7a4ec93acedda6087e7910f8e29da1bd82a8d25c99"
 dependencies = [
  "crossbeam-channel",
  "csv",
@@ -1011,6 +1012,12 @@ checksum = "d2b29bd4bc3f33391105ebee3589c19197c4271e3e5a9ec9bfe8127eeff8f082"
 dependencies = [
  "adler",
 ]
+
+[[package]]
+name = "multi_reader"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "136c3d751bf69339118f320ab119df4730670158ccfb73ac5d86154218840361"
 
 [[package]]
 name = "multiversion"

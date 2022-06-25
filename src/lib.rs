@@ -34,7 +34,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
     #[pyfn(m)]
     fn flatten_rs(
         _py: Python,
-        input_file: String,
+        input_files: Vec<String>,
         output_dir: String,
         csv: bool,
         xlsx: bool,
@@ -88,22 +88,26 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.sqlite_path = sqlite_path;
         op.threads = threads;
 
-        let file;
+        let mut readers = vec![];
 
-        match File::open(&input_file) {
-            Ok(input) => {
-                file = BufReader::new(input);
-            }
-            Err(err) => {
-                if log_error {
-                    log::error!("Can not open file `{}`: {}", input_file, &err)
-                };
-                let result: Result<()> = Err(err.into());
-                return result.wrap_err_with(|| format!("Can not open file `{}`", input_file));
-            }
-        };
+        for path in input_files {
+            match File::open(&path) {
+                Ok(input) => {
+                    readers.push(input);
+                    //file = BufReader::new(input);
+                }
+                Err(err) => {
+                    if log_error {
+                        log::error!("Can not open file `{}`: {}", path, &err)
+                    };
+                    let result: Result<()> = Err(err.into());
+                    return result.wrap_err_with(|| format!("Can not open file `{}`", path));
+                }
+            };
+        }
+        let input = BufReader::new(multi_reader::MultiReader::new(readers.iter()));
 
-        if let Err(err) = flatten(file, output_dir, op) {
+        if let Err(err) = flatten(input, output_dir, op) {
             if log_error {
                 log::error!("{}", err)
             };

@@ -82,6 +82,7 @@ def flatten(
     sqlite_path="",
     preview=0,
     threads=1,
+    files=False,
     log_error=False,
 ):
     global LOGGING_SETUP
@@ -101,21 +102,31 @@ def flatten(
     if dataframe:
         csv = True
     
+    method = None
     try:
         try:
-            iter(input)
-            is_iterator = True
+            if isinstance(input, str):
+                method = 'flatten'
+                input = [input]
+            else:
+                iter(input)
+                if not files:
+                    method = 'iter'
+                else:
+                    input = list(input)
+                    method = 'flatten'
         except TypeError:
-            is_iterator = False
+            input = [input]
+            method = 'flatten'
         
-        if isinstance(input, str):
+        if method == 'flatten':
             flatten_rs(input, output_dir, csv, xlsx, sqlite, parquet,
                        main_table_name, tables_csv, only_tables, fields_csv, only_fields,
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, path, json_stream, ndjson, 
                        sqlite_path, threads, log_error)
-        elif is_iterator:
+        elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
             iterator_flatten_rs(bytes_generator(input), output_dir, csv, xlsx, sqlite, parquet,

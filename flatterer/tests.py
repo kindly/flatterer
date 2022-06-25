@@ -45,7 +45,7 @@ class TestBasic(unittest.TestCase):
 
 
     def test_array_top(self):
-        output = flatterer.flatten('fixtures/basic.json', dataframe=True)
+        output = flatterer.flatten(['fixtures/basic.json'], dataframe=True, files=True)
         self.check_output(output)
 
     def test_jsonlines(self):
@@ -83,3 +83,14 @@ class TestBasic(unittest.TestCase):
         bytes_list = [json.dumps(item).encode() for item in item_list]
         output = flatterer.flatten(bytes_list, dataframe=True)
         self.check_output(output)
+
+    def test_multiple(self):
+        output = flatterer.flatten(['fixtures/basic.json', 'fixtures/basic.json'], dataframe=True, files=True)
+
+        df = pandas.read_csv(f'fixtures/basic_expected/fields.csv')
+        df['count'] = df['count'] * 2
+
+        self.assertEqual(
+            output['fields'].to_dict('records'), 
+            df.to_dict('records'), 
+        )

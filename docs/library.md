@@ -34,6 +34,14 @@ This can be useful if you need to modify the data before it is processed, or if 
 
 It is also possible to supply an iterator of bytes or strings that will be interpreted as JSON.
 
+Also you can add the `files=True` argument to supply a list of file names.
+
+```
+import flatterer
+output = flatterer.flatten(['games.json','games2.json'], 'games_dir', files=True)
+```
+
+
 All other options are the same as the command line tool described in [](options.md#option-reference).
 
 ### Output
