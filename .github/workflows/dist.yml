@@ -213,7 +213,7 @@ jobs:
           python-version: 3.9
       - name: Publish to PyPi
         env:
-          TWINE_USERNAME: kindly
+          TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           pip install --upgrade twine
