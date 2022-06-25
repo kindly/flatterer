@@ -157,6 +157,11 @@
 </div>
 <p>This can be useful if you need to modify the data before it is processed, or if you are streaming data from a non-file source such as a database.</p>
 <p>It is also possible to supply an iterator of bytes or strings that will be interpreted as JSON.</p>
+<p>Also you can add the <code class="docutils literal notranslate"><span class="pre">files=True</span></code> argument to supply a list of file names.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="s1">'games.json'</span><span class="p">,</span><span class="s1">'games2.json'</span><span class="p">],</span> <span class="s1">'games_dir'</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>All other options are the same as the command line tool described in <a class="reference internal" href="options.html#option-reference"><span class="std std-doc">Option Reference</span></a>.</p>
 <section id="output">
 <h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
