@@ -1,0 +1,155 @@
+{
+  "profile": "tabular-data-package",
+  "resources": [
+    {
+      "profile": "tabular-data-resource",
+      "name": "main",
+      "flatterer_name": "main",
+      "title": "main",
+      "schema": {
+        "fields": [
+          {
+            "name": "_link",
+            "title": "_link",
+            "type": "string",
+            "count": 2
+          },
+          {
+            "name": "id",
+            "title": "id",
+            "type": "number",
+            "count": 2
+          },
+          {
+            "name": "title",
+            "title": "title",
+            "type": "string",
+            "count": 2
+          },
+          {
+            "name": "releaseDate",
+            "title": "releaseDate",
+            "type": "datetime",
+            "count": 2
+          },
+          {
+            "name": "rating_code",
+            "title": "rating_code",
+            "type": "string",
+            "count": 2
+          },
+          {
+            "name": "rating_name",
+            "title": "rating_name",
+            "type": "string",
+            "count": 2
+          }
+        ],
+        "primaryKey": "_link"
+      },
+      "path": "csv/main.csv"
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "developer",
+      "flatterer_name": "developer",
+      "title": "developer",
+      "schema": {
+        "fields": [
+          {
+            "name": "_link",
+            "title": "_link",
+            "type": "string",
+            "count": 2
+          },
+          {
+            "name": "_link_main",
+            "title": "_link_main",
+            "type": "string",
+            "count": 2
+          },
+          {
+            "name": "name",
+            "title": "name",
+            "type": "string",
+            "count": 2
+          },
+          {
+            "name": "main_id",
+            "title": "main_id",
+            "type": "number",
+            "count": 2
+          },
+          {
+            "name": "main_title",
+            "title": "main_title",
+            "type": "string",
+            "count": 2
+          }
+        ],
+        "primaryKey": "_link",
+        "foreignKeys": [
+          {
+            "fields": "_link_main",
+            "reference": {
+              "resource": "main",
+              "fields": "_link"
+            }
+          }
+        ]
+      },
+      "path": "csv/developer.csv"
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "platforms",
+      "flatterer_name": "platforms",
+      "title": "platforms",
+      "schema": {
+        "fields": [
+          {
+            "name": "_link",
+            "title": "_link",
+            "type": "string",
+            "count": 3
+          },
+          {
+            "name": "_link_main",
+            "title": "_link_main",
+            "type": "string",
+            "count": 3
+          },
+          {
+            "name": "name",
+            "title": "name",
+            "type": "string",
+            "count": 3
+          },
+          {
+            "name": "main_id",
+            "title": "main_id",
+            "type": "number",
+            "count": 3
+          },
+          {
+            "name": "main_title",
+            "title": "main_title",
+            "type": "string",
+            "count": 3
+          }
+        ],
+        "primaryKey": "_link",
+        "foreignKeys": [
+          {
+            "fields": "_link_main",
+            "reference": {
+              "resource": "main",
+              "fields": "_link"
+            }
+          }
+        ]
+      },
+      "path": "csv/platforms.csv"
+    }
+  ]
+}

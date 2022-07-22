@@ -84,6 +84,10 @@ def flatten(
     threads=1,
     files=False,
     log_error=False,
+    postgres="",
+    postgres_schema="",
+    drop=False,
+    pushdown=[],
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -125,7 +129,7 @@ def flatten(
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, path, json_stream, ndjson, 
-                       sqlite_path, threads, log_error)
+                       sqlite_path, threads, log_error, postgres, postgres_schema, drop, pushdown)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
@@ -133,7 +137,8 @@ def flatten(
                        main_table_name, tables_csv, only_tables, fields_csv, only_fields,
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
-                       schema, schema_titles, sqlite_path, threads, log_error)
+                       schema, schema_titles, sqlite_path, threads, log_error, 
+                       postgres, postgres_schema, drop, pushdown)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 
@@ -174,6 +179,8 @@ def iterator_flatten(*args, **kw):
 @click.option('--xlsx/--noxlsx', default=False, help='Output XLSX file, default false')
 @click.option('--sqlite/--nosqlite', default=False, help='Output sqlite.db file, default false')
 @click.option('--parquet/--noparquet', default=False, help='Output directory of parquet files, default false')
+@click.option('--postgres', default="", help='Connection string to postgres. If supplied will load data into postgres')
+@click.option('--pushdown', '-d', multiple=True, help='Object keys and values, with this key name, will be copied down to child tables')
 @click.option('--main-table-name', '-m', default=None,
               help='Name of main table, defaults to name of the file without the extension')
 @click.option('--path', '-p', default='', help='Key name of where json array starts, default top level array')
@@ -201,6 +208,8 @@ def iterator_flatten(*args, **kw):
               help='Only output this `preview` amount of lines in final results')
 @click.option('--threads', default=1,
               help='Number of threads, default 1, 0 means use number of CPUs')
+@click.option('--postgres-schema', default="", help='When loading to postgres, put all tables into this schema.')
+@click.option('--drop', is_flag=True, default=False, help='When loading to postgres, drop table if already exists.')
 @click.argument('input_file')
 @click.argument('output_directory')
 def cli(
@@ -210,6 +219,7 @@ def cli(
     xlsx=False,
     sqlite=False,
     parquet=False,
+    postgres='',
     path='',
     main_table_name=None,
     ndjson=False,
@@ -226,6 +236,9 @@ def cli(
     schema_titles="",
     preview=0,
     threads=1,
+    postgres_schema="",
+    drop=False,
+    pushdown=[]
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -247,6 +260,7 @@ def cli(
                 xlsx=xlsx,
                 sqlite=sqlite,
                 parquet=parquet,
+                postgres=postgres,
                 path=path_list,
                 main_table_name=main_table_name,
                 ndjson=ndjson,
@@ -263,6 +277,9 @@ def cli(
                 schema_titles=schema_titles,
                 preview=preview,
                 threads=threads,
-                log_error=True)
+                log_error=True,
+                postgres_schema=postgres_schema,
+                drop=drop,
+                pushdown=pushdown)
     except IOError:
         pass

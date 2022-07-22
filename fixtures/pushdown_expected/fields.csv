@@ -1,0 +1,17 @@
+table_name,field_name,field_type,field_title,count
+main,_link,text,_link,2
+main,id,number,id,2
+main,title,text,title,2
+main,releaseDate,date,releaseDate,2
+main,rating_code,text,rating_code,2
+main,rating_name,text,rating_name,2
+developer,_link,text,_link,2
+developer,_link_main,text,_link_main,2
+developer,name,text,name,2
+developer,main_id,number,main_id,2
+developer,main_title,text,main_title,2
+platforms,_link,text,_link,3
+platforms,_link_main,text,_link_main,3
+platforms,name,text,name,3
+platforms,main_id,number,main_id,3
+platforms,main_title,text,main_title,3

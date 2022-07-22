@@ -60,6 +60,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         sqlite_path: String,
         threads: usize,
         log_error: bool,
+        postgres_connection: String,
+        postgres_schema: String,
+        drop_table: bool,
+        pushdown: Vec<String>,
     ) -> Result<()> {
 
         let mut op = Options::default();
@@ -87,6 +91,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.ndjson = ndjson;
         op.sqlite_path = sqlite_path;
         op.threads = threads;
+        op.drop = drop_table;
+        op.postgres_connection = postgres_connection;
+        op.postgres_schema = postgres_schema;
+        op.pushdown = pushdown;
 
         let mut readers = vec![];
 
@@ -144,6 +152,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         sqlite_path: String,
         threads: usize,
         log_error: bool,
+        postgres_connection: String,
+        postgres_schema: String,
+        drop_table: bool,
+        pushdown: Vec<String>,
     ) -> Result<()> {
         let mut options = Options::default();
 
@@ -167,6 +179,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         options.schema_titles = schema_titles;
         options.sqlite_path = sqlite_path;
         options.threads = threads;
+        options.drop = drop_table;
+        options.postgres_connection = postgres_connection;
+        options.postgres_schema = postgres_schema;
+        options.pushdown = pushdown;
 
 
         let final_output_path = PathBuf::from(output_dir);

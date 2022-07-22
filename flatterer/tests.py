@@ -22,7 +22,7 @@ def array_item_generator():
 
 class TestBasic(unittest.TestCase):
 
-    def check_output(self, output):
+    def check_output(self, output, directory='fixtures/basic_expected'):
 
         for field in (
             'fields',
@@ -30,7 +30,7 @@ class TestBasic(unittest.TestCase):
         ):
             self.assertEqual(
                 output[field].to_dict('records'), 
-                pandas.read_csv(f'fixtures/basic_expected/{field}.csv').to_dict('records'), 
+                pandas.read_csv(f'{directory}/{field}.csv').to_dict('records'), 
             )
 
         for table in (
@@ -40,7 +40,7 @@ class TestBasic(unittest.TestCase):
         ):
             self.assertEqual(
                 output['data'][table].to_dict('records'), 
-                pandas.read_csv(f'fixtures/basic_expected/csv/{table}.csv').to_dict('records'), 
+                pandas.read_csv(f'{directory}/csv/{table}.csv').to_dict('records'), 
             )
 
 
@@ -83,6 +83,21 @@ class TestBasic(unittest.TestCase):
         bytes_list = [json.dumps(item).encode() for item in item_list]
         output = flatterer.flatten(bytes_list, dataframe=True)
         self.check_output(output)
+
+    def test_pushdown(self):
+        output = flatterer.flatten('fixtures/basic.json', dataframe=True, pushdown=['id', 'title'])
+        self.check_output(output, 'fixtures/pushdown_expected')
+
+    def test_multiple(self):
+        output = flatterer.flatten(['fixtures/basic.json', 'fixtures/basic.json'], dataframe=True, files=True)
+
+        df = pandas.read_csv(f'fixtures/basic_expected/fields.csv')
+        df['count'] = df['count'] * 2
+
+        self.assertEqual(
+            output['fields'].to_dict('records'), 
+            df.to_dict('records'), 
+        )
 
     def test_multiple(self):
         output = flatterer.flatten(['fixtures/basic.json', 'fixtures/basic.json'], dataframe=True, files=True)
