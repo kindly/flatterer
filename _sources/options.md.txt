@@ -16,6 +16,10 @@ Options:
   --xlsx / --noxlsx           Output XLSX file, default false
   --sqlite / --nosqlite       Output sqlite.db file, default false
   --parquet / --noparquet     Output directory of parquet files, default false
+  --postgres TEXT             Connection string to postgres. If supplied will
+                              load data into postgres
+  -d, --pushdown TEXT         Object keys and values, with this key name, will be
+                              copied down to child tables
   -m, --main-table-name TEXT  Name of main table, defaults to name of the file
                               without the extension
   -p, --path TEXT             Key name of where json array starts, default top
@@ -40,6 +44,10 @@ Options:
                               final results
   --threads INTEGER           Number of threads, default 1, 0 means use number
                               of CPUs
+  --postgres-schema TEXT      When loading to postgres, put all tables into
+                              this schema.
+  --drop                      When loading to postgres, drop table if already
+                              exists.
   --help                      Show this message and exit.
 ```
 
@@ -53,29 +61,37 @@ Options:
 
 **PARQUET:**  Output parquet files in `<OUTPUT_DIRECTORY>/parquet/`.
 
+**POSTGRES:**  Output in database.
+
 ### CLI Usage
 
-Stop CSV output:
+**Stop CSV output:**
 ```bash 
 flatterer --nocsv INPUT_FILE OUTPUT_DIRECTORY
 ```
 
-xlsx output:
+**xlsx output:**
 ```bash 
 flatterer --xlsx INPUT_FILE OUTPUT_DIRECTORY
 ```
 
-sqlite output:
-
+**sqlite output:**
 ```bash 
 flatterer --sqlite INPUT_FILE OUTPUT_DIRECTORY
 ```
 
-parquet output:
-
+**parquet output:**
 ```bash 
 flatterer --parquet INPUT_FILE OUTPUT_DIRECTORY
 ```
+
+**postgres output:**
+```bash 
+flatterer --postgres='postgres://user:pass@host/dbname' INPUT_FILE OUTPUT_DIRECTORY
+```
+
+The connection string should be in [one of these formats](https://docs.rs/postgres/latest/postgres/config/struct.Config.html#examples).  
+
 
 ### Python Usage
 
@@ -84,7 +100,7 @@ Export sqlite, xlsx, and parquet but not CSV.
 ```bash 
 import flatterer
 
-flatterer.flatten('inputfile.json', 'ouput_dir', csv=False, sqlite=True, xlsx=True, parquet=True)
+flatterer.flatten('inputfile.json', 'ouput_dir', csv=False, sqlite=True, xlsx=True, parquet=True, postgres='postgres://user:pass@host/dbname')
 ```
 
 ## Main Table Name
@@ -94,6 +110,8 @@ Name of the table that represents data at the root of the JSON object.
 For CSV will create `<OUTPUT_DIRECTORY>/csv/<main_table_name>.csv` and for XLSX will be the first tab name.
 
 For CLI defaults to name of input file without the file ending and for python defaults to `main`.
+
+
 
 ### CLI Usage
 
@@ -108,6 +126,66 @@ import flatterer
 
 flatterer.flatten('inputfile.json', 'ouput_dir', main_table_name='games')
 ```
+
+## Pushdown Fields
+
+This allows you to copy values from top level object down to the child tables.  This is useful if you want to define your own join keys or if it is useful having certain values in all related tables, saving you doing extra joins for common queries.
+
+You need to specify a list of fields names (keys in the JSON) that you want to appear on all one-to-many tables (child tables). The field will prefixed with the table name where the field existed and the value will be copied from that table.
+
+For example if `main_table_name` is `game` and this is the input JSON:
+
+```
+[
+  {
+    "id": 4,
+    "platforms": [
+      {
+        "name":"PC",
+        "id": 1,
+        "requirements": [
+          {"ram": "4GB"}
+        ] 
+      }
+    ]
+  }
+]
+```
+
+### CLI Usage
+
+If `id` and `name` are pushdown fields:
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY -d id -d name
+```
+
+`platforms` table will contain:
+
+|_link|_link_game|name|id|game_id|
+|-----|----------|----|--|-------|
+|0.platforms.0|0|PC|1|4|
+
+As you can see a new column `game_id` is created containing the `id` from the `games` object.
+
+`platforms_requirements` table will contain:
+
+|_link|_link_platforms|_link_game|platforms_name|platforms_id|game_id|ram|
+|-----|---------------|----------|--------------|----|--|-------|
+|0.platforms.0.requirements.0|0.platforms.0|0|PC|1|4|4GB
+
+This table also contains `game_id` but also `platforms_id` as `id` is pushed down from both parent tables.  Also as `name` is a pushdown field, `platforms_name` column is also created.
+
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', pushdown=['id','games'])
+```
+
+
 
 ## Path to JSON Array
 
@@ -240,6 +318,45 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --force
 import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', force=True)
+```
+
+## Postgres Schema
+
+Put tables into a postgres schema. Will create schema if it does not already exist.
+
+
+### CLI Usage
+
+```bash 
+flatterer --postgres='postgres://user:pass@host/dbname' INPUT_FILE OUTPUT_DIRECTORY --postgres-schema=myschema
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', postgres='postgres://user:pass@host/dbname', postgres_schema='myschema')
+```
+
+## Drop Tables
+
+**Warning: this could mean you loose data**
+
+Only for postgres export. Drop the existing table if it exists.
+
+### CLI Usage
+
+```bash 
+flatterer --postgres='postgres://user:pass@host/dbname' INPUT_FILE OUTPUT_DIRECTORY --drop
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', postgres='postgres://user:pass@host/dbname', drop=True)
 ```
 
 ## Fields File

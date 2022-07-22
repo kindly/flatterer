@@ -1,12 +1,28 @@
 # Change Log
 All notable changes to this project will be documented in this file.
  
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
+
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [0.14.0] - 2021-07-22
+
+### New
+- `pushdown` option.  Copy data from top level objects down to child (one-to-many) tables.  This is useful if the data has its own keys (such as `id` fields) that you want to exist in the related tables. Also useful for denormalizing the data so querying on a common field, requires less joining.
+  
+- `postgres` option.  Export to postgres database by supplying a connection string.
+
+- `postgres-schema` option. Choose a postgres schema to insert data into. 
+
+- `drop` option. If table already exists.
+
+### Removed
+
+- sqlite and postgres scripts in output directory. No longer required as the actual database tables can be created by
 
 ## [0.13.2] - 2021-06-24
 
-- `files` option, so multiple files can be supplied at onece.
+### New
+- `files` option, so multiple files can be supplied at once.
 
 ## [0.13.1] - 2021-05-27
 

@@ -133,7 +133,7 @@
 <a class="reference internal image-reference" href="_images/flatterer-with-text.svg"><img alt="_images/flatterer-with-text.svg" src="_images/flatterer-with-text.svg" width="500"/></a>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>An opinionated JSON to CSV/XLSX/SQLITE/PARQUET converter which tries to make a useful relational output for data analysis.</p>
+<p>An opinionated JSON to CSV/XLSX/SQLITE/PARQUET/POSTGRES converter which tries to make a useful relational output for data analysis.</p>
 </section>
 <section id="rationale">
 <h2>Rationale<a class="headerlink" href="#rationale" title="Permalink to this headline">¶</a></h2>
@@ -142,7 +142,7 @@
 <ul class="simple">
 <li><p>It is fast, written in rust but with python bindings for ease of use.  It can be 10x faster than hand written python flattening.</p></li>
 <li><p>Memory efficient.  Uses a custom streaming JSON parser to mean that long list of objects nested with the JSON will be streamed, so not much data needs to be loaded into memory at once.</p></li>
-<li><p>Fast memory efficient output to CSV/XLSX/SQLITE/PARQUET</p></li>
+<li><p>Fast memory efficient output to CSV/XLSX/SQLITE/PARQUET/POSTGRES</p></li>
 <li><p>Uses best practice that has been learnt from flattening JSON countless times, such as generating keys to link one-to-many tables to their parents.</p></li>
 </ul>
 <section id="install">

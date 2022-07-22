@@ -4,7 +4,7 @@
 
 ## Introduction
 
-An opinionated JSON to CSV/XLSX/SQLITE/PARQUET converter which tries to make a useful relational output for data analysis.
+An opinionated JSON to CSV/XLSX/SQLITE/PARQUET/POSTGRES converter which tries to make a useful relational output for data analysis.
 
 ## Rationale
 
@@ -14,7 +14,7 @@ Flatterer aims to be the first tool to go to when faced with the above problem. 
 
 * It is fast, written in rust but with python bindings for ease of use.  It can be 10x faster than hand written python flattening.
 * Memory efficient.  Uses a custom streaming JSON parser to mean that long list of objects nested with the JSON will be streamed, so not much data needs to be loaded into memory at once.
-* Fast memory efficient output to CSV/XLSX/SQLITE/PARQUET
+* Fast memory efficient output to CSV/XLSX/SQLITE/PARQUET/POSTGRES
 * Uses best practice that has been learnt from flattening JSON countless times, such as generating keys to link one-to-many tables to their parents.
 
 
