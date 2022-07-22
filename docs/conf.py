@@ -22,7 +22,7 @@ copyright = '2021-2022, David Raznick'
 author = 'David Raznick'
 
 # The full version, including alpha/beta/rc tags
-release = '0.13'
+release = '0.14'
 
 myst_heading_anchors = 3
 

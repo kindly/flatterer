@@ -9,7 +9,7 @@ use std::sync::atomic::Ordering;
 
 fn main() -> Result<()> {
     let matches = Command::new("flatterer")
-        .version("0.13")
+        .version("0.14")
         .author("David Raznick")
         .about("Make JSON flatterer")
         .args(&[
