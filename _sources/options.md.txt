@@ -182,9 +182,8 @@ This table also contains `game_id` but also `platforms_id` as `id` is pushed dow
 ```python
 import flatterer
 
-flatterer.flatten('inputfile.json', 'ouput_dir', pushdown=['id','games'])
+flatterer.flatten('inputfile.json', 'ouput_dir', pushdown=['id','name'])
 ```
-
 
 
 ## Path to JSON Array
@@ -639,3 +638,11 @@ import flatterer
 
 flatterer.flatten('inputfile.json', 'ouput_dir', threads=10)
 ```
+
+## Sql Scripts
+
+Python only. Export scripts for importing data into the database.
+
+### Python Usage
+
+flatterer.flatten('inputfile.json', 'ouput_dir', sql_scripts=True)

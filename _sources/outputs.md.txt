@@ -82,7 +82,7 @@ The `parquet` directory contains a parquet file representing a relational table.
 
 ## Postgresql Files
 
-When using a CSV output a `postgresql` directory is made which contains SQL to help load the CSV files into the database.  
+Need option `sql_scripts=True`.  When using a CSV output a `postgresql` directory is made which contains SQL to help load the CSV files into the database.  
 
 ### postgresql_schema.sql
 
@@ -128,7 +128,7 @@ psql postgresql://user:password@host/database -f games_dir_/postgresql/postgresq
 
 ## Sqlite Files.
 
-When using a CSV output a `sqlite` directory is made which contains SQL to help load the CSV files into a sqlite database.  
+Need option `sql_scripts=True`. When using a CSV output a `sqlite` directory is made which contains SQL to help load the CSV files into a sqlite database.  
 
 ### sqlite_schema.sql
 

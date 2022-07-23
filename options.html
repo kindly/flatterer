@@ -316,7 +316,7 @@ flatterer.flatten<span class="o">(</span><span class="s1">'inputfile.json'</span
 <h3>Python Usage<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
-<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.json'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">pushdown</span><span class="o">=</span><span class="p">[</span><span class="s1">'id'</span><span class="p">,</span><span class="s1">'games'</span><span class="p">])</span>
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.json'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">pushdown</span><span class="o">=</span><span class="p">[</span><span class="s1">'id'</span><span class="p">,</span><span class="s1">'name'</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
@@ -783,6 +783,14 @@ This can be useful if you are trying to namespace the output when inserting into
 </div>
 </section>
 </section>
+<section id="sql-scripts">
+<h2>Sql Scripts<a class="headerlink" href="#sql-scripts" title="Permalink to this headline">¶</a></h2>
+<p>Python only. Export scripts for importing data into the database.</p>
+<section id="id39">
+<h3>Python Usage<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h3>
+<p>flatterer.flatten(‘inputfile.json’, ‘ouput_dir’, sql_scripts=True)</p>
+</section>
+</section>
 </section>
 
       </article>
@@ -939,6 +947,10 @@ This can be useful if you are trying to namespace the output when inserting into
 <li><a class="reference internal" href="#threads">Threads</a><ul>
 <li><a class="reference internal" href="#id37">CLI Usage</a></li>
 <li><a class="reference internal" href="#id38">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sql-scripts">Sql Scripts</a><ul>
+<li><a class="reference internal" href="#id39">Python Usage</a></li>
 </ul>
 </li>
 </ul>
