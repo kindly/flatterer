@@ -88,6 +88,7 @@ def flatten(
     postgres_schema="",
     drop=False,
     pushdown=[],
+    sql_scripts=False
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -129,7 +130,7 @@ def flatten(
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, path, json_stream, ndjson, 
-                       sqlite_path, threads, log_error, postgres, postgres_schema, drop, pushdown)
+                       sqlite_path, threads, log_error, postgres, postgres_schema, drop, pushdown, sql_scripts)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
@@ -138,7 +139,7 @@ def flatten(
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, sqlite_path, threads, log_error, 
-                       postgres, postgres_schema, drop, pushdown)
+                       postgres, postgres_schema, drop, pushdown, sql_scripts)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 

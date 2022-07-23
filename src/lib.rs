@@ -64,6 +64,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         postgres_schema: String,
         drop_table: bool,
         pushdown: Vec<String>,
+        sql_scripts: bool,
     ) -> Result<()> {
 
         let mut op = Options::default();
@@ -95,6 +96,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.postgres_connection = postgres_connection;
         op.postgres_schema = postgres_schema;
         op.pushdown = pushdown;
+        op.sql_scripts = sql_scripts;
 
         let mut readers = vec![];
 
@@ -156,6 +158,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         postgres_schema: String,
         drop_table: bool,
         pushdown: Vec<String>,
+        sql_scripts: bool
     ) -> Result<()> {
         let mut options = Options::default();
 
@@ -183,6 +186,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         options.postgres_connection = postgres_connection;
         options.postgres_schema = postgres_schema;
         options.pushdown = pushdown;
+        options.sql_scripts = sql_scripts;
 
 
         let final_output_path = PathBuf::from(output_dir);

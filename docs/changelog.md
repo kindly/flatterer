@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.14.1] - 2021-07-23
+
+### Fixed
+- `sql_script` option to export scripts that for sqlite and postgres to make output backward compatable with earlier versions.
+
 ## [0.14.0] - 2021-07-22
 
 ### New
