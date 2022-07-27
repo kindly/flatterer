@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.14.2] - 2021-07-27
+
+### New
+- Postgres connection from environment variable
+
 ## [0.14.1] - 2021-07-23
 
 ### Fixed

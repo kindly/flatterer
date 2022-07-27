@@ -208,7 +208,12 @@ Options:
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer --postgres<span class="o">=</span><span class="s1">'postgres://user:pass@host/dbname'</span> INPUT_FILE OUTPUT_DIRECTORY
 </pre></div>
 </div>
-<p>The connection string should be in <a class="reference external" href="https://docs.rs/postgres/latest/postgres/config/struct.Config.html#examples">one of these formats</a>.</p>
+<p>The connection string should be in <a class="reference external" href="https://docs.rs/postgres/latest/postgres/config/struct.Config.html#examples">one of these formats</a>. In addition, if you want the connection string from an environment variable then use the string <code class="docutils literal notranslate"><span class="pre">env</span></code> (for default DATABASE_URL enviroment variable) <code class="docutils literal notranslate"><span class="pre">env=MY_ENV_VAR</span></code> (for MY_ENV_VAR environment variable).</p>
+<p><strong>postgres output from envirment variable:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer --postgres<span class="o">=</span><span class="s1">'env=MY_ENV_VAR'</span> INPUT_FILE OUTPUT_DIRECTORY
+</pre></div>
+</div>
+<p>This will get the connection string from the <code class="docutils literal notranslate"><span class="pre">MY_ENV_VAR</span></code> environment variable.</p>
 </section>
 <section id="python-usage">
 <h3>Python Usage<a class="headerlink" href="#python-usage" title="Permalink to this headline">¶</a></h3>
