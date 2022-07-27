@@ -438,9 +438,9 @@ dependencies = [
 
 [[package]]
 name = "datapackage_convert"
-version = "0.5.4"
+version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "acabb7eb0238d8785148c5dddf1320c960d9efef7b4a6d8cd912b4f5ae92c02a"
+checksum = "e6121f1e770ac833fbdc996fd98f47aec91f3d20996cb4147b3aab251563a111"
 dependencies = [
  "arrow",
  "csv",
@@ -586,7 +586,7 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.14.1"
+version = "0.14.2"
 dependencies = [
  "clap 3.1.8",
  "crossbeam-channel",
@@ -985,13 +985,13 @@ checksum = "349d5a591cd28b49e1d1037471617a32ddcda5731b99419008085f72d5a53836"
 
 [[package]]
 name = "libflatterer"
-version = "0.14.2"
+version = "0.14.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd677d178290db19846031332dd2817f433c7118bedf0b57bdf29d957f1075e2"
+checksum = "584389c8a2040e5deb39443c62f34199204248b2539d65070995bf93b70fe1a5"
 dependencies = [
  "crossbeam-channel",
  "csv",
- "datapackage_convert 0.5.4",
+ "datapackage_convert 0.5.6",
  "indexmap",
  "itertools",
  "jsonref",

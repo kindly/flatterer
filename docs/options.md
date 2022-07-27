@@ -90,8 +90,13 @@ flatterer --parquet INPUT_FILE OUTPUT_DIRECTORY
 flatterer --postgres='postgres://user:pass@host/dbname' INPUT_FILE OUTPUT_DIRECTORY
 ```
 
-The connection string should be in [one of these formats](https://docs.rs/postgres/latest/postgres/config/struct.Config.html#examples).  
+The connection string should be in [one of these formats](https://docs.rs/postgres/latest/postgres/config/struct.Config.html#examples). In addition, if you want the connection string from an environment variable then use the string `env` (for default DATABASE_URL enviroment variable) `env=MY_ENV_VAR` (for MY_ENV_VAR environment variable).
 
+**postgres output from envirment variable:**
+```bash 
+flatterer --postgres='env=MY_ENV_VAR' INPUT_FILE OUTPUT_DIRECTORY
+```
+This will get the connection string from the `MY_ENV_VAR` environment variable.
 
 ### Python Usage
 
