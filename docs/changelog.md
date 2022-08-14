@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.15.0] - 2021-07-27
 
 ### New
-- Evolve option for sqlite and postgres.
+- `evolve` option for sqlite and postgres.  Can add data to existing tables and will alter tables if new fields are needed.
+- `drop` option for `sqlite`.
+
+### Changed
+- No need for output directory when using `sqlite` or `postgres` outputs . Will use temp space if not supplied.
+- `sqlite-path` option will switch on `sqlite` option.
 
 ## [0.14.2] - 2021-07-27
 
