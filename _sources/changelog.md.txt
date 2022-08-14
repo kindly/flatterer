@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.15.0] - 2021-07-27
+
+### New
+- Evolve option for sqlite and postgres.
+
 ## [0.14.2] - 2021-07-27
 
 ### New
