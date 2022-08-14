@@ -65,6 +65,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         drop_table: bool,
         pushdown: Vec<String>,
         sql_scripts: bool,
+        evolve: bool,
     ) -> Result<()> {
 
         let mut op = Options::default();
@@ -97,6 +98,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.postgres_schema = postgres_schema;
         op.pushdown = pushdown;
         op.sql_scripts = sql_scripts;
+        op.evolve = evolve;
 
         let mut readers = vec![];
 
@@ -116,6 +118,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             };
         }
         let input = BufReader::new(multi_reader::MultiReader::new(readers.iter()));
+
+        log::info!("Starting processing input.");
 
         if let Err(err) = flatten(input, output_dir, op) {
             if log_error {
@@ -158,7 +162,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         postgres_schema: String,
         drop_table: bool,
         pushdown: Vec<String>,
-        sql_scripts: bool
+        sql_scripts: bool,
+        evolve: bool
     ) -> Result<()> {
         let mut options = Options::default();
 
@@ -187,7 +192,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         options.postgres_schema = postgres_schema;
         options.pushdown = pushdown;
         options.sql_scripts = sql_scripts;
-
+        options.evolve = evolve;
 
         let final_output_path = PathBuf::from(output_dir);
         let parts_path = final_output_path.join("parts");

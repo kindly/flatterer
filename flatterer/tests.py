@@ -98,14 +98,3 @@ class TestBasic(unittest.TestCase):
             output['fields'].to_dict('records'), 
             df.to_dict('records'), 
         )
-
-    def test_multiple(self):
-        output = flatterer.flatten(['fixtures/basic.json', 'fixtures/basic.json'], dataframe=True, files=True)
-
-        df = pandas.read_csv(f'fixtures/basic_expected/fields.csv')
-        df['count'] = df['count'] * 2
-
-        self.assertEqual(
-            output['fields'].to_dict('records'), 
-            df.to_dict('records'), 
-        )

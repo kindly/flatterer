@@ -88,7 +88,8 @@ def flatten(
     postgres_schema="",
     drop=False,
     pushdown=[],
-    sql_scripts=False
+    sql_scripts=False,
+    evolve=False,
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -98,8 +99,8 @@ def flatten(
     using_tmp = False
     
     if not output_dir:
-        if not dataframe:
-            raise AttributeError("Please set an `output_dir` or set `dataframe=True`")
+        if not dataframe and not sqlite_path and not postgres:
+            raise AttributeError("Please set an `output_dir` or set `dataframe=True` or `postgres` or `sqlite-db`")
         output_dir = tempfile.mkdtemp(prefix="flatterer-")
         force = True
         using_tmp = True
@@ -124,13 +125,16 @@ def flatten(
             input = [input]
             method = 'flatten'
         
+        if sqlite_path:
+            sqlite = True
+        
         if method == 'flatten':
             flatten_rs(input, output_dir, csv, xlsx, sqlite, parquet,
                        main_table_name, tables_csv, only_tables, fields_csv, only_fields,
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, path, json_stream, ndjson, 
-                       sqlite_path, threads, log_error, postgres, postgres_schema, drop, pushdown, sql_scripts)
+                       sqlite_path, threads, log_error, postgres, postgres_schema, drop, pushdown, sql_scripts, evolve)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
@@ -139,7 +143,7 @@ def flatten(
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, sqlite_path, threads, log_error, 
-                       postgres, postgres_schema, drop, pushdown, sql_scripts)
+                       postgres, postgres_schema, drop, pushdown, sql_scripts, evolve)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 
@@ -181,6 +185,7 @@ def iterator_flatten(*args, **kw):
 @click.option('--sqlite/--nosqlite', default=False, help='Output sqlite.db file, default false')
 @click.option('--parquet/--noparquet', default=False, help='Output directory of parquet files, default false')
 @click.option('--postgres', default="", help='Connection string to postgres. If supplied will load data into postgres')
+@click.option('--sqlite-path', default="", help='Output sqlite file to this file')
 @click.option('--pushdown', '-d', multiple=True, help='Object keys and values, with this key name, will be copied down to child tables')
 @click.option('--main-table-name', '-m', default=None,
               help='Name of main table, defaults to name of the file without the extension')
@@ -210,15 +215,18 @@ def iterator_flatten(*args, **kw):
 @click.option('--threads', default=1,
               help='Number of threads, default 1, 0 means use number of CPUs')
 @click.option('--postgres-schema', default="", help='When loading to postgres, put all tables into this schema.')
-@click.option('--drop', is_flag=True, default=False, help='When loading to postgres, drop table if already exists.')
+@click.option('--evolve', is_flag=True, default=False, help='When loading to postgres or sqlite, evolve tables to fit data')
+@click.option('--drop', is_flag=True, default=False, help='When loading to postgres or sqlite, drop table if already exists.')
+@click.option('--id-prefix', default="", help='Prefix for all `_link` id fields')
 @click.argument('input_file')
-@click.argument('output_directory')
+@click.argument('output_directory', required=False)
 def cli(
     input_file,
     output_directory,
     csv=True,
     xlsx=False,
     sqlite=False,
+    sqlite_path='',
     parquet=False,
     postgres='',
     path='',
@@ -238,8 +246,10 @@ def cli(
     preview=0,
     threads=1,
     postgres_schema="",
+    evolve=False,
     drop=False,
-    pushdown=[]
+    pushdown=[],
+    id_prefix=""
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -280,7 +290,10 @@ def cli(
                 threads=threads,
                 log_error=True,
                 postgres_schema=postgres_schema,
+                evolve=evolve,
                 drop=drop,
-                pushdown=pushdown)
+                pushdown=pushdown,
+                id_prefix=id_prefix,
+                sqlite_path=sqlite_path)
     except IOError:
         pass

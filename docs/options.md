@@ -18,6 +18,7 @@ Options:
   --parquet / --noparquet     Output directory of parquet files, default false
   --postgres TEXT             Connection string to postgres. If supplied will
                               load data into postgres
+  --sqlite-path TEXT          Output sqlite file to this file
   -d, --pushdown TEXT         Object keys and values, with this key name, will be
                               copied down to child tables
   -m, --main-table-name TEXT  Name of main table, defaults to name of the file
@@ -45,10 +46,12 @@ Options:
   --threads INTEGER           Number of threads, default 1, 0 means use number
                               of CPUs
   --postgres-schema TEXT      When loading to postgres, put all tables into
-                              this schema.
+                              this schema
+  --evolve                    When loading to postgres or sqlite, evolve
+                              tables to fit data
   --drop                      When loading to postgres, drop table if already
                               exists.
-  --help                      Show this message and exit.
+  --help                      Show this message and exit
 ```
 
 ## Output Formats
@@ -343,16 +346,51 @@ import flatterer
 flatterer.flatten('inputfile.json', 'ouput_dir', postgres='postgres://user:pass@host/dbname', postgres_schema='myschema')
 ```
 
-## Drop Tables
+## Evolve Tables
 
-**Warning: this could mean you loose data**
+For postgres and sqlite. This will evolve the existing tables if the schema of the new flattened data is different. This is useful if you have new JSON data that comes in over time or you have lots of files you want to process one by one.
 
-Only for postgres export. Drop the existing table if it exists.
+Evolving follows the following rules:
+
+- If the new flattened data contains a table that does not exist in the database it will created.
+- If the table already exists but the new data has extra fields, the table is altered to add the new fields.
+- If table exists but fields that are in the database are not in the new data, they will result in nulls in the database when the new data is inserted. 
+- If table exists and contains the same field name as the new data but the data types of the fields conflict:
+  - For postgres the field is altered to being a `text` field so that both new and old data can exist (all types can be coerced to text).
+  - For sqlite, as you can not alter existing types, the original type is kept. This will mean the data insertion will still work as sqlite treats any field as if it is text.  
+- If no `id_prefix` is supplied random string will be added to `_link` fields so that these ids will be unique across loads. 
+
+It is recommended to add an `id_prefix` that is unique for each JSON file load. It could conatain for example the name of the file or a date.
+
+**Warning: this could mean you modify existing data.**
+
+**Warning: Not completely parallel safe if multiple processes are inserting data into same database, it may cause an error if two processes are trying to add the same new field. This will not currupt any data and a retry should work.**
+
 
 ### CLI Usage
 
 ```bash 
 flatterer --postgres='postgres://user:pass@host/dbname' INPUT_FILE OUTPUT_DIRECTORY --drop
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', postgres='postgres://user:pass@host/dbname', drop=True)
+```
+
+## Drop Tables
+
+**Warning: this could mean you loose data**
+
+For postgres and sqlite. Drop the existing table if it exists.
+
+### CLI Usage
+
+```bash 
+flatterer --postgres='postgres://user:pass@host/dbname' --sqlite-path=sqlite.db INPUT_FILE OUTPUT_DIRECTORY --drop
 ```
 
 ### Python Usage
