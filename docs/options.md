@@ -370,7 +370,7 @@ It is recommended to add an `id_prefix` that is unique for each JSON file load. 
 ### CLI Usage
 
 ```bash 
-flatterer --postgres='postgres://user:pass@host/dbname' INPUT_FILE OUTPUT_DIRECTORY --drop
+flatterer --postgres='postgres://user:pass@host/dbname' INPUT_FILE OUTPUT_DIRECTORY --evolve
 ```
 
 ### Python Usage
@@ -378,7 +378,7 @@ flatterer --postgres='postgres://user:pass@host/dbname' INPUT_FILE OUTPUT_DIRECT
 ```python
 import flatterer
 
-flatterer.flatten('inputfile.json', 'ouput_dir', postgres='postgres://user:pass@host/dbname', drop=True)
+flatterer.flatten('inputfile.json', 'ouput_dir', postgres='postgres://user:pass@host/dbname', evolve=True)
 ```
 
 ## Drop Tables
