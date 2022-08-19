@@ -488,7 +488,7 @@ flatterer.flatten<span class="o">(</span><span class="s1">'inputfile.json'</span
 <p><strong>Warning: Not completely parallel safe if multiple processes are inserting data into same database, it may cause an error if two processes are trying to add the same new field. This will not currupt any data and a retry should work.</strong></p>
 <section id="id15">
 <h3>CLI Usage<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer --postgres<span class="o">=</span><span class="s1">'postgres://user:pass@host/dbname'</span> INPUT_FILE OUTPUT_DIRECTORY --drop
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer --postgres<span class="o">=</span><span class="s1">'postgres://user:pass@host/dbname'</span> INPUT_FILE OUTPUT_DIRECTORY --evolve
 </pre></div>
 </div>
 </section>
@@ -496,7 +496,7 @@ flatterer.flatten<span class="o">(</span><span class="s1">'inputfile.json'</span
 <h3>Python Usage<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
-<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.json'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">postgres</span><span class="o">=</span><span class="s1">'postgres://user:pass@host/dbname'</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'inputfile.json'</span><span class="p">,</span> <span class="s1">'ouput_dir'</span><span class="p">,</span> <span class="n">postgres</span><span class="o">=</span><span class="s1">'postgres://user:pass@host/dbname'</span><span class="p">,</span> <span class="n">evolve</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
