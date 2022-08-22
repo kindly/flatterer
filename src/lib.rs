@@ -21,6 +21,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         ctrlc::set_handler(|| {
             log::debug!("ctrlc pressed");
             TERMINATE.store(true, Ordering::SeqCst);
+            std::process::exit(0);
         })
         .expect("Error setting Ctrl-C handler");
     }
@@ -31,6 +32,11 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             .format_target(false)
             .init();
     }
+    #[pyfn(m)]
+    fn web_rs(_py: Python) {
+        flatterer_web::main().unwrap();
+    }
+
     #[pyfn(m)]
     fn flatten_rs(
         _py: Python,

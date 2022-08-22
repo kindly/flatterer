@@ -7,7 +7,7 @@ import tempfile
 import orjson
 import pandas
 
-from .flatterer import iterator_flatten_rs, flatten_rs, setup_logging, setup_ctrlc
+from .flatterer import iterator_flatten_rs, flatten_rs, setup_logging, setup_ctrlc, web_rs
 
 LOGGING_SETUP = False
 
@@ -180,6 +180,7 @@ def iterator_flatten(*args, **kw):
 
 
 @click.command()
+@click.option('--web', default=False, is_flag=True ,help='Load web based version')
 @click.option('--csv/--nocsv', default=True, help='Output CSV files, default true')
 @click.option('--xlsx/--noxlsx', default=False, help='Output XLSX file, default false')
 @click.option('--sqlite/--nosqlite', default=False, help='Output sqlite.db file, default false')
@@ -218,11 +219,12 @@ def iterator_flatten(*args, **kw):
 @click.option('--evolve', is_flag=True, default=False, help='When loading to postgres or sqlite, evolve tables to fit data')
 @click.option('--drop', is_flag=True, default=False, help='When loading to postgres or sqlite, drop table if already exists.')
 @click.option('--id-prefix', default="", help='Prefix for all `_link` id fields')
-@click.argument('input_file')
+@click.argument('input_file', required=False)
 @click.argument('output_directory', required=False)
 def cli(
     input_file,
     output_directory,
+    web=False,
     csv=True,
     xlsx=False,
     sqlite=False,
@@ -251,11 +253,26 @@ def cli(
     pushdown=[],
     id_prefix=""
 ):
+    if web:
+        import pathlib
+        filepath = pathlib.Path(__file__).resolve().parent
+        os.environ['STATIC_FILES'] = str(filepath / 'static')
+        os.environ['OPEN_BROWSER'] = "true"
+        os.environ['CLEAN_TMP_TIME'] = "0"
+        setup_ctrlc()
+        web_rs()
+        return
+    
+    if not input_file:
+        click.echo("An input file is needed as first argument.")
+        raise click.Abort
+
     global LOGGING_SETUP
     if not LOGGING_SETUP:
         setup_logging("info")
         LOGGING_SETUP = True
         setup_ctrlc()
+    
 
     if not main_table_name:
         main_table_name = input_file.split('/')[-1].split('.')[0]
