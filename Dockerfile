@@ -13,7 +13,8 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
 
 RUN yum install centos-release-scl -y \
     && yum-config-manager --enable rhel-server-rhscl-7-rpms \
-    && yum install llvm-toolset-7.0 -y
+    && yum install llvm-toolset-7.0 -y \
+    && yum install openssl-devel -y
 
 WORKDIR /io
 
