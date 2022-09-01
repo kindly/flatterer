@@ -1,6 +1,6 @@
 [package]
 name = "flatterer"
-version = "0.16.0"
+version = "0.1.0"
 authors = ["David Raznick <kindly@gmail.com>"]
 edition = "2021"
 license = "MIT"
