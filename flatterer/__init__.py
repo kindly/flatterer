@@ -257,7 +257,9 @@ def cli(
         import pathlib
         filepath = pathlib.Path(__file__).resolve().parent
         os.environ['STATIC_FILES'] = str(filepath / 'static')
-        os.environ['OPEN_BROWSER'] = "true"
+        if not os.environ.get('NO_BROWSER', ''):
+            os.environ['OPEN_BROWSER'] = "true"
+
         os.environ['CLEAN_TMP_TIME'] = "0"
         setup_ctrlc()
         web_rs()
