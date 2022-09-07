@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Change Log" href="changelog.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Change Log" href="changelog.html" /><link rel="prev" title="Outputs" href="outputs.html" />
 
     <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
-        <title>Development - flatterer 0.15 documentation</title>
+        <title>Web Interface - flatterer 0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
@@ -90,7 +90,7 @@
       <a href="index.html"><div class="brand">flatterer 0.15 documentation</div></a>
     </div>
     <div class="header-right">
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
     </div>
@@ -112,9 +112,9 @@
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Python Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="web.html">Web Interface</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Web Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 </ul>
 
 </div>
@@ -126,61 +126,43 @@
   <main class="main">
     <div class="content">
       <article role="main">
-        <label class="toc-overlay-icon toc-content-icon" for="__toc">
+        <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
           <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
         </label>
-        <section class="tex2jax_ignore mathjax_ignore" id="development">
-<h1>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h1>
-<p>Please contribute <a class="reference external" href="https://github.com/kindly/flatterer">on github</a>.</p>
-<section id="local-install">
-<h2>Local install<a class="headerlink" href="#local-install" title="Permalink to this headline">¶</a></h2>
-<p>Need local rust stable toolchain and python-virtualenv.</p>
-<p>Clone this repo.</p>
-<p>Create python virtual environment.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>virtualenv .ve
-<span class="nb">source</span> .ve/bin/activate
+        <section class="tex2jax_ignore mathjax_ignore" id="web-interface">
+<h1>Web Interface<a class="headerlink" href="#web-interface" title="Permalink to this headline">¶</a></h1>
+<p>A way to explore flatterer features without needing to learn all the command line options and get visual feedback of the flattened data.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer --web
 </pre></div>
 </div>
-<p>Install maturin (the build tool for building rust extensions)</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install maturin
-</pre></div>
-</div>
-<p>Test local build.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>maturin develop --release 
-</pre></div>
-</div>
-</section>
-<section id="builds">
-<h2>Builds<a class="headerlink" href="#builds" title="Permalink to this headline">¶</a></h2>
-<p>Build anylinux wheels for all pythons 3.6+ and source distribution.</p>
-<p>Run this once</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">flatterer</span><span class="o">-</span><span class="n">anylinux</span> <span class="o">.</span>
-</pre></div>
-</div>
-<p>To build</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo docker run  -v $(pwd):/io flatterer-anylinux build --release
-</pre></div>
-</div>
-</section>
-<section id="logging">
-<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
-<p>Set enviroment variable <code class="docutils literal notranslate"><span class="pre">FLATTERER_LOG</span></code> to <code class="docutils literal notranslate"><span class="pre">trace</span></code> to get full debug output.</p>
-</section>
+<p>To configure the webserver, the following environment variables can be set:</p>
+<p><code class="docutils literal notranslate"><span class="pre">PORT</span></code>: Port of webserver, defaults to 8080.</p>
+<p><code class="docutils literal notranslate"><span class="pre">HOST</span></code>: Host of webserver, localhost (127.0.0.1).</p>
+<p><code class="docutils literal notranslate"><span class="pre">MAX_SIZE</span></code>: Size in MB as the maximum size of the file the interface will accept. Defaults to 500.</p>
+<p><code class="docutils literal notranslate"><span class="pre">NO_BROWSER</span></code>: Set to any value so that a browser window in not automatically opened when running the webserver.</p>
 </section>
 
       </article>
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="changelog.html">
+          <a class="next-page" href="changelog.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Change Log</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="outputs.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Change Log</div>
+                <div class="title">Outputs</div>
                 
               </div>
             </a>
@@ -194,7 +176,7 @@
               <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
               <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
             |
-            <a class="muted-link" href="_sources/development.md.txt"
+            <a class="muted-link" href="_sources/web.md.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -202,29 +184,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            Contents
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Development</a><ul>
-<li><a class="reference internal" href="#local-install">Local install</a></li>
-<li><a class="reference internal" href="#builds">Builds</a></li>
-<li><a class="reference internal" href="#logging">Logging</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

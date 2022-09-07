@@ -73,6 +73,16 @@ flatterer games.json games_dir
 
 See [](./options.md#option-reference) for details of additional command line options.
 
+#### Local web interface
+
+Local web interface to explore flatterer features.
+
+```bash
+flatterer --web
+```
+
+See [](./web.md#web-interface) for details of how to configure web interface.
+
 #### As python library
 
 ```python
@@ -167,6 +177,7 @@ This can be useful for renameing columns, rearranging the field order or if you 
 options
 library
 outputs
+web
 changelog
 development
 ```
