@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.16.1] - 2021-10-16
+
+### Fixed 
+- Error not writing larger XLSX files
+
 ## [0.16.0] - 2021-07-27
 
 ### New
