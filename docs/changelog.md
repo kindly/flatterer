@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.16.2] - 2021-10-25
+
+### New
+- Support python 3.11
+
 ## [0.16.2] - 2021-10-16
 
 ### Fixed 
