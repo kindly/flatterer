@@ -6,6 +6,8 @@
 
 An opinionated JSON to CSV/XLSX/SQLITE/PARQUET converter which tries to make a useful relational output for data analysis.
 
+[Web playgroud of CSV/XLSX conversions](https://lite.flatterer.dev/)
+
 ## Rationale
 
 When receiving a JSON file where the structure is deeply nested or not well specified, it is hard to determine what the data contains. Also, even after knowing the JSON structure, it requires a lot of time to work out how to flatten the JSON into a relational structure to do data analysis on and to be part of a data pipeline. 
