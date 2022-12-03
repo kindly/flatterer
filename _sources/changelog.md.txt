@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.17.0] - 2021-12-03
+
+### New
+- Web Assembly version of libflatterer. Available to use here https://lite.flatterer.dev/.
+- Upgrade to vue 3 and vite for web frontend.
+
+### Fixed 
+- Ignore blank lines in json lines files
+- Better errors when too many files are open
+- Better errors when file could be json-stream
+
 ## [0.16.2] - 2021-10-25
 
 ### New
