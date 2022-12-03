@@ -1,5 +1,5 @@
 use crossbeam_channel::{bounded, Sender, Receiver};
-use datapackage_convert::{merge_datapackage_with_options, datapackage_to_parquet_with_options, datapackage_to_sqlite_with_options};
+use csvs_convert::{merge_datapackage_with_options, datapackage_to_parquet_with_options, datapackage_to_sqlite_with_options};
 use eyre::{Result, WrapErr, eyre};
 use libflatterer::{flatten, Options, TERMINATE, FlatFiles};
 use serde_json::Value;
@@ -322,7 +322,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         }
 
         if options.threads > 1 {
-            let op = datapackage_convert::Options::builder()
+            let op = csvs_convert::Options::builder()
                 .delete_input_csv(true)
                 .build();
             merge_datapackage_with_options(final_output_path.clone(), output_paths, op)?;
@@ -330,7 +330,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             remove_dir_all(&parts_path)?;
 
             if options.parquet {
-                let op = datapackage_convert::Options::builder().build();
+                let op = csvs_convert::Options::builder().build();
                 datapackage_to_parquet_with_options(
                     final_output_path.join("parquet"),
                     final_output_path.to_string_lossy().into(),
@@ -339,7 +339,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             }
 
             if options.sqlite {
-                let op = datapackage_convert::Options::builder().build();
+                let op = csvs_convert::Options::builder().build();
                 if options.sqlite_path.is_empty() {
                     options.sqlite_path = final_output_path.join("sqlite.db").to_string_lossy().into();
                 }
