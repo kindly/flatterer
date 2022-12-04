@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.17.0] - 2021-12-03
+## [0.17.0] - 2022-12-03
 
 ### New
 - Web Assembly version of libflatterer. Available to use here https://lite.flatterer.dev/.
@@ -15,27 +15,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Better errors when too many files are open
 - Better errors when file could be json-stream
 
-## [0.16.2] - 2021-10-25
+## [0.16.2] - 2022-10-25
 
 ### New
 - Support python 3.11
 
-## [0.16.2] - 2021-10-16
+## [0.16.2] - 2022-10-16
 
 ### Fixed 
 - Error not writing larger XLSX files
 
-## [0.16.1] - 2021-10-16
+## [0.16.1] - 2022-10-16
 
 ### Fixed 
 - Cors for web api
 
-## [0.16.0] - 2021-07-27
+## [0.16.0] - 2022-07-27
 
 ### New
 - Local web interface for exploring flatterer features `flatterer --web`. 
 
-## [0.15.0] - 2021-07-27
+## [0.15.0] - 2022-07-27
 
 ### New
 - `evolve` option for sqlite and postgres.  Can add data to existing tables and will alter tables if new fields are needed.
@@ -45,17 +45,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - No need for output directory when using `sqlite` or `postgres` outputs . Will use temp space if not supplied.
 - `sqlite-path` option will switch on `sqlite` option.
 
-## [0.14.2] - 2021-07-27
+## [0.14.2] - 2022-07-27
 
 ### New
 - Postgres connection from environment variable
 
-## [0.14.1] - 2021-07-23
+## [0.14.1] - 2022-07-23
 
 ### Fixed
 - `sql_script` option to export scripts that for sqlite and postgres to make output backward compatable with earlier versions.
 
-## [0.14.0] - 2021-07-22
+## [0.14.0] - 2022-07-22
 
 ### New
 - `pushdown` option.  Copy data from top level objects down to child (one-to-many) tables.  This is useful if the data has its own keys (such as `id` fields) that you want to exist in the related tables. Also useful for denormalizing the data so querying on a common field, requires less joining.
@@ -70,16 +70,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - sqlite and postgres scripts in output directory. No longer required as the actual database tables can be created by
 
-## [0.13.2] - 2021-06-24
+## [0.13.2] - 2022-06-24
 
 ### New
 - `files` option, so multiple files can be supplied at once.
 
-## [0.13.1] - 2021-05-27
+## [0.13.1] - 2022-05-27
 
 - Threads option now can output xlsx
 
-## [0.13.0] - 2021-04-28
+## [0.13.0] - 2022-04-28
 
 ### New
 
@@ -91,14 +91,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - BREAKING: `json-lines` option renamed to `ndjson` 
 - New `json-stream` option that works in same way as the old json-lines option and accepts concatonated json.
 
-## [0.12.12] - 2021-04-15
+## [0.12.12] - 2022-04-15
 
 ### Changed
 
 - Datapackage output uses correct date type
 - Lists of strings are now escaped the same way as optional quoted CSVs
 
-## [0.12.11] - 2021-04-09
+## [0.12.11] - 2022-04-09
 
 ### Changed
 
@@ -106,42 +106,42 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - datapackage output now has forign keys.
 
 
-## [0.12.10] - 2021-03-21
+## [0.12.10] - 2022-03-21
 
 ### Fixed
 
 - Python decimal converted to float not string.
 
 
-## [0.12.9] - 2021-03-07
+## [0.12.9] - 2022-03-07
 
 ### Fixed
 
 - SQLite export lower memory use
 
 
-## [0.12.8] - 2021-03-01
+## [0.12.8] - 2022-03-01
 
 ### Changed
 
 - SQLite export has indexes and foreign key contraints.
 
 
-## [0.12.7] - 2021-02-27
+## [0.12.7] - 2022-02-27
 
 ### Fixed
 
 - main_table_name was number caused exception
 
 
-## [0.12.6] - 2021-02-26
+## [0.12.6] - 2022-02-26
 
 ### Fixed
 
 - list of JSON strings supplied to `flatten` fixed.
 - datapackage.json named correctly.
 
-## [0.12.4] - 2021-02-18
+## [0.12.4] - 2022-02-18
 
 ### Changed
 
@@ -150,26 +150,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Tests for `flatten`
 - iterator_flatten now deprecated as it is just a subset of `flatten'
 
-## [0.12.3] - 2021-02-15
+## [0.12.3] - 2022-02-15
 
 ### Fixed
 
 - More lenient if tmp directory can not be deleted.
 
-## [0.12.1] - 2021-02-15
+## [0.12.1] - 2022-02-15
 
 ### Fixed
 
 - Preview option in python CLI and library.
 
 
-## [0.12] - 2021-02-02
+## [0.12] - 2022-02-02
 
 ### New
 
 - SQLite export option
 
-## [0.11] - 2021-01-25
+## [0.11] - 2022-01-25
 
 ### New
 
