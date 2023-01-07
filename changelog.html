@@ -1,62 +1,58 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Development" href="development.html" /><link rel="prev" title="Web Interface" href="web.html" />
 
-    <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
         <title>Change Log - flatterer 0.17 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
     
 
 
 <style>
-  :root {
+  body {
     --color-code-background: #f8f8f8;
   --color-code-foreground: black;
   
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
     }
-  }
-
-  /* For allowing end-user-specific overrides */
-  .override-light {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
-  
-  }
-  .override-dark {
-    --color-code-background: #202020;
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+      }
+    }
   }
-</style><link media="(prefers-color-scheme: dark)" rel="stylesheet" href="_static/pygments_dark.css"></head>
-  <body dir="">
+</style></head>
+  <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-      <path stroke="none" d="M0 0h24v24H0z"/>
-      <line x1="4" y1="6" x2="20" y2="6" />
-      <line x1="10" y1="12" x2="20" y2="12" />
-      <line x1="6" y1="18" x2="20" y2="18" />
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
     </svg>
   </symbol>
   <symbol id="svg-menu" viewBox="0 0 24 24">
     <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-      class="feather feather-menu">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
       <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -64,18 +60,57 @@
   </symbol>
   <symbol id="svg-arrow-right" viewBox="0 0 24 24">
     <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-      class="feather feather-chevron-right">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
       <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
     </svg>
   </symbol>
 </svg>
 
 <input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
 <input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation"></label>
-<label class="overlay toc-overlay" for="__toc"></label>
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
 
 
 
@@ -83,6 +118,7 @@
   <header class="mobile-header">
     <div class="header-left">
       <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
         <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
       </label>
     </div>
@@ -90,7 +126,16 @@
       <a href="index.html"><div class="brand">flatterer 0.17 documentation</div></a>
     </div>
     <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
     </div>
@@ -103,11 +148,12 @@
   
   <span class="sidebar-brand-text">flatterer 0.17 documentation</span>
   
-</a><form class="sidebar-search-container" method="get" action="search.html">
-  <input class="sidebar-search" placeholder=Search name="q">
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
-</form><div class="sidebar-scroll"><div class="sidebar-tree">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Python Library</a></li>
@@ -119,31 +165,61 @@
 
 </div>
 </div>
+
       </div>
       
     </div>
   </aside>
-  <main class="main">
+  <div class="main">
     <div class="content">
-      <article role="main">
-        <label class="toc-overlay-icon toc-content-icon" for="__toc">
-          <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-        </label>
-        <section class="tex2jax_ignore mathjax_ignore" id="change-log">
-<h1>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="change-log">
+<h1>Change Log<a class="headerlink" href="#change-log" title="Permalink to this heading">#</a></h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>and this project adheres to <a class="reference external" href="http://semver.org/">Semantic Versioning</a>.</p>
 <section id="id1">
-<h2>[0.17.0] - 2022-12-03<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>[0.17.1] - 2022-01-07<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Trucate cell that is larger than xlsx allow</p></li>
+<li><p>Allow more rows in xlsx in non threaded mode.</p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>[0.17.0] - 2022-12-03<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
 <section id="new">
-<h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
+<h3>New<a class="headerlink" href="#new" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Web Assembly version of libflatterer. Available to use here https://lite.flatterer.dev/.</p></li>
 <li><p>Upgrade to vue 3 and vite for web frontend.</p></li>
 </ul>
 </section>
-<section id="fixed">
-<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
+<section id="id3">
+<h3>Fixed<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Ignore blank lines in json lines files</p></li>
 <li><p>Better errors when too many files are open</p></li>
@@ -151,81 +227,81 @@
 </ul>
 </section>
 </section>
-<section id="id2">
-<h2>[0.16.2] - 2022-10-25<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<section id="id3">
-<h3>New<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<section id="id4">
+<h2>[0.16.2] - 2022-10-25<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h2>
+<section id="id5">
+<h3>New<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Support python 3.11</p></li>
 </ul>
 </section>
 </section>
-<section id="id4">
-<h2>[0.16.2] - 2022-10-16<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<section id="id5">
-<h3>Fixed<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<section id="id6">
+<h2>[0.16.2] - 2022-10-16<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h2>
+<section id="id7">
+<h3>Fixed<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Error not writing larger XLSX files</p></li>
 </ul>
 </section>
 </section>
-<section id="id6">
-<h2>[0.16.1] - 2022-10-16<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
-<section id="id7">
-<h3>Fixed<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<section id="id8">
+<h2>[0.16.1] - 2022-10-16<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h2>
+<section id="id9">
+<h3>Fixed<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Cors for web api</p></li>
 </ul>
 </section>
 </section>
-<section id="id8">
-<h2>[0.16.0] - 2022-07-27<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
-<section id="id9">
-<h3>New<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<section id="id10">
+<h2>[0.16.0] - 2022-07-27<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h2>
+<section id="id11">
+<h3>New<a class="headerlink" href="#id11" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Local web interface for exploring flatterer features <code class="docutils literal notranslate"><span class="pre">flatterer</span> <span class="pre">--web</span></code>.</p></li>
 </ul>
 </section>
 </section>
-<section id="id10">
-<h2>[0.15.0] - 2022-07-27<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
-<section id="id11">
-<h3>New<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<section id="id12">
+<h2>[0.15.0] - 2022-07-27<a class="headerlink" href="#id12" title="Permalink to this heading">#</a></h2>
+<section id="id13">
+<h3>New<a class="headerlink" href="#id13" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">evolve</span></code> option for sqlite and postgres.  Can add data to existing tables and will alter tables if new fields are needed.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">drop</span></code> option for <code class="docutils literal notranslate"><span class="pre">sqlite</span></code>.</p></li>
 </ul>
 </section>
 <section id="changed">
-<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
+<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>No need for output directory when using <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> or <code class="docutils literal notranslate"><span class="pre">postgres</span></code> outputs . Will use temp space if not supplied.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">sqlite-path</span></code> option will switch on <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> option.</p></li>
 </ul>
 </section>
 </section>
-<section id="id12">
-<h2>[0.14.2] - 2022-07-27<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
-<section id="id13">
-<h3>New<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<section id="id14">
+<h2>[0.14.2] - 2022-07-27<a class="headerlink" href="#id14" title="Permalink to this heading">#</a></h2>
+<section id="id15">
+<h3>New<a class="headerlink" href="#id15" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Postgres connection from environment variable</p></li>
 </ul>
 </section>
 </section>
-<section id="id14">
-<h2>[0.14.1] - 2022-07-23<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
-<section id="id15">
-<h3>Fixed<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<section id="id16">
+<h2>[0.14.1] - 2022-07-23<a class="headerlink" href="#id16" title="Permalink to this heading">#</a></h2>
+<section id="id17">
+<h3>Fixed<a class="headerlink" href="#id17" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">sql_script</span></code> option to export scripts that for sqlite and postgres to make output backward compatable with earlier versions.</p></li>
 </ul>
 </section>
 </section>
-<section id="id16">
-<h2>[0.14.0] - 2022-07-22<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
-<section id="id17">
-<h3>New<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<section id="id18">
+<h2>[0.14.0] - 2022-07-22<a class="headerlink" href="#id18" title="Permalink to this heading">#</a></h2>
+<section id="id19">
+<h3>New<a class="headerlink" href="#id19" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">pushdown</span></code> option.  Copy data from top level objects down to child (one-to-many) tables.  This is useful if the data has its own keys (such as <code class="docutils literal notranslate"><span class="pre">id</span></code> fields) that you want to exist in the related tables. Also useful for denormalizing the data so querying on a common field, requires less joining.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">postgres</span></code> option.  Export to postgres database by supplying a connection string.</p></li>
@@ -234,114 +310,114 @@
 </ul>
 </section>
 <section id="removed">
-<h3>Removed<a class="headerlink" href="#removed" title="Permalink to this headline">¶</a></h3>
+<h3>Removed<a class="headerlink" href="#removed" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>sqlite and postgres scripts in output directory. No longer required as the actual database tables can be created by</p></li>
 </ul>
 </section>
 </section>
-<section id="id18">
-<h2>[0.13.2] - 2022-06-24<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
-<section id="id19">
-<h3>New<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<section id="id20">
+<h2>[0.13.2] - 2022-06-24<a class="headerlink" href="#id20" title="Permalink to this heading">#</a></h2>
+<section id="id21">
+<h3>New<a class="headerlink" href="#id21" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">files</span></code> option, so multiple files can be supplied at once.</p></li>
 </ul>
 </section>
 </section>
-<section id="id20">
-<h2>[0.13.1] - 2022-05-27<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h2>
+<section id="id22">
+<h2>[0.13.1] - 2022-05-27<a class="headerlink" href="#id22" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Threads option now can output xlsx</p></li>
 </ul>
 </section>
-<section id="id21">
-<h2>[0.13.0] - 2022-04-28<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h2>
-<section id="id22">
-<h3>New<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<section id="id23">
+<h2>[0.13.0] - 2022-04-28<a class="headerlink" href="#id23" title="Permalink to this heading">#</a></h2>
+<section id="id24">
+<h3>New<a class="headerlink" href="#id24" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Threads option, so that can be run on all cores. Works best with ndjson input.</p></li>
 <li><p>Parquet export option.</p></li>
 </ul>
 </section>
-<section id="id23">
-<h3>Changed<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<section id="id25">
+<h3>Changed<a class="headerlink" href="#id25" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>BREAKING: <code class="docutils literal notranslate"><span class="pre">json-lines</span></code> option renamed to <code class="docutils literal notranslate"><span class="pre">ndjson</span></code></p></li>
 <li><p>New <code class="docutils literal notranslate"><span class="pre">json-stream</span></code> option that works in same way as the old json-lines option and accepts concatonated json.</p></li>
 </ul>
 </section>
 </section>
-<section id="id24">
-<h2>[0.12.12] - 2022-04-15<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h2>
-<section id="id25">
-<h3>Changed<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<section id="id26">
+<h2>[0.12.12] - 2022-04-15<a class="headerlink" href="#id26" title="Permalink to this heading">#</a></h2>
+<section id="id27">
+<h3>Changed<a class="headerlink" href="#id27" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Datapackage output uses correct date type</p></li>
 <li><p>Lists of strings are now escaped the same way as optional quoted CSVs</p></li>
 </ul>
 </section>
 </section>
-<section id="id26">
-<h2>[0.12.11] - 2022-04-09<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h2>
-<section id="id27">
-<h3>Changed<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<section id="id28">
+<h2>[0.12.11] - 2022-04-09<a class="headerlink" href="#id28" title="Permalink to this heading">#</a></h2>
+<section id="id29">
+<h3>Changed<a class="headerlink" href="#id29" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Clearer errors when error happens in rust. BREAKING CHANGE, if catching certain error types in python these may have changed.</p></li>
 <li><p>datapackage output now has forign keys.</p></li>
 </ul>
 </section>
 </section>
-<section id="id28">
-<h2>[0.12.10] - 2022-03-21<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h2>
-<section id="id29">
-<h3>Fixed<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
+<section id="id30">
+<h2>[0.12.10] - 2022-03-21<a class="headerlink" href="#id30" title="Permalink to this heading">#</a></h2>
+<section id="id31">
+<h3>Fixed<a class="headerlink" href="#id31" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Python decimal converted to float not string.</p></li>
 </ul>
 </section>
 </section>
-<section id="id30">
-<h2>[0.12.9] - 2022-03-07<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h2>
-<section id="id31">
-<h3>Fixed<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
+<section id="id32">
+<h2>[0.12.9] - 2022-03-07<a class="headerlink" href="#id32" title="Permalink to this heading">#</a></h2>
+<section id="id33">
+<h3>Fixed<a class="headerlink" href="#id33" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>SQLite export lower memory use</p></li>
 </ul>
 </section>
 </section>
-<section id="id32">
-<h2>[0.12.8] - 2022-03-01<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h2>
-<section id="id33">
-<h3>Changed<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
+<section id="id34">
+<h2>[0.12.8] - 2022-03-01<a class="headerlink" href="#id34" title="Permalink to this heading">#</a></h2>
+<section id="id35">
+<h3>Changed<a class="headerlink" href="#id35" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>SQLite export has indexes and foreign key contraints.</p></li>
 </ul>
 </section>
 </section>
-<section id="id34">
-<h2>[0.12.7] - 2022-02-27<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h2>
-<section id="id35">
-<h3>Fixed<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
+<section id="id36">
+<h2>[0.12.7] - 2022-02-27<a class="headerlink" href="#id36" title="Permalink to this heading">#</a></h2>
+<section id="id37">
+<h3>Fixed<a class="headerlink" href="#id37" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>main_table_name was number caused exception</p></li>
 </ul>
 </section>
 </section>
-<section id="id36">
-<h2>[0.12.6] - 2022-02-26<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h2>
-<section id="id37">
-<h3>Fixed<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h3>
+<section id="id38">
+<h2>[0.12.6] - 2022-02-26<a class="headerlink" href="#id38" title="Permalink to this heading">#</a></h2>
+<section id="id39">
+<h3>Fixed<a class="headerlink" href="#id39" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>list of JSON strings supplied to <code class="docutils literal notranslate"><span class="pre">flatten</span></code> fixed.</p></li>
 <li><p>datapackage.json named correctly.</p></li>
 </ul>
 </section>
 </section>
-<section id="id38">
-<h2>[0.12.4] - 2022-02-18<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h2>
-<section id="id39">
-<h3>Changed<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h3>
+<section id="id40">
+<h2>[0.12.4] - 2022-02-18<a class="headerlink" href="#id40" title="Permalink to this heading">#</a></h2>
+<section id="id41">
+<h3>Changed<a class="headerlink" href="#id41" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">flatten</span></code> python function now accepts iterator</p></li>
 <li><p>Docs for <code class="docutils literal notranslate"><span class="pre">flatten</span></code></p></li>
@@ -350,83 +426,83 @@
 </ul>
 </section>
 </section>
-<section id="id40">
-<h2>[0.12.3] - 2022-02-15<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h2>
-<section id="id41">
-<h3>Fixed<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h3>
+<section id="id42">
+<h2>[0.12.3] - 2022-02-15<a class="headerlink" href="#id42" title="Permalink to this heading">#</a></h2>
+<section id="id43">
+<h3>Fixed<a class="headerlink" href="#id43" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>More lenient if tmp directory can not be deleted.</p></li>
 </ul>
 </section>
 </section>
-<section id="id42">
-<h2>[0.12.1] - 2022-02-15<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h2>
-<section id="id43">
-<h3>Fixed<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h3>
+<section id="id44">
+<h2>[0.12.1] - 2022-02-15<a class="headerlink" href="#id44" title="Permalink to this heading">#</a></h2>
+<section id="id45">
+<h3>Fixed<a class="headerlink" href="#id45" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Preview option in python CLI and library.</p></li>
 </ul>
 </section>
 </section>
-<section id="id44">
-<h2>[0.12] - 2022-02-02<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h2>
-<section id="id45">
-<h3>New<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h3>
+<section id="id46">
+<h2>[0.12] - 2022-02-02<a class="headerlink" href="#id46" title="Permalink to this heading">#</a></h2>
+<section id="id47">
+<h3>New<a class="headerlink" href="#id47" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>SQLite export option</p></li>
 </ul>
 </section>
 </section>
-<section id="id46">
-<h2>[0.11] - 2022-01-25<a class="headerlink" href="#id46" title="Permalink to this headline">¶</a></h2>
-<section id="id47">
-<h3>New<a class="headerlink" href="#id47" title="Permalink to this headline">¶</a></h3>
+<section id="id48">
+<h2>[0.11] - 2022-01-25<a class="headerlink" href="#id48" title="Permalink to this heading">#</a></h2>
+<section id="id49">
+<h3>New<a class="headerlink" href="#id49" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Support top level object. All list of objects are streamed and top level object data saved in main table.</p></li>
 <li><p>New yaglish parser for both json stream and arrays.</p></li>
 <li><p>Library has schema_guess function to tell if data is a JSON Stream or has an array of object.</p></li>
 </ul>
 </section>
-<section id="id48">
-<h3>Fixed<a class="headerlink" href="#id48" title="Permalink to this headline">¶</a></h3>
+<section id="id50">
+<h3>Fixed<a class="headerlink" href="#id50" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Empty objects do not make a line in output.</p></li>
 </ul>
 </section>
 </section>
-<section id="id49">
-<h2>[0.10.1] - 2021-12-22<a class="headerlink" href="#id49" title="Permalink to this headline">¶</a></h2>
-<section id="id50">
-<h3>New<a class="headerlink" href="#id50" title="Permalink to this headline">¶</a></h3>
+<section id="id51">
+<h2>[0.10.1] - 2021-12-22<a class="headerlink" href="#id51" title="Permalink to this heading">#</a></h2>
+<section id="id52">
+<h3>New<a class="headerlink" href="#id52" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>ctrlc support added.</p></li>
 </ul>
 </section>
-<section id="id51">
-<h3>Changed<a class="headerlink" href="#id51" title="Permalink to this headline">¶</a></h3>
+<section id="id53">
+<h3>Changed<a class="headerlink" href="#id53" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Logging output improved.</p></li>
 <li><p>Traceback not shown for CLI use.</p></li>
 </ul>
 </section>
-<section id="id52">
-<h3>Fixed<a class="headerlink" href="#id52" title="Permalink to this headline">¶</a></h3>
+<section id="id54">
+<h3>Fixed<a class="headerlink" href="#id54" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Occurences where output folder not being deleted.</p></li>
 </ul>
 </section>
 </section>
-<section id="id53">
-<h2>[0.10] - 2021-12-22<a class="headerlink" href="#id53" title="Permalink to this headline">¶</a></h2>
-<section id="id54">
-<h3>New<a class="headerlink" href="#id54" title="Permalink to this headline">¶</a></h3>
+<section id="id55">
+<h2>[0.10] - 2021-12-22<a class="headerlink" href="#id55" title="Permalink to this heading">#</a></h2>
+<section id="id56">
+<h3>New<a class="headerlink" href="#id56" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">tables.csv</span></code> input in order to control tab names. <a class="reference external" href="https://flatterer.opendata.coop/options.html#tables-file">Tables File option</a></p></li>
 <li><p>Beginning to use logging.</p></li>
 </ul>
 </section>
-<section id="id55">
-<h3>Changed<a class="headerlink" href="#id55" title="Permalink to this headline">¶</a></h3>
+<section id="id57">
+<h3>Changed<a class="headerlink" href="#id57" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Better handling of long excel sheet names names. See https://github.com/kindly/flatterer/issues/12</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">field_type</span></code> no longer required in fields.csv.</p></li>
@@ -435,8 +511,8 @@
 <li><p>More human readable error messages.</p></li>
 </ul>
 </section>
-<section id="id56">
-<h3>Fixed<a class="headerlink" href="#id56" title="Permalink to this headline">¶</a></h3>
+<section id="id58">
+<h3>Fixed<a class="headerlink" href="#id58" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Bad characters in XLSX stripped and raise warning.</p></li>
 <li><p>Check limits on XLSX files and raise error if found.</p></li>
@@ -445,53 +521,53 @@
 </ul>
 </section>
 </section>
-<section id="id57">
-<h2>[0.9] - 2021-12-12<a class="headerlink" href="#id57" title="Permalink to this headline">¶</a></h2>
-<section id="id58">
-<h3>Fixed<a class="headerlink" href="#id58" title="Permalink to this headline">¶</a></h3>
+<section id="id59">
+<h2>[0.9] - 2021-12-12<a class="headerlink" href="#id59" title="Permalink to this heading">#</a></h2>
+<section id="id60">
+<h3>Fixed<a class="headerlink" href="#id60" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Removed unwrap on channel send, to remove possible panic.</p></li>
 </ul>
 </section>
-<section id="id59">
-<h3>Changed<a class="headerlink" href="#id59" title="Permalink to this headline">¶</a></h3>
+<section id="id61">
+<h3>Changed<a class="headerlink" href="#id61" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Table ordering of output in JSON input order.  Making <code class="docutils literal notranslate"><span class="pre">xlsx</span></code> and <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> table order reflect the input data.</p></li>
 <li><p>Lib has new <code class="docutils literal notranslate"><span class="pre">FlatFiles::new_with_dafualts()</span></code> to make using the library less verbose.</p></li>
 <li><p>Use insta for more tests.</p></li>
 </ul>
 </section>
-<section id="id60">
-<h3>New<a class="headerlink" href="#id60" title="Permalink to this headline">¶</a></h3>
+<section id="id62">
+<h3>New<a class="headerlink" href="#id62" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Lib has preview option, meaning CSV output will optionally only show specified number of lines.</p></li>
 </ul>
 </section>
 </section>
-<section id="id61">
-<h2>[0.8] - 2021-12-01<a class="headerlink" href="#id61" title="Permalink to this headline">¶</a></h2>
-<section id="id62">
-<h3>Changed<a class="headerlink" href="#id62" title="Permalink to this headline">¶</a></h3>
+<section id="id63">
+<h2>[0.8] - 2021-12-01<a class="headerlink" href="#id63" title="Permalink to this heading">#</a></h2>
+<section id="id64">
+<h3>Changed<a class="headerlink" href="#id64" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Paths to data in sqlite and postgres start at root of output.</p></li>
 <li><p>Clippy for linting and insta for tests.</p></li>
 </ul>
 </section>
 </section>
-<section id="id63">
-<h2>[0.7.1] - 2021-12-01<a class="headerlink" href="#id63" title="Permalink to this headline">¶</a></h2>
-<section id="id64">
-<h3>Changed<a class="headerlink" href="#id64" title="Permalink to this headline">¶</a></h3>
+<section id="id65">
+<h2>[0.7.1] - 2021-12-01<a class="headerlink" href="#id65" title="Permalink to this heading">#</a></h2>
+<section id="id66">
+<h3>Changed<a class="headerlink" href="#id66" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Do less work when just exporting Metadata.</p></li>
 <li><p>Minor speedup due to not using <code class="docutils literal notranslate"><span class="pre">format</span></code> so much.</p></li>
 </ul>
 </section>
 </section>
-<section id="id65">
-<h2>[0.7] - 2021-11-24<a class="headerlink" href="#id65" title="Permalink to this headline">¶</a></h2>
+<section id="id67">
+<h2>[0.7] - 2021-11-24<a class="headerlink" href="#id67" title="Permalink to this heading">#</a></h2>
 <section id="added">
-<h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<h3>Added<a class="headerlink" href="#added" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Ability to add <code class="docutils literal notranslate"><span class="pre">field_title</span></code> to <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> so you can rename column headings.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">schema-titles</span></code> option to get field names out of JSONSchema.</p></li>
@@ -499,10 +575,10 @@
 </ul>
 </section>
 </section>
-<section id="id66">
-<h2>[0.6.2] - 2021-11-24<a class="headerlink" href="#id66" title="Permalink to this headline">¶</a></h2>
-<section id="id67">
-<h3>Fixed<a class="headerlink" href="#id67" title="Permalink to this headline">¶</a></h3>
+<section id="id68">
+<h2>[0.6.2] - 2021-11-24<a class="headerlink" href="#id68" title="Permalink to this heading">#</a></h2>
+<section id="id69">
+<h3>Fixed<a class="headerlink" href="#id69" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Change to pypi metadata</p></li>
 <li><p>Tests run in action</p></li>
@@ -510,28 +586,28 @@
 </ul>
 </section>
 </section>
-<section id="id68">
-<h2>[0.6.1] - 2021-11-24<a class="headerlink" href="#id68" title="Permalink to this headline">¶</a></h2>
-<section id="id69">
-<h3>Fixed<a class="headerlink" href="#id69" title="Permalink to this headline">¶</a></h3>
+<section id="id70">
+<h2>[0.6.1] - 2021-11-24<a class="headerlink" href="#id70" title="Permalink to this heading">#</a></h2>
+<section id="id71">
+<h3>Fixed<a class="headerlink" href="#id71" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Regression in speed due to new error handling</p></li>
 </ul>
 </section>
 </section>
-<section id="id70">
-<h2>[0.6] - 2021-11-23<a class="headerlink" href="#id70" title="Permalink to this headline">¶</a></h2>
-<section id="id71">
-<h3>Changed<a class="headerlink" href="#id71" title="Permalink to this headline">¶</a></h3>
+<section id="id72">
+<h2>[0.6] - 2021-11-23<a class="headerlink" href="#id72" title="Permalink to this heading">#</a></h2>
+<section id="id73">
+<h3>Changed<a class="headerlink" href="#id73" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>New error handling using <code class="docutils literal notranslate"><span class="pre">anyhow</span></code>, giving errors more context.</p></li>
 </ul>
 </section>
 </section>
-<section id="id72">
-<h2>[0.5] - 2021-11-22<a class="headerlink" href="#id72" title="Permalink to this headline">¶</a></h2>
-<section id="id73">
-<h3>Added<a class="headerlink" href="#id73" title="Permalink to this headline">¶</a></h3>
+<section id="id74">
+<h2>[0.5] - 2021-11-22<a class="headerlink" href="#id74" title="Permalink to this heading">#</a></h2>
+<section id="id75">
+<h3>Added<a class="headerlink" href="#id75" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#schema">Schema option</a> to supply JSONSchema, to make field order the same as schema.</p></li>
 <li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#table-prefix">Table prefix option</a> to namespece exported tables.</p></li>
@@ -539,20 +615,20 @@
 </ul>
 </section>
 </section>
-<section id="id74">
-<h2>[0.4] - 2021-11-20<a class="headerlink" href="#id74" title="Permalink to this headline">¶</a></h2>
-<section id="id75">
-<h3>Added<a class="headerlink" href="#id75" title="Permalink to this headline">¶</a></h3>
+<section id="id76">
+<h2>[0.4] - 2021-11-20<a class="headerlink" href="#id76" title="Permalink to this heading">#</a></h2>
+<section id="id77">
+<h3>Added<a class="headerlink" href="#id77" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Postgresql and sqlite scripts to load CSV data into databases.</p></li>
 <li><p>Wheel builds for Windows and MacOS, automatically published using github actions.</p></li>
 </ul>
 </section>
 </section>
-<section id="id76">
-<h2>[0.3] - 2021-10-25<a class="headerlink" href="#id76" title="Permalink to this headline">¶</a></h2>
-<section id="id77">
-<h3>Added<a class="headerlink" href="#id77" title="Permalink to this headline">¶</a></h3>
+<section id="id78">
+<h2>[0.3] - 2021-10-25<a class="headerlink" href="#id78" title="Permalink to this heading">#</a></h2>
+<section id="id79">
+<h3>Added<a class="headerlink" href="#id79" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#inline-one-to-one">Inline One to One option</a> to mean that if an array only has one item in for all the data then treat it as sub-object.</p></li>
 </ul>
@@ -560,7 +636,8 @@
 </section>
 </section>
 
-      </article>
+        </article>
+      </div>
       <footer>
         
         <div class="related-pages">
@@ -571,10 +648,10 @@
                 </div>
                 <div class="title">Development</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="web.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -585,19 +662,19 @@
               </div>
             </a>
         </div>
-
-        <div class="related-information">
-              Copyright &#169; 2021-2022, David Raznick
-            |
-            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
-              and
-              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            |
-            <a class="muted-link" href="_sources/changelog.md.txt"
-               rel="nofollow">
-              Show Source
-            </a>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2021-2022, David Raznick
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
         </div>
         
       </footer>
@@ -608,163 +685,167 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Change Log</a><ul>
-<li><a class="reference internal" href="#id1">[0.17.0] - 2022-12-03</a><ul>
-<li><a class="reference internal" href="#new">New</a></li>
+<li><a class="reference internal" href="#id1">[0.17.1] - 2022-01-07</a><ul>
 <li><a class="reference internal" href="#fixed">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id2">[0.16.2] - 2022-10-25</a><ul>
-<li><a class="reference internal" href="#id3">New</a></li>
+<li><a class="reference internal" href="#id2">[0.17.0] - 2022-12-03</a><ul>
+<li><a class="reference internal" href="#new">New</a></li>
+<li><a class="reference internal" href="#id3">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id4">[0.16.2] - 2022-10-16</a><ul>
-<li><a class="reference internal" href="#id5">Fixed</a></li>
+<li><a class="reference internal" href="#id4">[0.16.2] - 2022-10-25</a><ul>
+<li><a class="reference internal" href="#id5">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">[0.16.1] - 2022-10-16</a><ul>
+<li><a class="reference internal" href="#id6">[0.16.2] - 2022-10-16</a><ul>
 <li><a class="reference internal" href="#id7">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id8">[0.16.0] - 2022-07-27</a><ul>
-<li><a class="reference internal" href="#id9">New</a></li>
+<li><a class="reference internal" href="#id8">[0.16.1] - 2022-10-16</a><ul>
+<li><a class="reference internal" href="#id9">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id10">[0.15.0] - 2022-07-27</a><ul>
+<li><a class="reference internal" href="#id10">[0.16.0] - 2022-07-27</a><ul>
 <li><a class="reference internal" href="#id11">New</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">[0.15.0] - 2022-07-27</a><ul>
+<li><a class="reference internal" href="#id13">New</a></li>
 <li><a class="reference internal" href="#changed">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id12">[0.14.2] - 2022-07-27</a><ul>
-<li><a class="reference internal" href="#id13">New</a></li>
+<li><a class="reference internal" href="#id14">[0.14.2] - 2022-07-27</a><ul>
+<li><a class="reference internal" href="#id15">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id14">[0.14.1] - 2022-07-23</a><ul>
-<li><a class="reference internal" href="#id15">Fixed</a></li>
+<li><a class="reference internal" href="#id16">[0.14.1] - 2022-07-23</a><ul>
+<li><a class="reference internal" href="#id17">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id16">[0.14.0] - 2022-07-22</a><ul>
-<li><a class="reference internal" href="#id17">New</a></li>
+<li><a class="reference internal" href="#id18">[0.14.0] - 2022-07-22</a><ul>
+<li><a class="reference internal" href="#id19">New</a></li>
 <li><a class="reference internal" href="#removed">Removed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id18">[0.13.2] - 2022-06-24</a><ul>
-<li><a class="reference internal" href="#id19">New</a></li>
+<li><a class="reference internal" href="#id20">[0.13.2] - 2022-06-24</a><ul>
+<li><a class="reference internal" href="#id21">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id20">[0.13.1] - 2022-05-27</a></li>
-<li><a class="reference internal" href="#id21">[0.13.0] - 2022-04-28</a><ul>
-<li><a class="reference internal" href="#id22">New</a></li>
-<li><a class="reference internal" href="#id23">Changed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id24">[0.12.12] - 2022-04-15</a><ul>
+<li><a class="reference internal" href="#id22">[0.13.1] - 2022-05-27</a></li>
+<li><a class="reference internal" href="#id23">[0.13.0] - 2022-04-28</a><ul>
+<li><a class="reference internal" href="#id24">New</a></li>
 <li><a class="reference internal" href="#id25">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id26">[0.12.11] - 2022-04-09</a><ul>
+<li><a class="reference internal" href="#id26">[0.12.12] - 2022-04-15</a><ul>
 <li><a class="reference internal" href="#id27">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id28">[0.12.10] - 2022-03-21</a><ul>
-<li><a class="reference internal" href="#id29">Fixed</a></li>
+<li><a class="reference internal" href="#id28">[0.12.11] - 2022-04-09</a><ul>
+<li><a class="reference internal" href="#id29">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id30">[0.12.9] - 2022-03-07</a><ul>
+<li><a class="reference internal" href="#id30">[0.12.10] - 2022-03-21</a><ul>
 <li><a class="reference internal" href="#id31">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id32">[0.12.8] - 2022-03-01</a><ul>
-<li><a class="reference internal" href="#id33">Changed</a></li>
+<li><a class="reference internal" href="#id32">[0.12.9] - 2022-03-07</a><ul>
+<li><a class="reference internal" href="#id33">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id34">[0.12.7] - 2022-02-27</a><ul>
-<li><a class="reference internal" href="#id35">Fixed</a></li>
+<li><a class="reference internal" href="#id34">[0.12.8] - 2022-03-01</a><ul>
+<li><a class="reference internal" href="#id35">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id36">[0.12.6] - 2022-02-26</a><ul>
+<li><a class="reference internal" href="#id36">[0.12.7] - 2022-02-27</a><ul>
 <li><a class="reference internal" href="#id37">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id38">[0.12.4] - 2022-02-18</a><ul>
-<li><a class="reference internal" href="#id39">Changed</a></li>
+<li><a class="reference internal" href="#id38">[0.12.6] - 2022-02-26</a><ul>
+<li><a class="reference internal" href="#id39">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id40">[0.12.3] - 2022-02-15</a><ul>
-<li><a class="reference internal" href="#id41">Fixed</a></li>
+<li><a class="reference internal" href="#id40">[0.12.4] - 2022-02-18</a><ul>
+<li><a class="reference internal" href="#id41">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id42">[0.12.1] - 2022-02-15</a><ul>
+<li><a class="reference internal" href="#id42">[0.12.3] - 2022-02-15</a><ul>
 <li><a class="reference internal" href="#id43">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id44">[0.12] - 2022-02-02</a><ul>
-<li><a class="reference internal" href="#id45">New</a></li>
+<li><a class="reference internal" href="#id44">[0.12.1] - 2022-02-15</a><ul>
+<li><a class="reference internal" href="#id45">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id46">[0.11] - 2022-01-25</a><ul>
+<li><a class="reference internal" href="#id46">[0.12] - 2022-02-02</a><ul>
 <li><a class="reference internal" href="#id47">New</a></li>
-<li><a class="reference internal" href="#id48">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id49">[0.10.1] - 2021-12-22</a><ul>
-<li><a class="reference internal" href="#id50">New</a></li>
-<li><a class="reference internal" href="#id51">Changed</a></li>
-<li><a class="reference internal" href="#id52">Fixed</a></li>
+<li><a class="reference internal" href="#id48">[0.11] - 2022-01-25</a><ul>
+<li><a class="reference internal" href="#id49">New</a></li>
+<li><a class="reference internal" href="#id50">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id53">[0.10] - 2021-12-22</a><ul>
-<li><a class="reference internal" href="#id54">New</a></li>
-<li><a class="reference internal" href="#id55">Changed</a></li>
-<li><a class="reference internal" href="#id56">Fixed</a></li>
+<li><a class="reference internal" href="#id51">[0.10.1] - 2021-12-22</a><ul>
+<li><a class="reference internal" href="#id52">New</a></li>
+<li><a class="reference internal" href="#id53">Changed</a></li>
+<li><a class="reference internal" href="#id54">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id57">[0.9] - 2021-12-12</a><ul>
+<li><a class="reference internal" href="#id55">[0.10] - 2021-12-22</a><ul>
+<li><a class="reference internal" href="#id56">New</a></li>
+<li><a class="reference internal" href="#id57">Changed</a></li>
 <li><a class="reference internal" href="#id58">Fixed</a></li>
-<li><a class="reference internal" href="#id59">Changed</a></li>
-<li><a class="reference internal" href="#id60">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id61">[0.8] - 2021-12-01</a><ul>
-<li><a class="reference internal" href="#id62">Changed</a></li>
+<li><a class="reference internal" href="#id59">[0.9] - 2021-12-12</a><ul>
+<li><a class="reference internal" href="#id60">Fixed</a></li>
+<li><a class="reference internal" href="#id61">Changed</a></li>
+<li><a class="reference internal" href="#id62">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id63">[0.7.1] - 2021-12-01</a><ul>
+<li><a class="reference internal" href="#id63">[0.8] - 2021-12-01</a><ul>
 <li><a class="reference internal" href="#id64">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id65">[0.7] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id65">[0.7.1] - 2021-12-01</a><ul>
+<li><a class="reference internal" href="#id66">Changed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id67">[0.7] - 2021-11-24</a><ul>
 <li><a class="reference internal" href="#added">Added</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id66">[0.6.2] - 2021-11-24</a><ul>
-<li><a class="reference internal" href="#id67">Fixed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id68">[0.6.1] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id68">[0.6.2] - 2021-11-24</a><ul>
 <li><a class="reference internal" href="#id69">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id70">[0.6] - 2021-11-23</a><ul>
-<li><a class="reference internal" href="#id71">Changed</a></li>
+<li><a class="reference internal" href="#id70">[0.6.1] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id71">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id72">[0.5] - 2021-11-22</a><ul>
-<li><a class="reference internal" href="#id73">Added</a></li>
+<li><a class="reference internal" href="#id72">[0.6] - 2021-11-23</a><ul>
+<li><a class="reference internal" href="#id73">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id74">[0.4] - 2021-11-20</a><ul>
+<li><a class="reference internal" href="#id74">[0.5] - 2021-11-22</a><ul>
 <li><a class="reference internal" href="#id75">Added</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id76">[0.3] - 2021-10-25</a><ul>
+<li><a class="reference internal" href="#id76">[0.4] - 2021-11-20</a><ul>
 <li><a class="reference internal" href="#id77">Added</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id78">[0.3] - 2021-10-25</a><ul>
+<li><a class="reference internal" href="#id79">Added</a></li>
 </ul>
 </li>
 </ul>
@@ -777,11 +858,13 @@
       
       
     </aside>
-  </main>
+  </div>
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/scripts/main.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/furo.js"></script>
     </body>
 </html>

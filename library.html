@@ -1,62 +1,58 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Outputs" href="outputs.html" /><link rel="prev" title="Option Reference" href="options.html" />
 
-    <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
         <title>Python Library - flatterer 0.17 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
     
 
 
 <style>
-  :root {
+  body {
     --color-code-background: #f8f8f8;
   --color-code-foreground: black;
   
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
     }
-  }
-
-  /* For allowing end-user-specific overrides */
-  .override-light {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
-  
-  }
-  .override-dark {
-    --color-code-background: #202020;
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+      }
+    }
   }
-</style><link media="(prefers-color-scheme: dark)" rel="stylesheet" href="_static/pygments_dark.css"></head>
-  <body dir="">
+</style></head>
+  <body>
     
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-      <path stroke="none" d="M0 0h24v24H0z"/>
-      <line x1="4" y1="6" x2="20" y2="6" />
-      <line x1="10" y1="12" x2="20" y2="12" />
-      <line x1="6" y1="18" x2="20" y2="18" />
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
     </svg>
   </symbol>
   <symbol id="svg-menu" viewBox="0 0 24 24">
     <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-      class="feather feather-menu">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
       <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -64,18 +60,57 @@
   </symbol>
   <symbol id="svg-arrow-right" viewBox="0 0 24 24">
     <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-      class="feather feather-chevron-right">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
       <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
     </svg>
   </symbol>
 </svg>
 
 <input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
 <input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation"></label>
-<label class="overlay toc-overlay" for="__toc"></label>
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
 
 
 
@@ -83,6 +118,7 @@
   <header class="mobile-header">
     <div class="header-left">
       <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
         <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
       </label>
     </div>
@@ -90,7 +126,16 @@
       <a href="index.html"><div class="brand">flatterer 0.17 documentation</div></a>
     </div>
     <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
     </div>
@@ -103,11 +148,12 @@
   
   <span class="sidebar-brand-text">flatterer 0.17 documentation</span>
   
-</a><form class="sidebar-search-container" method="get" action="search.html">
-  <input class="sidebar-search" placeholder=Search name="q">
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
-</form><div class="sidebar-scroll"><div class="sidebar-tree">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Python Library</a></li>
@@ -119,71 +165,91 @@
 
 </div>
 </div>
+
       </div>
       
     </div>
   </aside>
-  <main class="main">
+  <div class="main">
     <div class="content">
-      <article role="main">
-        <label class="toc-overlay-icon toc-content-icon" for="__toc">
-          <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-        </label>
-        <section class="tex2jax_ignore mathjax_ignore" id="python-library">
-<h1>Python Library<a class="headerlink" href="#python-library" title="Permalink to this headline">¶</a></h1>
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="python-library">
+<h1>Python Library<a class="headerlink" href="#python-library" title="Permalink to this heading">#</a></h1>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'games.json'</span><span class="p">,</span> <span class="s1">'games_dir'</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;games.json&#39;</span><span class="p">,</span> <span class="s1">&#39;games_dir&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If the first argument to <code class="docutils literal notranslate"><span class="pre">flatten</span></code> is a string (as in the above example), it represents the path to the input JSON file.  However, it is also possible to supply an iterator of python dicts:</p>
 <p>i.e</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
-<span class="n">list_of_objects</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">},</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">}]</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">list_of_objects</span><span class="p">,</span> <span class="s1">'games_dir'</span><span class="p">)</span>
+<span class="n">list_of_objects</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">}]</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">list_of_objects</span><span class="p">,</span> <span class="s1">&#39;games_dir&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For more complicated cases, where you want a stream of data, it is possible make a generator to feed data into flatterer.  This example uses <code class="docutils literal notranslate"><span class="pre">ijson</span></code> to stream all objects from a JSON array in a file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="k">def</span> <span class="nf">array_item_generator</span><span class="p">():</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'fixtures/basic.json'</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ijson</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">'item'</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;fixtures/basic.json&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ijson</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;item&#39;</span><span class="p">):</span>
             <span class="o">//</span> <span class="n">you</span> <span class="n">could</span> <span class="n">manipulate</span> <span class="n">items</span> <span class="n">to</span> <span class="n">modify</span> <span class="n">data</span> <span class="k">as</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">going</span> <span class="ow">in</span><span class="o">.</span>
             <span class="k">yield</span> <span class="n">item</span>
 
-<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">array_item_generator</span><span class="p">(),</span> <span class="s1">'games_dir'</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">array_item_generator</span><span class="p">(),</span> <span class="s1">&#39;games_dir&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This can be useful if you need to modify the data before it is processed, or if you are streaming data from a non-file source such as a database.</p>
 <p>It is also possible to supply an iterator of bytes or strings that will be interpreted as JSON.</p>
 <p>Also you can add the <code class="docutils literal notranslate"><span class="pre">files=True</span></code> argument to supply a list of file names.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="s1">'games.json'</span><span class="p">,</span><span class="s1">'games2.json'</span><span class="p">],</span> <span class="s1">'games_dir'</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="s1">&#39;games.json&#39;</span><span class="p">,</span><span class="s1">&#39;games2.json&#39;</span><span class="p">],</span> <span class="s1">&#39;games_dir&#39;</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>All other options are the same as the command line tool described in <a class="reference internal" href="options.html#option-reference"><span class="std std-doc">Option Reference</span></a>.</p>
 <section id="output">
-<h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
+<h3>Output<a class="headerlink" href="#output" title="Permalink to this heading">#</a></h3>
 <p>The output from running <code class="docutils literal notranslate"><span class="pre">flatten</span></code> is a dict which contains metadata about the conversion:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'games.json'</span><span class="p">,</span> <span class="s1">'games_dir'</span><span class="p">,</span> <span class="n">sqlite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlsx</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;games.json&#39;</span><span class="p">,</span> <span class="s1">&#39;games_dir&#39;</span><span class="p">,</span> <span class="n">sqlite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xlsx</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
 <span class="go">{</span>
-<span class="go">    "fields": "DataFrame - table_name, field_name, field_type, fiel... (5 fields)"</span>
-<span class="go">    "tables": "DataFrame - table_name, table_title"</span>
-<span class="go">    "data": {</span>
-<span class="go">        "main": "File Path - games_dir/csv/main.csv"</span>
-<span class="go">        "developer": "File Path - games_dir/csv/developer.csv"</span>
-<span class="go">        "platforms": "File Path - games_dir/csv/platforms.csv"</span>
+<span class="go">    &quot;fields&quot;: &quot;DataFrame - table_name, field_name, field_type, fiel... (5 fields)&quot;</span>
+<span class="go">    &quot;tables&quot;: &quot;DataFrame - table_name, table_title&quot;</span>
+<span class="go">    &quot;data&quot;: {</span>
+<span class="go">        &quot;main&quot;: &quot;File Path - games_dir/csv/main.csv&quot;</span>
+<span class="go">        &quot;developer&quot;: &quot;File Path - games_dir/csv/developer.csv&quot;</span>
+<span class="go">        &quot;platforms&quot;: &quot;File Path - games_dir/csv/platforms.csv&quot;</span>
 <span class="go">    }</span>
-<span class="go">    "sqlite": "File Path - games_dir/sqlite.db"</span>
-<span class="go">    "xlsx": "File Path - games_dir/output.xlsx"</span>
+<span class="go">    &quot;sqlite&quot;: &quot;File Path - games_dir/sqlite.db&quot;</span>
+<span class="go">    &quot;xlsx&quot;: &quot;File Path - games_dir/output.xlsx&quot;</span>
 <span class="go">}</span>
 </pre></div>
 </div>
 <p>So output[‘fields’] contains a pandas DataFrame with information about the fields generated by flatterer:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">'fields'</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;fields&#39;</span><span class="p">])</span>
 <span class="go">   table_name   field_name field_type  field_title  count</span>
 <span class="go">0        main        _link       text        _link      2</span>
 <span class="go">1        main           id     number           id      2</span>
@@ -200,7 +266,7 @@
 </pre></div>
 </div>
 <p>Similar for <code class="docutils literal notranslate"><span class="pre">output['tables']</span></code> showing the tables in the data.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">'tables'</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;tables&#39;</span><span class="p">])</span>
 <span class="go">  table_name table_title</span>
 <span class="go">0       main        main</span>
 <span class="go">1  developer   developer</span>
@@ -214,26 +280,26 @@
 </ul>
 </section>
 <section id="creating-pandas-dataframes">
-<h3>Creating pandas DataFrames<a class="headerlink" href="#creating-pandas-dataframes" title="Permalink to this headline">¶</a></h3>
+<h3>Creating pandas DataFrames<a class="headerlink" href="#creating-pandas-dataframes" title="Permalink to this heading">#</a></h3>
 <p>You can do this by setting <code class="docutils literal notranslate"><span class="pre">dataframe=True</span></code></p>
 <p>This creates DataFrames for all tables generated. This option is for the python library only.</p>
 <p><strong>Warning: This will cause issues with large datasets as the DataFrames will be put in memory</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">'games.json'</span><span class="p">,</span> <span class="n">dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;games.json&#39;</span><span class="p">,</span> <span class="n">dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
 <span class="go">{</span>
-<span class="go">    "fields": "DataFrame - table_name, field_name, field_type, fiel... (5 fields)"</span>
-<span class="go">    "tables": "DataFrame - table_name, table_title"</span>
-<span class="go">    "data": {</span>
-<span class="go">        "main": "DataFrame - _link, id, title, releaseDate, rating_co... (6 fields)"</span>
-<span class="go">        "developer": "DataFrame - _link, _link_main, name"</span>
-<span class="go">        "platforms": "DataFrame - _link, _link_main, name"</span>
+<span class="go">    &quot;fields&quot;: &quot;DataFrame - table_name, field_name, field_type, fiel... (5 fields)&quot;</span>
+<span class="go">    &quot;tables&quot;: &quot;DataFrame - table_name, table_title&quot;</span>
+<span class="go">    &quot;data&quot;: {</span>
+<span class="go">        &quot;main&quot;: &quot;DataFrame - _link, id, title, releaseDate, rating_co... (6 fields)&quot;</span>
+<span class="go">        &quot;developer&quot;: &quot;DataFrame - _link, _link_main, name&quot;</span>
+<span class="go">        &quot;platforms&quot;: &quot;DataFrame - _link, _link_main, name&quot;</span>
 <span class="go">    }</span>
 <span class="go">}</span>
 </pre></div>
 </div>
 <p>As you can see with this option you do not need to supply an output directory and will work in your systems temporary space.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">data</span></code> key in the output now contains dataframes, e.g</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">'data'</span><span class="p">][</span><span class="s1">'main'</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;main&#39;</span><span class="p">])</span>
 <span class="go">   _link  id   title releaseDate rating_code rating_name</span>
 <span class="go">0      0   1  A Game  2015-01-01           E    Everyone</span>
 <span class="go">1      1   2  B Game  2016-01-01           E    Everyone</span>
@@ -243,7 +309,8 @@
 </section>
 </section>
 
-      </article>
+        </article>
+      </div>
       <footer>
         
         <div class="related-pages">
@@ -254,10 +321,10 @@
                 </div>
                 <div class="title">Outputs</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="options.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -268,19 +335,19 @@
               </div>
             </a>
         </div>
-
-        <div class="related-information">
-              Copyright &#169; 2021-2022, David Raznick
-            |
-            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
-              and
-              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            |
-            <a class="muted-link" href="_sources/library.md.txt"
-               rel="nofollow">
-              Show Source
-            </a>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2021-2022, David Raznick
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
         </div>
         
       </footer>
@@ -291,7 +358,7 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -313,11 +380,13 @@
       
       
     </aside>
-  </main>
+  </div>
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/scripts/main.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/furo.js"></script>
     </body>
 </html>
