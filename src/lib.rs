@@ -72,6 +72,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         pushdown: Vec<String>,
         sql_scripts: bool,
         evolve: bool,
+        no_link: bool,
     ) -> Result<()> {
 
         let mut op = Options::default();
@@ -105,6 +106,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.pushdown = pushdown;
         op.sql_scripts = sql_scripts;
         op.evolve = evolve;
+        op.no_link = no_link;
 
         let mut readers = vec![];
 
@@ -169,7 +171,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         drop_table: bool,
         pushdown: Vec<String>,
         sql_scripts: bool,
-        evolve: bool
+        evolve: bool,
+        no_link: bool
     ) -> Result<()> {
         let mut options = Options::default();
 
@@ -199,6 +202,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         options.pushdown = pushdown;
         options.sql_scripts = sql_scripts;
         options.evolve = evolve;
+        options.no_link = no_link;
 
         let final_output_path = PathBuf::from(output_dir);
         let parts_path = final_output_path.join("parts");

@@ -21,6 +21,7 @@ Options:
   --sqlite-path TEXT          Output sqlite file to this file
   -d, --pushdown TEXT         Object keys and values, with this key name, will be
                               copied down to child tables
+  -n, --no-link               Do not create `_link` fields
   -m, --main-table-name TEXT  Name of main table, defaults to name of the file
                               without the extension
   -p, --path TEXT             Key name of where json array starts, default top
@@ -193,6 +194,24 @@ import flatterer
 flatterer.flatten('inputfile.json', 'ouput_dir', pushdown=['id','name'])
 ```
 
+## No Link Fields
+
+Do not create any `_link` fields. This could be useful if `pushdown` pushes ids into 
+child tables and you trust that this will be sufficient to link the tables back together.
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY -n
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', pushdown=['id'], no_link=True)
+```
 
 ## Path to JSON Array
 

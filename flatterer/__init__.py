@@ -90,6 +90,7 @@ def flatten(
     pushdown=[],
     sql_scripts=False,
     evolve=False,
+    no_link=False
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -134,7 +135,8 @@ def flatten(
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, path, json_stream, ndjson, 
-                       sqlite_path, threads, log_error, postgres, postgres_schema, drop, pushdown, sql_scripts, evolve)
+                       sqlite_path, threads, log_error, postgres, postgres_schema, 
+                       drop, pushdown, sql_scripts, evolve, no_link)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
@@ -143,7 +145,7 @@ def flatten(
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, sqlite_path, threads, log_error, 
-                       postgres, postgres_schema, drop, pushdown, sql_scripts, evolve)
+                       postgres, postgres_schema, drop, pushdown, sql_scripts, evolve, no_link)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 
@@ -188,6 +190,7 @@ def iterator_flatten(*args, **kw):
 @click.option('--postgres', default="", help='Connection string to postgres. If supplied will load data into postgres')
 @click.option('--sqlite-path', default="", help='Output sqlite file to this file')
 @click.option('--pushdown', '-d', multiple=True, help='Object keys and values, with this key name, will be copied down to child tables')
+@click.option('--no-link', '-n', is_flag=True, help='Do not create `_link` fields')
 @click.option('--main-table-name', '-m', default=None,
               help='Name of main table, defaults to name of the file without the extension')
 @click.option('--path', '-p', default='', help='Key name of where json array starts, default top level array')
@@ -251,7 +254,8 @@ def cli(
     evolve=False,
     drop=False,
     pushdown=[],
-    id_prefix=""
+    id_prefix="",
+    no_link=False
 ):
     if web:
         import pathlib
@@ -313,6 +317,7 @@ def cli(
                 drop=drop,
                 pushdown=pushdown,
                 id_prefix=id_prefix,
-                sqlite_path=sqlite_path)
+                sqlite_path=sqlite_path,
+                no_link=no_link)
     except IOError:
         pass
