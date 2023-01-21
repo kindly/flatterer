@@ -4,10 +4,16 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.18.0] - 2022-01-07
+
+### New
+- Better type guessing for database inserts.
+- `no_link` option that removes `_link` fields in the output.
+
 ## [0.17.1] - 2022-01-07
 
 ### Fixed 
-- Trucate cell that is larger than xlsx allow
+- Truncate cell that is larger than xlsx allows.
 - Allow more rows in xlsx in non threaded mode.
 
 ## [0.17.0] - 2022-12-03
