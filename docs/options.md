@@ -9,9 +9,10 @@ flatterer --help
 output looks like
 
 ``` 
-Usage: flatterer [OPTIONS] INPUT_FILE OUTPUT_DIRECTORY
+Usage: flatterer [OPTIONS] [INPUT_FILE] [OUTPUT_DIRECTORY]
 
 Options:
+  --web                       Load web based version
   --csv / --nocsv             Output CSV files, default true
   --xlsx / --noxlsx           Output XLSX file, default false
   --sqlite / --nosqlite       Output sqlite.db file, default false
@@ -19,14 +20,17 @@ Options:
   --postgres TEXT             Connection string to postgres. If supplied will
                               load data into postgres
   --sqlite-path TEXT          Output sqlite file to this file
-  -d, --pushdown TEXT         Object keys and values, with this key name, will be
-                              copied down to child tables
+  -d, --pushdown TEXT         Object keys and values, with this key name, will
+                              be copied down to child tables
   -n, --no-link               Do not create `_link` fields
   -m, --main-table-name TEXT  Name of main table, defaults to name of the file
                               without the extension
   -p, --path TEXT             Key name of where json array starts, default top
                               level array
-  -j, --json-lines            Is file a jsonlines file, default false
+  -j, --ndjson                Is file a new line delemited JSON file, default
+                              false
+  --json-stream               File contains stream of json object, default
+                              false
   --force                     Delete output directory if it exists, then run
                               command, default False
   -f, --fields TEXT           fields.csv file to use
@@ -39,20 +43,21 @@ Options:
   -t, --table-prefix TEXT     Prefix to add to all table names
   -a, --path-separator TEXT   Seperator to denote new path within the input
                               JSON. Defaults to `_`
-  -i, --schema-titles TEXT    Use titles from JSONSchema in the given way.
+  -h, --schema-titles TEXT    Use titles from JSONSchema in the given way.
                               Options are `full`, `slug`, `underscore_slug`.
-                              Default to not using titles.
+                              Default to not using titles
   -w, --preview INTEGER       Only output this `preview` amount of lines in
                               final results
   --threads INTEGER           Number of threads, default 1, 0 means use number
                               of CPUs
   --postgres-schema TEXT      When loading to postgres, put all tables into
-                              this schema
+                              this schema.
   --evolve                    When loading to postgres or sqlite, evolve
                               tables to fit data
-  --drop                      When loading to postgres, drop table if already
-                              exists.
-  --help                      Show this message and exit
+  --drop                      When loading to postgres or sqlite, drop table
+                              if already exists.
+  --id-prefix TEXT            Prefix for all `_link` id fields
+  --help                      Show this message and exit.
 ```
 
 ## Output Formats
