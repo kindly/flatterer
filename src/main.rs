@@ -1,9 +1,7 @@
 use clap::{arg, Command};
 use env_logger::Env;
 use eyre::Result;
-use libflatterer::{flatten, Options, TERMINATE};
-use std::fs::File;
-use std::io::BufReader;
+use libflatterer::{flatten_all, Options, TERMINATE};
 use std::path::PathBuf;
 use std::sync::atomic::Ordering;
 
@@ -54,7 +52,6 @@ fn main() -> Result<()> {
         eprintln!("Can not find file {}", input);
         return Ok(());
     }
-    let input = BufReader::new(File::open(input)?);
 
     let output_dir = matches.value_of("OUT_DIR").unwrap(); //ok as parser will detect
 
@@ -118,7 +115,7 @@ fn main() -> Result<()> {
         options.tables_csv = tables.into();
     };
 
-    flatten(input, output_dir.into(), options)?;
+    flatten_all(vec![input.into()], output_dir.into(), options)?;
 
     log::info!("All finished with no errors!");
 

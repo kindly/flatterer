@@ -90,7 +90,11 @@ def flatten(
     pushdown=[],
     sql_scripts=False,
     evolve=False,
-    no_link=False
+    no_link=False,
+    stats=False,
+    low_disk=False,
+    gzip_input=False,
+    json_path="",
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -128,6 +132,8 @@ def flatten(
         
         if sqlite_path:
             sqlite = True
+
+        s3 = True if output_dir.startswith("s3://") else False
         
         if method == 'flatten':
             flatten_rs(input, output_dir, csv, xlsx, sqlite, parquet,
@@ -136,18 +142,26 @@ def flatten(
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, path, json_stream, ndjson, 
                        sqlite_path, threads, log_error, postgres, postgres_schema, 
-                       drop, pushdown, sql_scripts, evolve, no_link)
+                       drop, pushdown, sql_scripts, evolve, no_link, stats, low_disk, gzip_input, json_path)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
+            if s3:
+                raise AttributeError("s3 output not available when supplying an iterator")
+                
             iterator_flatten_rs(bytes_generator(input), output_dir, csv, xlsx, sqlite, parquet,
                        main_table_name, tables_csv, only_tables, fields_csv, only_fields,
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, sqlite_path, threads, log_error, 
-                       postgres, postgres_schema, drop, pushdown, sql_scripts, evolve, no_link)
+                       postgres, postgres_schema, drop, pushdown, sql_scripts, evolve, 
+                       no_link, stats, low_disk, gzip_input, json_path)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
+
+
+        if s3:
+            return PrettyDict()
 
         output = PrettyDict(
             fields=pandas.read_csv(os.path.join(output_dir, 'fields.csv')),
@@ -218,14 +232,17 @@ def iterator_flatten(*args, **kw):
               help='Only output this `preview` amount of lines in final results')
 @click.option('--threads', default=1,
               help='Number of threads, default 1, 0 means use number of CPUs')
+@click.option('--json-path', default="",
+              help='JSON path within each object to use to filter which objects to select')
 @click.option('--postgres-schema', default="", help='When loading to postgres, put all tables into this schema.')
 @click.option('--evolve', is_flag=True, default=False, help='When loading to postgres or sqlite, evolve tables to fit data')
 @click.option('--drop', is_flag=True, default=False, help='When loading to postgres or sqlite, drop table if already exists.')
 @click.option('--id-prefix', default="", help='Prefix for all `_link` id fields')
-@click.argument('input_file', required=False)
-@click.argument('output_directory', required=False)
+@click.option('--stats', is_flag=True, default=False, help='Produce stats about the data in the datapackage.json file')
+@click.argument('inputs', required=False, nargs=-1)
+@click.argument('output_directory', required=True)
 def cli(
-    input_file,
+    inputs,
     output_directory,
     web=False,
     csv=True,
@@ -255,7 +272,9 @@ def cli(
     drop=False,
     pushdown=[],
     id_prefix="",
-    no_link=False
+    no_link=False,
+    stats=False,
+    json_path="",
 ):
     if web:
         import pathlib
@@ -269,7 +288,7 @@ def cli(
         web_rs()
         return
     
-    if not input_file:
+    if not inputs:
         click.echo("An input file is needed as first argument.")
         raise click.Abort
 
@@ -281,14 +300,14 @@ def cli(
     
 
     if not main_table_name:
-        main_table_name = input_file.split('/')[-1].split('.')[0]
+        main_table_name = 'main'
     
     path_list = []
     if path:
         path_list.append(path)
 
     try:
-        flatten(input_file,
+        flatten(inputs,
                 output_directory,
                 csv=csv,
                 xlsx=xlsx,
@@ -318,6 +337,9 @@ def cli(
                 pushdown=pushdown,
                 id_prefix=id_prefix,
                 sqlite_path=sqlite_path,
-                no_link=no_link)
+                no_link=no_link,
+                files=True,
+                stats=stats,
+                json_path=json_path)
     except IOError:
         pass

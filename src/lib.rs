@@ -1,7 +1,7 @@
 use crossbeam_channel::{bounded, Sender, Receiver};
 use csvs_convert::{merge_datapackage_with_options, datapackage_to_parquet_with_options, datapackage_to_sqlite_with_options};
-use eyre::{Result, WrapErr, eyre};
-use libflatterer::{flatten, Options, TERMINATE, FlatFiles};
+use eyre::{Result, eyre};
+use libflatterer::{flatten_all, Options, TERMINATE, FlatFiles};
 use serde_json::Value;
 use std::thread;
 use std::path::PathBuf;
@@ -9,8 +9,7 @@ use std::path::PathBuf;
 use env_logger::Env;
 use pyo3::prelude::*;
 use pyo3::types::PyIterator;
-use std::fs::{File, remove_dir_all};
-use std::io::BufReader;
+use std::fs::remove_dir_all;
 use std::sync::atomic::Ordering;
 
 #[pymodule]
@@ -73,6 +72,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         sql_scripts: bool,
         evolve: bool,
         no_link: bool,
+        stats: bool,
+        low_disk:bool,
+        gzip_input:bool,
+        json_path_selector: String
     ) -> Result<()> {
 
         let mut op = Options::default();
@@ -107,29 +110,12 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.sql_scripts = sql_scripts;
         op.evolve = evolve;
         op.no_link = no_link;
+        op.stats = stats;
+        op.low_disk = low_disk;
+        op.gzip_input = gzip_input;
+        op.json_path_selector = json_path_selector;
 
-        let mut readers = vec![];
-
-        for path in input_files {
-            match File::open(&path) {
-                Ok(input) => {
-                    readers.push(input);
-                    //file = BufReader::new(input);
-                }
-                Err(err) => {
-                    if log_error {
-                        log::error!("Can not open file `{}`: {}", path, &err)
-                    };
-                    let result: Result<()> = Err(err.into());
-                    return result.wrap_err_with(|| format!("Can not open file `{}`", path));
-                }
-            };
-        }
-        let input = BufReader::new(multi_reader::MultiReader::new(readers.iter()));
-
-        log::info!("Starting processing input.");
-
-        if let Err(err) = flatten(input, output_dir, op) {
+        if let Err(err) = flatten_all(input_files, output_dir, op) {
             if log_error {
                 log::error!("{}", err)
             };
@@ -172,7 +158,11 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         pushdown: Vec<String>,
         sql_scripts: bool,
         evolve: bool,
-        no_link: bool
+        no_link: bool,
+        stats: bool,
+        low_disk:bool,
+        gzip_input:bool,
+        json_path_selector: String
     ) -> Result<()> {
         let mut options = Options::default();
 
@@ -203,6 +193,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         options.sql_scripts = sql_scripts;
         options.evolve = evolve;
         options.no_link = no_link;
+        options.stats = stats;
+        options.low_disk = low_disk;
+        options.gzip_input = gzip_input;
+        options.json_path_selector = json_path_selector;
 
         let final_output_path = PathBuf::from(output_dir);
         let parts_path = final_output_path.join("parts");
