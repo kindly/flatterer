@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Web Interface" href="web.html" /><link rel="prev" title="Python Library" href="library.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="S3" href="s3.html" /><link rel="prev" title="Input Sources" href="inputs.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
         <title>Outputs - flatterer 0.18 documentation</title>
@@ -157,7 +157,9 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Python Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputs.html">Input Sources</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3.html">S3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="web.html">Web Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -228,11 +230,15 @@
 </section>
 <section id="xlsx">
 <h2>XLSX<a class="headerlink" href="#xlsx" title="Permalink to this heading">#</a></h2>
-<p>The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a tab per table.  Tab names are truncated to not go over the allowed limit.</p>
+<p>The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a sheet per table.  Sheet names are truncated to not go over the allowed limit.</p>
 </section>
 <section id="sqlite">
 <h2>SQLITE<a class="headerlink" href="#sqlite" title="Permalink to this heading">#</a></h2>
-<p>A <code class="docutils literal notranslate"><span class="pre">sqlite.db</span></code> is created in the output directory each csv file is put in its own table.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">sqlite.db</span></code> is created in the output directory where each csv file is put in its own table.</p>
+</section>
+<section id="postgres">
+<h2>POSTGRES<a class="headerlink" href="#postgres" title="Permalink to this heading">#</a></h2>
+<p>Data is created in the postgres database where each csv file is put in its own table.</p>
 </section>
 <section id="parquet">
 <h2>PARQUET<a class="headerlink" href="#parquet" title="Permalink to this heading">#</a></h2>
@@ -488,23 +494,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="web.html">
+          <a class="next-page" href="s3.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Web Interface</div>
+                <div class="title">S3</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="library.html">
+          <a class="prev-page" href="inputs.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Python Library</div>
+                <div class="title">Input Sources</div>
                 
               </div>
             </a>
@@ -542,6 +548,7 @@
 <li><a class="reference internal" href="#csv">CSV</a></li>
 <li><a class="reference internal" href="#xlsx">XLSX</a></li>
 <li><a class="reference internal" href="#sqlite">SQLITE</a></li>
+<li><a class="reference internal" href="#postgres">POSTGRES</a></li>
 <li><a class="reference internal" href="#parquet">PARQUET</a></li>
 <li><a class="reference internal" href="#fields-csv">fields.csv</a></li>
 <li><a class="reference internal" href="#tables-csv">tables.csv</a></li>

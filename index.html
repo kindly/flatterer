@@ -157,7 +157,9 @@
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Python Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputs.html">Input Sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3.html">S3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="web.html">Web Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -211,6 +213,7 @@
 <li><p>Memory efficient.  Uses a custom streaming JSON parser to mean that long list of objects nested with the JSON will be streamed, so not much data needs to be loaded into memory at once.</p></li>
 <li><p>Fast memory efficient output to CSV/XLSX/SQLITE/PARQUET/POSTGRES</p></li>
 <li><p>Uses best practice that has been learnt from flattening JSON countless times, such as generating keys to link one-to-many tables to their parents.</p></li>
+<li><p><a class="reference internal" href="s3.html#s3"><span class="std std-doc">S3 Support</span></a></p></li>
 </ul>
 <section id="install">
 <h3>Install<a class="headerlink" href="#install" title="Permalink to this heading">#</a></h3>
@@ -260,7 +263,9 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>games.json<span class="w"> </span>games_dir
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="options.html#option-reference"><span class="std std-doc">Option Reference</span></a> for details of additional command line options.</p>
+<p>See <a class="reference internal" href="options.html#option-reference"><span class="std std-doc">Option Reference</span></a> for details of additional command line options,
+<a class="reference internal" href="outputs.html#outputs"><span class="std std-doc">outputs</span></a> for information on the output formats and <a class="reference internal" href="inputs.html#input-sources"><span class="std std-doc">inputs</span></a>
+for more information on input sources.</p>
 </section>
 <section id="local-web-interface">
 <h4>Local web interface<a class="headerlink" href="#local-web-interface" title="Permalink to this heading">#</a></h4>
@@ -442,7 +447,6 @@ After editing this file then you can rerun the transform:</p>
 </div>
 <p>This can be useful for renameing columns, rearranging the field order or if you want to remove some fields the <code class="docutils literal notranslate"><span class="pre">--only-fields</span></code> flag will only include the fields in the edited file.</p>
 <p><code class="docutils literal notranslate"><span class="pre">datapackage.json</span></code> contains metadata in the <a class="reference external" href="https://specs.frictionlessdata.io/tabular-data-package/#language">Tabular Datapackge Spec</a></p>
-<p><a class="reference internal" href="outputs.html#outputs"><span class="std std-doc">More information on the output formats.</span></a></p>
 <div class="toctree-wrapper compound">
 </div>
 </section>

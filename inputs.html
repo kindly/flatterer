@@ -2,10 +2,12 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Outputs" href="outputs.html" /><link rel="prev" title="Python Library" href="library.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 --><title>Index - flatterer 0.18 documentation</title>
-<link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Input Sources - flatterer 0.18 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -132,7 +134,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -152,10 +154,10 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Python Library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inputs.html">Input Sources</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Input Sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="s3.html">S3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="web.html">Web Interface</a></li>
@@ -180,7 +182,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -188,16 +191,62 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          
-<section class="genindex-section">
-  <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"></div>
+          <section id="input-sources">
+<h1>Input Sources<a class="headerlink" href="#input-sources" title="Permalink to this heading">#</a></h1>
+<p>JSON can be retrieved from a variety of sources, locally and on the web.  Below are examples of how to use the command line tool but they will also work with the
+<a class="reference internal" href="library.html#python-library"><span class="std std-doc">Python Library</span></a>.</p>
+<section id="local-file">
+<h2>Local File<a class="headerlink" href="#local-file" title="Permalink to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>games.json<span class="w"> </span>games_dir
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">games.json</span></code> can be a full or relative path to file.</p>
+</section>
+<section id="stdin">
+<h2>Stdin<a class="headerlink" href="#stdin" title="Permalink to this heading">#</a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">-</span></code> to get JSON from Stdin.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>games.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>flatterer<span class="w"> </span>-<span class="w"> </span>games_dir
+</pre></div>
+</div>
+</section>
+<section id="http-s">
+<h2>HTTP(s)<a class="headerlink" href="#http-s" title="Permalink to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span><span class="s1">&#39;https://example.com/my.json&#39;</span><span class="w"> </span>games_dir
+</pre></div>
+</div>
+</section>
+<section id="s3">
+<h2>S3<a class="headerlink" href="#s3" title="Permalink to this heading">#</a></h2>
+<p>See <a class="reference internal" href="s3.html#s3"><span class="std std-doc">S3</span></a> for how to configure connection to S3.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span><span class="s1">&#39;s3://bucketname/path/in/bucket&#39;</span><span class="w"> </span>games_dir
+</pre></div>
+</div>
+</section>
+<section id="gzip">
+<h2>GZIP<a class="headerlink" href="#gzip" title="Permalink to this heading">#</a></h2>
+<p>If the file ends with <code class="docutils literal notranslate"><span class="pre">.gz</span></code> it is assumed to be a gzip compressed file. This will work with all input formats above.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span><span class="s1">&#39;games.json.gz&#39;</span><span class="w"> </span>games_dir
+</pre></div>
+</div>
+</section>
+<section id="multiple-inputs">
+<h2>Multiple inputs<a class="headerlink" href="#multiple-inputs" title="Permalink to this heading">#</a></h2>
+<p>Multiple files can be selected. The last argument is the output directory and the rest are treated as inputs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flatterer</span> <span class="n">games</span><span class="o">.</span><span class="n">json</span> <span class="n">games2</span><span class="o">.</span><span class="n">json</span> <span class="n">games3</span><span class="o">.</span><span class="n">json</span> <span class="n">games_dir</span>
+</pre></div>
+</div>
+<p>As long as the format of the input is the same in each file, you can get the JSON from various sources.
+For example, this gets new line delimited json files (<code class="docutils literal notranslate"><span class="pre">ndjson</span></code>) from <code class="docutils literal notranslate"><span class="pre">stdin</span></code>, a gziped local file, a gzipped file on <code class="docutils literal notranslate"><span class="pre">s3</span></code> and a file on the web.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>games.ndjson<span class="w"> </span><span class="p">|</span><span class="w"> </span>flatterer<span class="w"> </span>--ndjson<span class="w"> </span>-<span class="w"> </span>games.ndjson.gz<span class="w"> </span>s3://bucketname/games.ndjson.gz<span class="w"> </span>http://example.com/games.ndjson<span class="w"> </span>games_dir
+</pre></div>
+</div>
+</section>
 </section>
 
         </article>
@@ -205,8 +254,26 @@
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="outputs.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Outputs</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="library.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Python Library</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -225,8 +292,32 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Input Sources</a><ul>
+<li><a class="reference internal" href="#local-file">Local File</a></li>
+<li><a class="reference internal" href="#stdin">Stdin</a></li>
+<li><a class="reference internal" href="#http-s">HTTP(s)</a></li>
+<li><a class="reference internal" href="#s3">S3</a></li>
+<li><a class="reference internal" href="#gzip">GZIP</a></li>
+<li><a class="reference internal" href="#multiple-inputs">Multiple inputs</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

@@ -157,7 +157,9 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Python Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inputs.html">Input Sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="s3.html">S3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="web.html">Web Interface</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -200,17 +202,29 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>and this project adheres to <a class="reference external" href="http://semver.org/">Semantic Versioning</a>.</p>
 <section id="id1">
-<h2>[0.18.0] - 2022-01-07<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+<h2>[0.19.1] - 2022-05-10<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
 <section id="new">
 <h3>New<a class="headerlink" href="#new" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>JSON Input sources from STDIN, HTTP, S3 and allow all inputs to be GZIPed if have <code class="docutils literal notranslate"><span class="pre">.gz</span></code> ending.</p></li>
+<li><p>Command line now accepts multiple files from any source.</p></li>
+<li><p>S3 output for CSV and PARQUET that is streamed from the input.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stats</span></code> produce statistics on ouput files.</p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>[0.18.0] - 2022-03-17<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
+<section id="id3">
+<h3>New<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Better type guessing for database inserts.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">no_link</span></code> option that removes <code class="docutils literal notranslate"><span class="pre">_link</span></code> fields in the output.</p></li>
 </ul>
 </section>
 </section>
-<section id="id2">
-<h2>[0.17.1] - 2022-01-07<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
+<section id="id4">
+<h2>[0.17.1] - 2022-01-07<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h2>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
@@ -219,17 +233,17 @@
 </ul>
 </section>
 </section>
-<section id="id3">
-<h2>[0.17.0] - 2022-12-03<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
-<section id="id4">
-<h3>New<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<section id="id5">
+<h2>[0.17.0] - 2022-12-03<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h2>
+<section id="id6">
+<h3>New<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Web Assembly version of libflatterer. Available to use here https://lite.flatterer.dev/.</p></li>
 <li><p>Upgrade to vue 3 and vite for web frontend.</p></li>
 </ul>
 </section>
-<section id="id5">
-<h3>Fixed<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
+<section id="id7">
+<h3>Fixed<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Ignore blank lines in json lines files</p></li>
 <li><p>Better errors when too many files are open</p></li>
@@ -237,46 +251,46 @@
 </ul>
 </section>
 </section>
-<section id="id6">
-<h2>[0.16.2] - 2022-10-25<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h2>
-<section id="id7">
-<h3>New<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
+<section id="id8">
+<h2>[0.16.2] - 2022-10-25<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h2>
+<section id="id9">
+<h3>New<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Support python 3.11</p></li>
 </ul>
 </section>
 </section>
-<section id="id8">
-<h2>[0.16.2] - 2022-10-16<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h2>
-<section id="id9">
-<h3>Fixed<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h3>
+<section id="id10">
+<h2>[0.16.2] - 2022-10-16<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h2>
+<section id="id11">
+<h3>Fixed<a class="headerlink" href="#id11" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Error not writing larger XLSX files</p></li>
 </ul>
 </section>
 </section>
-<section id="id10">
-<h2>[0.16.1] - 2022-10-16<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h2>
-<section id="id11">
-<h3>Fixed<a class="headerlink" href="#id11" title="Permalink to this heading">#</a></h3>
+<section id="id12">
+<h2>[0.16.1] - 2022-10-16<a class="headerlink" href="#id12" title="Permalink to this heading">#</a></h2>
+<section id="id13">
+<h3>Fixed<a class="headerlink" href="#id13" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Cors for web api</p></li>
 </ul>
 </section>
 </section>
-<section id="id12">
-<h2>[0.16.0] - 2022-07-27<a class="headerlink" href="#id12" title="Permalink to this heading">#</a></h2>
-<section id="id13">
-<h3>New<a class="headerlink" href="#id13" title="Permalink to this heading">#</a></h3>
+<section id="id14">
+<h2>[0.16.0] - 2022-07-27<a class="headerlink" href="#id14" title="Permalink to this heading">#</a></h2>
+<section id="id15">
+<h3>New<a class="headerlink" href="#id15" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Local web interface for exploring flatterer features <code class="docutils literal notranslate"><span class="pre">flatterer</span> <span class="pre">--web</span></code>.</p></li>
 </ul>
 </section>
 </section>
-<section id="id14">
-<h2>[0.15.0] - 2022-07-27<a class="headerlink" href="#id14" title="Permalink to this heading">#</a></h2>
-<section id="id15">
-<h3>New<a class="headerlink" href="#id15" title="Permalink to this heading">#</a></h3>
+<section id="id16">
+<h2>[0.15.0] - 2022-07-27<a class="headerlink" href="#id16" title="Permalink to this heading">#</a></h2>
+<section id="id17">
+<h3>New<a class="headerlink" href="#id17" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">evolve</span></code> option for sqlite and postgres.  Can add data to existing tables and will alter tables if new fields are needed.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">drop</span></code> option for <code class="docutils literal notranslate"><span class="pre">sqlite</span></code>.</p></li>
@@ -290,28 +304,28 @@
 </ul>
 </section>
 </section>
-<section id="id16">
-<h2>[0.14.2] - 2022-07-27<a class="headerlink" href="#id16" title="Permalink to this heading">#</a></h2>
-<section id="id17">
-<h3>New<a class="headerlink" href="#id17" title="Permalink to this heading">#</a></h3>
+<section id="id18">
+<h2>[0.14.2] - 2022-07-27<a class="headerlink" href="#id18" title="Permalink to this heading">#</a></h2>
+<section id="id19">
+<h3>New<a class="headerlink" href="#id19" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Postgres connection from environment variable</p></li>
 </ul>
 </section>
 </section>
-<section id="id18">
-<h2>[0.14.1] - 2022-07-23<a class="headerlink" href="#id18" title="Permalink to this heading">#</a></h2>
-<section id="id19">
-<h3>Fixed<a class="headerlink" href="#id19" title="Permalink to this heading">#</a></h3>
+<section id="id20">
+<h2>[0.14.1] - 2022-07-23<a class="headerlink" href="#id20" title="Permalink to this heading">#</a></h2>
+<section id="id21">
+<h3>Fixed<a class="headerlink" href="#id21" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">sql_script</span></code> option to export scripts that for sqlite and postgres to make output backward compatable with earlier versions.</p></li>
 </ul>
 </section>
 </section>
-<section id="id20">
-<h2>[0.14.0] - 2022-07-22<a class="headerlink" href="#id20" title="Permalink to this heading">#</a></h2>
-<section id="id21">
-<h3>New<a class="headerlink" href="#id21" title="Permalink to this heading">#</a></h3>
+<section id="id22">
+<h2>[0.14.0] - 2022-07-22<a class="headerlink" href="#id22" title="Permalink to this heading">#</a></h2>
+<section id="id23">
+<h3>New<a class="headerlink" href="#id23" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">pushdown</span></code> option.  Copy data from top level objects down to child (one-to-many) tables.  This is useful if the data has its own keys (such as <code class="docutils literal notranslate"><span class="pre">id</span></code> fields) that you want to exist in the related tables. Also useful for denormalizing the data so querying on a common field, requires less joining.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">postgres</span></code> option.  Export to postgres database by supplying a connection string.</p></li>
@@ -326,108 +340,108 @@
 </ul>
 </section>
 </section>
-<section id="id22">
-<h2>[0.13.2] - 2022-06-24<a class="headerlink" href="#id22" title="Permalink to this heading">#</a></h2>
-<section id="id23">
-<h3>New<a class="headerlink" href="#id23" title="Permalink to this heading">#</a></h3>
+<section id="id24">
+<h2>[0.13.2] - 2022-06-24<a class="headerlink" href="#id24" title="Permalink to this heading">#</a></h2>
+<section id="id25">
+<h3>New<a class="headerlink" href="#id25" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">files</span></code> option, so multiple files can be supplied at once.</p></li>
 </ul>
 </section>
 </section>
-<section id="id24">
-<h2>[0.13.1] - 2022-05-27<a class="headerlink" href="#id24" title="Permalink to this heading">#</a></h2>
+<section id="id26">
+<h2>[0.13.1] - 2022-05-27<a class="headerlink" href="#id26" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Threads option now can output xlsx</p></li>
 </ul>
 </section>
-<section id="id25">
-<h2>[0.13.0] - 2022-04-28<a class="headerlink" href="#id25" title="Permalink to this heading">#</a></h2>
-<section id="id26">
-<h3>New<a class="headerlink" href="#id26" title="Permalink to this heading">#</a></h3>
+<section id="id27">
+<h2>[0.13.0] - 2022-04-28<a class="headerlink" href="#id27" title="Permalink to this heading">#</a></h2>
+<section id="id28">
+<h3>New<a class="headerlink" href="#id28" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Threads option, so that can be run on all cores. Works best with ndjson input.</p></li>
 <li><p>Parquet export option.</p></li>
 </ul>
 </section>
-<section id="id27">
-<h3>Changed<a class="headerlink" href="#id27" title="Permalink to this heading">#</a></h3>
+<section id="id29">
+<h3>Changed<a class="headerlink" href="#id29" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>BREAKING: <code class="docutils literal notranslate"><span class="pre">json-lines</span></code> option renamed to <code class="docutils literal notranslate"><span class="pre">ndjson</span></code></p></li>
 <li><p>New <code class="docutils literal notranslate"><span class="pre">json-stream</span></code> option that works in same way as the old json-lines option and accepts concatonated json.</p></li>
 </ul>
 </section>
 </section>
-<section id="id28">
-<h2>[0.12.12] - 2022-04-15<a class="headerlink" href="#id28" title="Permalink to this heading">#</a></h2>
-<section id="id29">
-<h3>Changed<a class="headerlink" href="#id29" title="Permalink to this heading">#</a></h3>
+<section id="id30">
+<h2>[0.12.12] - 2022-04-15<a class="headerlink" href="#id30" title="Permalink to this heading">#</a></h2>
+<section id="id31">
+<h3>Changed<a class="headerlink" href="#id31" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Datapackage output uses correct date type</p></li>
 <li><p>Lists of strings are now escaped the same way as optional quoted CSVs</p></li>
 </ul>
 </section>
 </section>
-<section id="id30">
-<h2>[0.12.11] - 2022-04-09<a class="headerlink" href="#id30" title="Permalink to this heading">#</a></h2>
-<section id="id31">
-<h3>Changed<a class="headerlink" href="#id31" title="Permalink to this heading">#</a></h3>
+<section id="id32">
+<h2>[0.12.11] - 2022-04-09<a class="headerlink" href="#id32" title="Permalink to this heading">#</a></h2>
+<section id="id33">
+<h3>Changed<a class="headerlink" href="#id33" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Clearer errors when error happens in rust. BREAKING CHANGE, if catching certain error types in python these may have changed.</p></li>
 <li><p>datapackage output now has forign keys.</p></li>
 </ul>
 </section>
 </section>
-<section id="id32">
-<h2>[0.12.10] - 2022-03-21<a class="headerlink" href="#id32" title="Permalink to this heading">#</a></h2>
-<section id="id33">
-<h3>Fixed<a class="headerlink" href="#id33" title="Permalink to this heading">#</a></h3>
+<section id="id34">
+<h2>[0.12.10] - 2022-03-21<a class="headerlink" href="#id34" title="Permalink to this heading">#</a></h2>
+<section id="id35">
+<h3>Fixed<a class="headerlink" href="#id35" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Python decimal converted to float not string.</p></li>
 </ul>
 </section>
 </section>
-<section id="id34">
-<h2>[0.12.9] - 2022-03-07<a class="headerlink" href="#id34" title="Permalink to this heading">#</a></h2>
-<section id="id35">
-<h3>Fixed<a class="headerlink" href="#id35" title="Permalink to this heading">#</a></h3>
+<section id="id36">
+<h2>[0.12.9] - 2022-03-07<a class="headerlink" href="#id36" title="Permalink to this heading">#</a></h2>
+<section id="id37">
+<h3>Fixed<a class="headerlink" href="#id37" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>SQLite export lower memory use</p></li>
 </ul>
 </section>
 </section>
-<section id="id36">
-<h2>[0.12.8] - 2022-03-01<a class="headerlink" href="#id36" title="Permalink to this heading">#</a></h2>
-<section id="id37">
-<h3>Changed<a class="headerlink" href="#id37" title="Permalink to this heading">#</a></h3>
+<section id="id38">
+<h2>[0.12.8] - 2022-03-01<a class="headerlink" href="#id38" title="Permalink to this heading">#</a></h2>
+<section id="id39">
+<h3>Changed<a class="headerlink" href="#id39" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>SQLite export has indexes and foreign key contraints.</p></li>
 </ul>
 </section>
 </section>
-<section id="id38">
-<h2>[0.12.7] - 2022-02-27<a class="headerlink" href="#id38" title="Permalink to this heading">#</a></h2>
-<section id="id39">
-<h3>Fixed<a class="headerlink" href="#id39" title="Permalink to this heading">#</a></h3>
+<section id="id40">
+<h2>[0.12.7] - 2022-02-27<a class="headerlink" href="#id40" title="Permalink to this heading">#</a></h2>
+<section id="id41">
+<h3>Fixed<a class="headerlink" href="#id41" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>main_table_name was number caused exception</p></li>
 </ul>
 </section>
 </section>
-<section id="id40">
-<h2>[0.12.6] - 2022-02-26<a class="headerlink" href="#id40" title="Permalink to this heading">#</a></h2>
-<section id="id41">
-<h3>Fixed<a class="headerlink" href="#id41" title="Permalink to this heading">#</a></h3>
+<section id="id42">
+<h2>[0.12.6] - 2022-02-26<a class="headerlink" href="#id42" title="Permalink to this heading">#</a></h2>
+<section id="id43">
+<h3>Fixed<a class="headerlink" href="#id43" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>list of JSON strings supplied to <code class="docutils literal notranslate"><span class="pre">flatten</span></code> fixed.</p></li>
 <li><p>datapackage.json named correctly.</p></li>
 </ul>
 </section>
 </section>
-<section id="id42">
-<h2>[0.12.4] - 2022-02-18<a class="headerlink" href="#id42" title="Permalink to this heading">#</a></h2>
-<section id="id43">
-<h3>Changed<a class="headerlink" href="#id43" title="Permalink to this heading">#</a></h3>
+<section id="id44">
+<h2>[0.12.4] - 2022-02-18<a class="headerlink" href="#id44" title="Permalink to this heading">#</a></h2>
+<section id="id45">
+<h3>Changed<a class="headerlink" href="#id45" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">flatten</span></code> python function now accepts iterator</p></li>
 <li><p>Docs for <code class="docutils literal notranslate"><span class="pre">flatten</span></code></p></li>
@@ -436,83 +450,83 @@
 </ul>
 </section>
 </section>
-<section id="id44">
-<h2>[0.12.3] - 2022-02-15<a class="headerlink" href="#id44" title="Permalink to this heading">#</a></h2>
-<section id="id45">
-<h3>Fixed<a class="headerlink" href="#id45" title="Permalink to this heading">#</a></h3>
+<section id="id46">
+<h2>[0.12.3] - 2022-02-15<a class="headerlink" href="#id46" title="Permalink to this heading">#</a></h2>
+<section id="id47">
+<h3>Fixed<a class="headerlink" href="#id47" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>More lenient if tmp directory can not be deleted.</p></li>
 </ul>
 </section>
 </section>
-<section id="id46">
-<h2>[0.12.1] - 2022-02-15<a class="headerlink" href="#id46" title="Permalink to this heading">#</a></h2>
-<section id="id47">
-<h3>Fixed<a class="headerlink" href="#id47" title="Permalink to this heading">#</a></h3>
+<section id="id48">
+<h2>[0.12.1] - 2022-02-15<a class="headerlink" href="#id48" title="Permalink to this heading">#</a></h2>
+<section id="id49">
+<h3>Fixed<a class="headerlink" href="#id49" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Preview option in python CLI and library.</p></li>
 </ul>
 </section>
 </section>
-<section id="id48">
-<h2>[0.12] - 2022-02-02<a class="headerlink" href="#id48" title="Permalink to this heading">#</a></h2>
-<section id="id49">
-<h3>New<a class="headerlink" href="#id49" title="Permalink to this heading">#</a></h3>
+<section id="id50">
+<h2>[0.12] - 2022-02-02<a class="headerlink" href="#id50" title="Permalink to this heading">#</a></h2>
+<section id="id51">
+<h3>New<a class="headerlink" href="#id51" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>SQLite export option</p></li>
 </ul>
 </section>
 </section>
-<section id="id50">
-<h2>[0.11] - 2022-01-25<a class="headerlink" href="#id50" title="Permalink to this heading">#</a></h2>
-<section id="id51">
-<h3>New<a class="headerlink" href="#id51" title="Permalink to this heading">#</a></h3>
+<section id="id52">
+<h2>[0.11] - 2022-01-25<a class="headerlink" href="#id52" title="Permalink to this heading">#</a></h2>
+<section id="id53">
+<h3>New<a class="headerlink" href="#id53" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Support top level object. All list of objects are streamed and top level object data saved in main table.</p></li>
 <li><p>New yaglish parser for both json stream and arrays.</p></li>
 <li><p>Library has schema_guess function to tell if data is a JSON Stream or has an array of object.</p></li>
 </ul>
 </section>
-<section id="id52">
-<h3>Fixed<a class="headerlink" href="#id52" title="Permalink to this heading">#</a></h3>
+<section id="id54">
+<h3>Fixed<a class="headerlink" href="#id54" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Empty objects do not make a line in output.</p></li>
 </ul>
 </section>
 </section>
-<section id="id53">
-<h2>[0.10.1] - 2021-12-22<a class="headerlink" href="#id53" title="Permalink to this heading">#</a></h2>
-<section id="id54">
-<h3>New<a class="headerlink" href="#id54" title="Permalink to this heading">#</a></h3>
+<section id="id55">
+<h2>[0.10.1] - 2021-12-22<a class="headerlink" href="#id55" title="Permalink to this heading">#</a></h2>
+<section id="id56">
+<h3>New<a class="headerlink" href="#id56" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>ctrlc support added.</p></li>
 </ul>
 </section>
-<section id="id55">
-<h3>Changed<a class="headerlink" href="#id55" title="Permalink to this heading">#</a></h3>
+<section id="id57">
+<h3>Changed<a class="headerlink" href="#id57" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Logging output improved.</p></li>
 <li><p>Traceback not shown for CLI use.</p></li>
 </ul>
 </section>
-<section id="id56">
-<h3>Fixed<a class="headerlink" href="#id56" title="Permalink to this heading">#</a></h3>
+<section id="id58">
+<h3>Fixed<a class="headerlink" href="#id58" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Occurences where output folder not being deleted.</p></li>
 </ul>
 </section>
 </section>
-<section id="id57">
-<h2>[0.10] - 2021-12-22<a class="headerlink" href="#id57" title="Permalink to this heading">#</a></h2>
-<section id="id58">
-<h3>New<a class="headerlink" href="#id58" title="Permalink to this heading">#</a></h3>
+<section id="id59">
+<h2>[0.10] - 2021-12-22<a class="headerlink" href="#id59" title="Permalink to this heading">#</a></h2>
+<section id="id60">
+<h3>New<a class="headerlink" href="#id60" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">tables.csv</span></code> input in order to control tab names. <a class="reference external" href="https://flatterer.opendata.coop/options.html#tables-file">Tables File option</a></p></li>
 <li><p>Beginning to use logging.</p></li>
 </ul>
 </section>
-<section id="id59">
-<h3>Changed<a class="headerlink" href="#id59" title="Permalink to this heading">#</a></h3>
+<section id="id61">
+<h3>Changed<a class="headerlink" href="#id61" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Better handling of long excel sheet names names. See https://github.com/kindly/flatterer/issues/12</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">field_type</span></code> no longer required in fields.csv.</p></li>
@@ -521,8 +535,8 @@
 <li><p>More human readable error messages.</p></li>
 </ul>
 </section>
-<section id="id60">
-<h3>Fixed<a class="headerlink" href="#id60" title="Permalink to this heading">#</a></h3>
+<section id="id62">
+<h3>Fixed<a class="headerlink" href="#id62" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Bad characters in XLSX stripped and raise warning.</p></li>
 <li><p>Check limits on XLSX files and raise error if found.</p></li>
@@ -531,51 +545,51 @@
 </ul>
 </section>
 </section>
-<section id="id61">
-<h2>[0.9] - 2021-12-12<a class="headerlink" href="#id61" title="Permalink to this heading">#</a></h2>
-<section id="id62">
-<h3>Fixed<a class="headerlink" href="#id62" title="Permalink to this heading">#</a></h3>
+<section id="id63">
+<h2>[0.9] - 2021-12-12<a class="headerlink" href="#id63" title="Permalink to this heading">#</a></h2>
+<section id="id64">
+<h3>Fixed<a class="headerlink" href="#id64" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Removed unwrap on channel send, to remove possible panic.</p></li>
 </ul>
 </section>
-<section id="id63">
-<h3>Changed<a class="headerlink" href="#id63" title="Permalink to this heading">#</a></h3>
+<section id="id65">
+<h3>Changed<a class="headerlink" href="#id65" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Table ordering of output in JSON input order.  Making <code class="docutils literal notranslate"><span class="pre">xlsx</span></code> and <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> table order reflect the input data.</p></li>
 <li><p>Lib has new <code class="docutils literal notranslate"><span class="pre">FlatFiles::new_with_dafualts()</span></code> to make using the library less verbose.</p></li>
 <li><p>Use insta for more tests.</p></li>
 </ul>
 </section>
-<section id="id64">
-<h3>New<a class="headerlink" href="#id64" title="Permalink to this heading">#</a></h3>
+<section id="id66">
+<h3>New<a class="headerlink" href="#id66" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Lib has preview option, meaning CSV output will optionally only show specified number of lines.</p></li>
 </ul>
 </section>
 </section>
-<section id="id65">
-<h2>[0.8] - 2021-12-01<a class="headerlink" href="#id65" title="Permalink to this heading">#</a></h2>
-<section id="id66">
-<h3>Changed<a class="headerlink" href="#id66" title="Permalink to this heading">#</a></h3>
+<section id="id67">
+<h2>[0.8] - 2021-12-01<a class="headerlink" href="#id67" title="Permalink to this heading">#</a></h2>
+<section id="id68">
+<h3>Changed<a class="headerlink" href="#id68" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Paths to data in sqlite and postgres start at root of output.</p></li>
 <li><p>Clippy for linting and insta for tests.</p></li>
 </ul>
 </section>
 </section>
-<section id="id67">
-<h2>[0.7.1] - 2021-12-01<a class="headerlink" href="#id67" title="Permalink to this heading">#</a></h2>
-<section id="id68">
-<h3>Changed<a class="headerlink" href="#id68" title="Permalink to this heading">#</a></h3>
+<section id="id69">
+<h2>[0.7.1] - 2021-12-01<a class="headerlink" href="#id69" title="Permalink to this heading">#</a></h2>
+<section id="id70">
+<h3>Changed<a class="headerlink" href="#id70" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Do less work when just exporting Metadata.</p></li>
 <li><p>Minor speedup due to not using <code class="docutils literal notranslate"><span class="pre">format</span></code> so much.</p></li>
 </ul>
 </section>
 </section>
-<section id="id69">
-<h2>[0.7] - 2021-11-24<a class="headerlink" href="#id69" title="Permalink to this heading">#</a></h2>
+<section id="id71">
+<h2>[0.7] - 2021-11-24<a class="headerlink" href="#id71" title="Permalink to this heading">#</a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
@@ -585,10 +599,10 @@
 </ul>
 </section>
 </section>
-<section id="id70">
-<h2>[0.6.2] - 2021-11-24<a class="headerlink" href="#id70" title="Permalink to this heading">#</a></h2>
-<section id="id71">
-<h3>Fixed<a class="headerlink" href="#id71" title="Permalink to this heading">#</a></h3>
+<section id="id72">
+<h2>[0.6.2] - 2021-11-24<a class="headerlink" href="#id72" title="Permalink to this heading">#</a></h2>
+<section id="id73">
+<h3>Fixed<a class="headerlink" href="#id73" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Change to pypi metadata</p></li>
 <li><p>Tests run in action</p></li>
@@ -596,28 +610,28 @@
 </ul>
 </section>
 </section>
-<section id="id72">
-<h2>[0.6.1] - 2021-11-24<a class="headerlink" href="#id72" title="Permalink to this heading">#</a></h2>
-<section id="id73">
-<h3>Fixed<a class="headerlink" href="#id73" title="Permalink to this heading">#</a></h3>
+<section id="id74">
+<h2>[0.6.1] - 2021-11-24<a class="headerlink" href="#id74" title="Permalink to this heading">#</a></h2>
+<section id="id75">
+<h3>Fixed<a class="headerlink" href="#id75" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Regression in speed due to new error handling</p></li>
 </ul>
 </section>
 </section>
-<section id="id74">
-<h2>[0.6] - 2021-11-23<a class="headerlink" href="#id74" title="Permalink to this heading">#</a></h2>
-<section id="id75">
-<h3>Changed<a class="headerlink" href="#id75" title="Permalink to this heading">#</a></h3>
+<section id="id76">
+<h2>[0.6] - 2021-11-23<a class="headerlink" href="#id76" title="Permalink to this heading">#</a></h2>
+<section id="id77">
+<h3>Changed<a class="headerlink" href="#id77" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>New error handling using <code class="docutils literal notranslate"><span class="pre">anyhow</span></code>, giving errors more context.</p></li>
 </ul>
 </section>
 </section>
-<section id="id76">
-<h2>[0.5] - 2021-11-22<a class="headerlink" href="#id76" title="Permalink to this heading">#</a></h2>
-<section id="id77">
-<h3>Added<a class="headerlink" href="#id77" title="Permalink to this heading">#</a></h3>
+<section id="id78">
+<h2>[0.5] - 2021-11-22<a class="headerlink" href="#id78" title="Permalink to this heading">#</a></h2>
+<section id="id79">
+<h3>Added<a class="headerlink" href="#id79" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#schema">Schema option</a> to supply JSONSchema, to make field order the same as schema.</p></li>
 <li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#table-prefix">Table prefix option</a> to namespece exported tables.</p></li>
@@ -625,20 +639,20 @@
 </ul>
 </section>
 </section>
-<section id="id78">
-<h2>[0.4] - 2021-11-20<a class="headerlink" href="#id78" title="Permalink to this heading">#</a></h2>
-<section id="id79">
-<h3>Added<a class="headerlink" href="#id79" title="Permalink to this heading">#</a></h3>
+<section id="id80">
+<h2>[0.4] - 2021-11-20<a class="headerlink" href="#id80" title="Permalink to this heading">#</a></h2>
+<section id="id81">
+<h3>Added<a class="headerlink" href="#id81" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Postgresql and sqlite scripts to load CSV data into databases.</p></li>
 <li><p>Wheel builds for Windows and MacOS, automatically published using github actions.</p></li>
 </ul>
 </section>
 </section>
-<section id="id80">
-<h2>[0.3] - 2021-10-25<a class="headerlink" href="#id80" title="Permalink to this heading">#</a></h2>
-<section id="id81">
-<h3>Added<a class="headerlink" href="#id81" title="Permalink to this heading">#</a></h3>
+<section id="id82">
+<h2>[0.3] - 2021-10-25<a class="headerlink" href="#id82" title="Permalink to this heading">#</a></h2>
+<section id="id83">
+<h3>Added<a class="headerlink" href="#id83" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://flatterer.opendata.coop/options.html#inline-one-to-one">Inline One to One option</a> to mean that if an array only has one item in for all the data then treat it as sub-object.</p></li>
 </ul>
@@ -702,164 +716,168 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Change Log</a><ul>
-<li><a class="reference internal" href="#id1">[0.18.0] - 2022-01-07</a><ul>
+<li><a class="reference internal" href="#id1">[0.19.1] - 2022-05-10</a><ul>
 <li><a class="reference internal" href="#new">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id2">[0.17.1] - 2022-01-07</a><ul>
+<li><a class="reference internal" href="#id2">[0.18.0] - 2022-03-17</a><ul>
+<li><a class="reference internal" href="#id3">New</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">[0.17.1] - 2022-01-07</a><ul>
 <li><a class="reference internal" href="#fixed">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id3">[0.17.0] - 2022-12-03</a><ul>
-<li><a class="reference internal" href="#id4">New</a></li>
-<li><a class="reference internal" href="#id5">Fixed</a></li>
+<li><a class="reference internal" href="#id5">[0.17.0] - 2022-12-03</a><ul>
+<li><a class="reference internal" href="#id6">New</a></li>
+<li><a class="reference internal" href="#id7">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">[0.16.2] - 2022-10-25</a><ul>
-<li><a class="reference internal" href="#id7">New</a></li>
+<li><a class="reference internal" href="#id8">[0.16.2] - 2022-10-25</a><ul>
+<li><a class="reference internal" href="#id9">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id8">[0.16.2] - 2022-10-16</a><ul>
-<li><a class="reference internal" href="#id9">Fixed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id10">[0.16.1] - 2022-10-16</a><ul>
+<li><a class="reference internal" href="#id10">[0.16.2] - 2022-10-16</a><ul>
 <li><a class="reference internal" href="#id11">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id12">[0.16.0] - 2022-07-27</a><ul>
-<li><a class="reference internal" href="#id13">New</a></li>
+<li><a class="reference internal" href="#id12">[0.16.1] - 2022-10-16</a><ul>
+<li><a class="reference internal" href="#id13">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id14">[0.15.0] - 2022-07-27</a><ul>
+<li><a class="reference internal" href="#id14">[0.16.0] - 2022-07-27</a><ul>
 <li><a class="reference internal" href="#id15">New</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id16">[0.15.0] - 2022-07-27</a><ul>
+<li><a class="reference internal" href="#id17">New</a></li>
 <li><a class="reference internal" href="#changed">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id16">[0.14.2] - 2022-07-27</a><ul>
-<li><a class="reference internal" href="#id17">New</a></li>
+<li><a class="reference internal" href="#id18">[0.14.2] - 2022-07-27</a><ul>
+<li><a class="reference internal" href="#id19">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id18">[0.14.1] - 2022-07-23</a><ul>
-<li><a class="reference internal" href="#id19">Fixed</a></li>
+<li><a class="reference internal" href="#id20">[0.14.1] - 2022-07-23</a><ul>
+<li><a class="reference internal" href="#id21">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id20">[0.14.0] - 2022-07-22</a><ul>
-<li><a class="reference internal" href="#id21">New</a></li>
+<li><a class="reference internal" href="#id22">[0.14.0] - 2022-07-22</a><ul>
+<li><a class="reference internal" href="#id23">New</a></li>
 <li><a class="reference internal" href="#removed">Removed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id22">[0.13.2] - 2022-06-24</a><ul>
-<li><a class="reference internal" href="#id23">New</a></li>
+<li><a class="reference internal" href="#id24">[0.13.2] - 2022-06-24</a><ul>
+<li><a class="reference internal" href="#id25">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id24">[0.13.1] - 2022-05-27</a></li>
-<li><a class="reference internal" href="#id25">[0.13.0] - 2022-04-28</a><ul>
-<li><a class="reference internal" href="#id26">New</a></li>
-<li><a class="reference internal" href="#id27">Changed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id28">[0.12.12] - 2022-04-15</a><ul>
+<li><a class="reference internal" href="#id26">[0.13.1] - 2022-05-27</a></li>
+<li><a class="reference internal" href="#id27">[0.13.0] - 2022-04-28</a><ul>
+<li><a class="reference internal" href="#id28">New</a></li>
 <li><a class="reference internal" href="#id29">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id30">[0.12.11] - 2022-04-09</a><ul>
+<li><a class="reference internal" href="#id30">[0.12.12] - 2022-04-15</a><ul>
 <li><a class="reference internal" href="#id31">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id32">[0.12.10] - 2022-03-21</a><ul>
-<li><a class="reference internal" href="#id33">Fixed</a></li>
+<li><a class="reference internal" href="#id32">[0.12.11] - 2022-04-09</a><ul>
+<li><a class="reference internal" href="#id33">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id34">[0.12.9] - 2022-03-07</a><ul>
+<li><a class="reference internal" href="#id34">[0.12.10] - 2022-03-21</a><ul>
 <li><a class="reference internal" href="#id35">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id36">[0.12.8] - 2022-03-01</a><ul>
-<li><a class="reference internal" href="#id37">Changed</a></li>
+<li><a class="reference internal" href="#id36">[0.12.9] - 2022-03-07</a><ul>
+<li><a class="reference internal" href="#id37">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id38">[0.12.7] - 2022-02-27</a><ul>
-<li><a class="reference internal" href="#id39">Fixed</a></li>
+<li><a class="reference internal" href="#id38">[0.12.8] - 2022-03-01</a><ul>
+<li><a class="reference internal" href="#id39">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id40">[0.12.6] - 2022-02-26</a><ul>
+<li><a class="reference internal" href="#id40">[0.12.7] - 2022-02-27</a><ul>
 <li><a class="reference internal" href="#id41">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id42">[0.12.4] - 2022-02-18</a><ul>
-<li><a class="reference internal" href="#id43">Changed</a></li>
+<li><a class="reference internal" href="#id42">[0.12.6] - 2022-02-26</a><ul>
+<li><a class="reference internal" href="#id43">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id44">[0.12.3] - 2022-02-15</a><ul>
-<li><a class="reference internal" href="#id45">Fixed</a></li>
+<li><a class="reference internal" href="#id44">[0.12.4] - 2022-02-18</a><ul>
+<li><a class="reference internal" href="#id45">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id46">[0.12.1] - 2022-02-15</a><ul>
+<li><a class="reference internal" href="#id46">[0.12.3] - 2022-02-15</a><ul>
 <li><a class="reference internal" href="#id47">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id48">[0.12] - 2022-02-02</a><ul>
-<li><a class="reference internal" href="#id49">New</a></li>
+<li><a class="reference internal" href="#id48">[0.12.1] - 2022-02-15</a><ul>
+<li><a class="reference internal" href="#id49">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id50">[0.11] - 2022-01-25</a><ul>
+<li><a class="reference internal" href="#id50">[0.12] - 2022-02-02</a><ul>
 <li><a class="reference internal" href="#id51">New</a></li>
-<li><a class="reference internal" href="#id52">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id53">[0.10.1] - 2021-12-22</a><ul>
-<li><a class="reference internal" href="#id54">New</a></li>
-<li><a class="reference internal" href="#id55">Changed</a></li>
-<li><a class="reference internal" href="#id56">Fixed</a></li>
+<li><a class="reference internal" href="#id52">[0.11] - 2022-01-25</a><ul>
+<li><a class="reference internal" href="#id53">New</a></li>
+<li><a class="reference internal" href="#id54">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id57">[0.10] - 2021-12-22</a><ul>
-<li><a class="reference internal" href="#id58">New</a></li>
-<li><a class="reference internal" href="#id59">Changed</a></li>
-<li><a class="reference internal" href="#id60">Fixed</a></li>
+<li><a class="reference internal" href="#id55">[0.10.1] - 2021-12-22</a><ul>
+<li><a class="reference internal" href="#id56">New</a></li>
+<li><a class="reference internal" href="#id57">Changed</a></li>
+<li><a class="reference internal" href="#id58">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id61">[0.9] - 2021-12-12</a><ul>
+<li><a class="reference internal" href="#id59">[0.10] - 2021-12-22</a><ul>
+<li><a class="reference internal" href="#id60">New</a></li>
+<li><a class="reference internal" href="#id61">Changed</a></li>
 <li><a class="reference internal" href="#id62">Fixed</a></li>
-<li><a class="reference internal" href="#id63">Changed</a></li>
-<li><a class="reference internal" href="#id64">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id65">[0.8] - 2021-12-01</a><ul>
-<li><a class="reference internal" href="#id66">Changed</a></li>
+<li><a class="reference internal" href="#id63">[0.9] - 2021-12-12</a><ul>
+<li><a class="reference internal" href="#id64">Fixed</a></li>
+<li><a class="reference internal" href="#id65">Changed</a></li>
+<li><a class="reference internal" href="#id66">New</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id67">[0.7.1] - 2021-12-01</a><ul>
+<li><a class="reference internal" href="#id67">[0.8] - 2021-12-01</a><ul>
 <li><a class="reference internal" href="#id68">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id69">[0.7] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id69">[0.7.1] - 2021-12-01</a><ul>
+<li><a class="reference internal" href="#id70">Changed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id71">[0.7] - 2021-11-24</a><ul>
 <li><a class="reference internal" href="#added">Added</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id70">[0.6.2] - 2021-11-24</a><ul>
-<li><a class="reference internal" href="#id71">Fixed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id72">[0.6.1] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id72">[0.6.2] - 2021-11-24</a><ul>
 <li><a class="reference internal" href="#id73">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id74">[0.6] - 2021-11-23</a><ul>
-<li><a class="reference internal" href="#id75">Changed</a></li>
+<li><a class="reference internal" href="#id74">[0.6.1] - 2021-11-24</a><ul>
+<li><a class="reference internal" href="#id75">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id76">[0.5] - 2021-11-22</a><ul>
-<li><a class="reference internal" href="#id77">Added</a></li>
+<li><a class="reference internal" href="#id76">[0.6] - 2021-11-23</a><ul>
+<li><a class="reference internal" href="#id77">Changed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id78">[0.4] - 2021-11-20</a><ul>
+<li><a class="reference internal" href="#id78">[0.5] - 2021-11-22</a><ul>
 <li><a class="reference internal" href="#id79">Added</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id80">[0.3] - 2021-10-25</a><ul>
+<li><a class="reference internal" href="#id80">[0.4] - 2021-11-20</a><ul>
 <li><a class="reference internal" href="#id81">Added</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id82">[0.3] - 2021-10-25</a><ul>
+<li><a class="reference internal" href="#id83">Added</a></li>
 </ul>
 </li>
 </ul>

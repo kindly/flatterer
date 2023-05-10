@@ -2,10 +2,12 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Web Interface" href="web.html" /><link rel="prev" title="Outputs" href="outputs.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 --><title>Index - flatterer 0.18 documentation</title>
-<link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>S3 - flatterer 0.18 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -132,7 +134,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -152,12 +154,12 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="options.html">Option Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Python Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inputs.html">Input Sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="outputs.html">Outputs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="s3.html">S3</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">S3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="web.html">Web Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -180,7 +182,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -188,16 +191,51 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          
-<section class="genindex-section">
-  <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"></div>
+          <section id="s3">
+<h1>S3<a class="headerlink" href="#s3" title="Permalink to this heading">#</a></h1>
+<p>JSON can be fetched from S3 buckets. <code class="docutils literal notranslate"><span class="pre">csv</span></code> and <code class="docutils literal notranslate"><span class="pre">parquet</span></code> exports can be streamed to S3.</p>
+<section id="url">
+<h2>URL<a class="headerlink" href="#url" title="Permalink to this heading">#</a></h2>
+<p>Only the following URL format is accepted.</p>
+<p><code class="docutils literal notranslate"><span class="pre">s3://&lt;bucket&gt;/path/in/bucket</span></code></p>
+</section>
+<section id="region-and-authentication">
+<h2>Region and authentication.<a class="headerlink" href="#region-and-authentication" title="Permalink to this heading">#</a></h2>
+<p>Environment variables are the only way to specify S3 region and provide authentication information.</p>
+<p>The following are supported:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>AWS_DEFAULT_REGION -&gt; region, e.g us‑east‑2
+AWS_ACCESS_KEY_ID -&gt; access_key_id
+AWS_SECRET_ACCESS_KEY -&gt; secret_access_key
+AWS_ENDPOINT -&gt; endpoint
+AWS_SESSION_TOKEN -&gt; token
+AWS_CONTAINER_CREDENTIALS_RELATIVE_URI -&gt; https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html
+AWS_ALLOW_HTTP -&gt; set to “true” to permit HTTP connections without TLS
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">AWS_DEFAULT_REGION</span></code> is always required. Most commonly, authentication is provided by defining <code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code> and <code class="docutils literal notranslate"><span class="pre">AWS_SECRET_ACCESS_KEY</span></code>.  However, <code class="docutils literal notranslate"><span class="pre">AWS_SESSION_TOKEN</span></code> can be used also alone.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Stream a JSON file from S3 and upload flattened <code class="docutils literal notranslate"><span class="pre">parquet</span></code> version of it.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export AWS_DEFAULT_REGION=us‑east‑2
+export AWS_ACCESS_KEY_ID=SOMEACCESSKEYID
+export AWS_SECRET_ACCESS_KEY=SOMESECRETACCESSKEYID
+
+flatterer --parquet &#39;s3://mybucket/mydata.json&#39; &#39;s3://mybucket/flattenedoutput&#39; 
+</pre></div>
+</div>
+</section>
+<section id="usage-note">
+<h2>Usage Note<a class="headerlink" href="#usage-note" title="Permalink to this heading">#</a></h2>
+<p>When using s3 output, no temporary data is stored locally, which is useful for use in constrained environments like serverless functions.<br />
+However, this leads to the need to read the input files twice (once for analysis), meaning stdin can not be used unless schema is known upfront by specifying a <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> file and the <code class="docutils literal notranslate"><span class="pre">only-fields</span></code> option.</p>
+</section>
 </section>
 
         </article>
@@ -205,8 +243,26 @@
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="web.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Web Interface</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="outputs.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Outputs</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -225,8 +281,30 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">S3</a><ul>
+<li><a class="reference internal" href="#url">URL</a></li>
+<li><a class="reference internal" href="#region-and-authentication">Region and authentication.</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#usage-note">Usage Note</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

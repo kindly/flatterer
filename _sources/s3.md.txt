@@ -1,0 +1,46 @@
+# S3
+
+JSON can be fetched from S3 buckets. `csv` and `parquet` exports can be streamed to S3. 
+
+
+## URL
+
+Only the following URL format is accepted.
+
+`s3://<bucket>/path/in/bucket`
+
+## Region and authentication.
+
+Environment variables are the only way to specify S3 region and provide authentication information.
+
+The following are supported:
+
+```
+AWS_DEFAULT_REGION -> region, e.g us‑east‑2
+AWS_ACCESS_KEY_ID -> access_key_id
+AWS_SECRET_ACCESS_KEY -> secret_access_key
+AWS_ENDPOINT -> endpoint
+AWS_SESSION_TOKEN -> token
+AWS_CONTAINER_CREDENTIALS_RELATIVE_URI -> https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html
+AWS_ALLOW_HTTP -> set to “true” to permit HTTP connections without TLS
+```
+
+`AWS_DEFAULT_REGION` is always required. Most commonly, authentication is provided by defining `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.  However, `AWS_SESSION_TOKEN` can be used also alone.
+
+
+## Example
+
+Stream a JSON file from S3 and upload flattened `parquet` version of it.
+
+```
+export AWS_DEFAULT_REGION=us‑east‑2
+export AWS_ACCESS_KEY_ID=SOMEACCESSKEYID
+export AWS_SECRET_ACCESS_KEY=SOMESECRETACCESSKEYID
+
+flatterer --parquet 's3://mybucket/mydata.json' 's3://mybucket/flattenedoutput' 
+```
+
+## Usage Note
+
+When using s3 output, no temporary data is stored locally, which is useful for use in constrained environments like serverless functions.  
+However, this leads to the need to read the input files twice (once for analysis), meaning stdin can not be used unless schema is known upfront by specifying a `fields.csv` file and the `only-fields` option.

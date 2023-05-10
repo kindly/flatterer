@@ -16,6 +16,7 @@ Flatterer aims to be the first tool to go to when faced with the above problem. 
 * Memory efficient.  Uses a custom streaming JSON parser to mean that long list of objects nested with the JSON will be streamed, so not much data needs to be loaded into memory at once.
 * Fast memory efficient output to CSV/XLSX/SQLITE/PARQUET/POSTGRES
 * Uses best practice that has been learnt from flattening JSON countless times, such as generating keys to link one-to-many tables to their parents.
+* [S3 Support](./s3.md#s3) 
 
 
 ### Install
@@ -71,7 +72,9 @@ Run the above file with flatterer.
 flatterer games.json games_dir
 ```
 
-See [](./options.md#option-reference) for details of additional command line options.
+See [](./options.md#option-reference) for details of additional command line options, 
+[outputs](./outputs.md#outputs) for information on the output formats and [inputs](./inputs.md#input-sources) 
+for more information on input sources.
 
 #### Local web interface
 
@@ -170,13 +173,13 @@ This can be useful for renameing columns, rearranging the field order or if you 
 
 `datapackage.json` contains metadata in the [Tabular Datapackge Spec](https://specs.frictionlessdata.io/tabular-data-package/#language)
 
-[More information on the output formats.](./outputs.md#outputs)
-
 ```{toctree}
 :hidden:
 options
 library
+inputs
 outputs
+s3
 web
 changelog
 development
