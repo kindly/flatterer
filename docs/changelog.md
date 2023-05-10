@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.18.0] - 2022-01-07
+## [0.19.1] - 2022-05-10
+
+### New
+- JSON Input sources from STDIN, HTTP, S3 and allow all inputs to be GZIPed if have `.gz` ending.
+- Command line now accepts multiple files from any source.
+- S3 output for CSV and PARQUET that is streamed from the input.
+- `stats` produce statistics on ouput files. 
+
+## [0.18.0] - 2022-03-17
 
 ### New
 - Better type guessing for database inserts.

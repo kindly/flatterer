@@ -35,11 +35,15 @@ The `csv` directory contains a CSV file representing a relational table.  A new 
 
 ## XLSX
 
-The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a tab per table.  Tab names are truncated to not go over the allowed limit.
+The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a sheet per table.  Sheet names are truncated to not go over the allowed limit.
 
 ## SQLITE
 
-A `sqlite.db` is created in the output directory each csv file is put in its own table.
+A `sqlite.db` is created in the output directory where each csv file is put in its own table.
+
+## POSTGRES
+
+Data is created in the postgres database where each csv file is put in its own table.
 
 ## PARQUET
 

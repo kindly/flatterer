@@ -9,7 +9,7 @@ flatterer --help
 output looks like
 
 ``` 
-Usage: flatterer [OPTIONS] [INPUT_FILE] [OUTPUT_DIRECTORY]
+Usage: flatterer [OPTIONS] [INPUTS]... OUTPUT_DIRECTORY
 
 Options:
   --web                       Load web based version
@@ -50,6 +50,8 @@ Options:
                               final results
   --threads INTEGER           Number of threads, default 1, 0 means use number
                               of CPUs
+  --json-path TEXT            JSON path within each object to use to filter
+                              which objects to select
   --postgres-schema TEXT      When loading to postgres, put all tables into
                               this schema.
   --evolve                    When loading to postgres or sqlite, evolve
@@ -57,6 +59,8 @@ Options:
   --drop                      When loading to postgres or sqlite, drop table
                               if already exists.
   --id-prefix TEXT            Prefix for all `_link` id fields
+  --stats                     Produce stats about the data in the
+                              datapackage.json file
   --help                      Show this message and exit.
 ```
 
@@ -331,6 +335,50 @@ import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', json_stream=True)
 ```
+
+## JSON Path Filter
+
+This is used for filtering out objects to be included in the output, not for selecting values within an object. 
+
+Use a [JSON path][https://goessner.net/articles/JsonPath/] expression to select if a particular object will be in output.
+
+Flatterer will evaluate the JSON path expression against every object in the input, and if there is any non-null value, it will include that object in the result.
+
+e.g
+
+
+```json
+[{
+  "id": 1,
+  "title": "A Film",
+  "type": "film"
+},
+{
+  "id": 2,
+  "title": "A Game",
+  "type": "game"
+}]
+```  
+
+Using the above input JSON the following will only select object with `type = game` (only select the second object in the example).
+
+### CLI Usage
+
+```bash 
+# careful as the $ needs escaping
+flatterer INPUT_FILE OUTPUT_DIRECTORY --json-path "\$[?(@.type == 'game')]]" 
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.jl', 'ouput_dir', json_path="$[?(@.type == 'game')]")
+```
+
+More complicated expressions can be used including logical conditions so `$[?(@.type == 'game' || @.type == 'film')]` will select objects with either `type = 'game' OR type = 'film'`.
+
 
 ## Force
 
@@ -662,6 +710,24 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --schema-titles underscore_slug
 import flatterer
 
 flatterer.flatten('inputfile.jl', 'ouput_dir', schema_titles='underscore_slug_')
+```
+
+## Stats
+
+Adds additional statistics about the output files in the `datapackage.json` output.
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --stats
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', stats=True)
 ```
 
 ## Preview
