@@ -1728,7 +1728,7 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.19.1"
+version = "0.19.2"
 dependencies = [
  "clap",
  "crossbeam-channel",
@@ -1747,9 +1747,9 @@ dependencies = [
 
 [[package]]
 name = "flatterer-web"
-version = "0.19.1"
+version = "0.19.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb42274642a872d9630773f736ba3a1020375f2a83a7b42d19a666d6a7de258e"
+checksum = "c2923867bbfaaf913216906767edd666222594b3e210500a57e68ca36277f980"
 dependencies = [
  "async-std",
  "csv",
@@ -2498,9 +2498,9 @@ dependencies = [
 
 [[package]]
 name = "libflatterer"
-version = "0.19.1"
+version = "0.19.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4d11d94b8458cfc15000afd1847999bf9d0126c99540972802eae449ba5b1a01"
+checksum = "3d24c250a7b3bb79e3d7df1b1248f2927c7fee6141079ba2be54ab19c4bdcd0d"
 dependencies = [
  "arrow-array 38.0.0",
  "arrow-schema 38.0.0",
