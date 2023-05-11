@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.19.2] - 2023-05-11
+## [0.19.3] - 2023-05-11
 
 ### Fixed
 - CSV output to S3 broken in some cases.
