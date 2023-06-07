@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.19.5] - 2023-06-07
+
+### Fixed
+- Parquet naming of headers where incorrect for dates.
+
 ## [0.19.4] - 2023-05-26
 
 ### Fixed
