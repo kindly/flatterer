@@ -754,7 +754,9 @@ flatterer.flatten('inputfile.json', 'ouput_dir', preview=10)
 
 The number of threads used to process the data. Default to 1. If set to 0 will use amount of CPUs.
 
-Works best with new line delimited JSON `--ndjson` as JSON parsing can then be done by each thread. This can about a x3 times improvement with 6 threads if you have that many CPU cores. Without `--ndjson` makes only about x1.24 improvement on 2 threads and not worth going over 2 as it will not lead to performance improvement.
+Works best with new line delimited JSON `--ndjson` as JSON parsing can then be done by each thread. This can about a x3 times improvement with 6 threads if you have that many CPU cores. Without `--ndjson` makes only about x1.24 improvement on 2 threads and not worth going over 2 as it will not lead to performance improvement. For very small datasets (less than 100 object) using threads will most likely be slower.
+
+**Warning:** Will fail for small inputs where the amount of objects is less that the amount of threads specified.  
 
 **Warning:** May have issues with inline-one-to-one as each thread will determine what should be inlined.
 
