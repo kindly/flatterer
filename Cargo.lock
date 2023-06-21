@@ -1384,9 +1384,9 @@ dependencies = [
 
 [[package]]
 name = "csvs_convert"
-version = "0.8.3"
+version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7b5c36bcf78504e0e1259889af2ef040e6abfff435699f851be612ca77cd8d5"
+checksum = "7e6237c87e354342ade7ac6dcb6629de2d67b7dc38254d7ba5e703e8b4c248de"
 dependencies = [
  "arrow 37.0.0",
  "chrono",
@@ -1728,7 +1728,7 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.19.2"
+version = "0.19.6"
 dependencies = [
  "clap",
  "crossbeam-channel",
@@ -1747,9 +1747,9 @@ dependencies = [
 
 [[package]]
 name = "flatterer-web"
-version = "0.19.2"
+version = "0.19.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2923867bbfaaf913216906767edd666222594b3e210500a57e68ca36277f980"
+checksum = "671ce6db14b8ec73b1f0831ee1b425fb80e7c7c9874cedb5d72f6079b2807048"
 dependencies = [
  "async-std",
  "csv",
@@ -2498,9 +2498,9 @@ dependencies = [
 
 [[package]]
 name = "libflatterer"
-version = "0.19.2"
+version = "0.19.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d24c250a7b3bb79e3d7df1b1248f2927c7fee6141079ba2be54ab19c4bdcd0d"
+checksum = "90655e4434cc0c67b3008cca53800e21123e1586d712a4a460104a4bf028c13b"
 dependencies = [
  "arrow-array 38.0.0",
  "arrow-schema 38.0.0",

@@ -115,6 +115,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.gzip_input = gzip_input;
         op.json_path_selector = json_path_selector;
 
+
         if let Err(err) = flatten_all(input_files, output_dir, op) {
             if log_error {
                 log::error!("{}", err)
