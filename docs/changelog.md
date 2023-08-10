@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.19.8] - 2023-06-21
+
+### New
+- `arrays_as_table` option added to convert all arrays to their own table.
+
 ## [0.19.6] - 2023-06-21
 
 ### Fixed

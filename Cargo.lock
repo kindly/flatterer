@@ -1729,7 +1729,7 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.19.7"
+version = "0.19.8"
 dependencies = [
  "clap",
  "crossbeam-channel",
@@ -1748,9 +1748,9 @@ dependencies = [
 
 [[package]]
 name = "flatterer-web"
-version = "0.19.6"
+version = "0.19.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4413cd8cf1813fc02ce2128671e85a048e0162edb0bee51406c32defff6cb6a2"
+checksum = "4a72e978460a40c83cad3aec5c57d5eabe2e6f859a8e48f1c7c2a50b5ff18800"
 dependencies = [
  "async-std",
  "csv",
@@ -2499,9 +2499,9 @@ dependencies = [
 
 [[package]]
 name = "libflatterer"
-version = "0.19.6"
+version = "0.19.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ac9881cfc81c24726413e1ee555a3e47c251dce9efc5e5cf4f1e0529e9a8e3c"
+checksum = "8f3e4d882519814cdbe5dce18422402c227dbd97859283a865105be37b0faacb"
 dependencies = [
  "arrow-array 38.0.0",
  "arrow-schema 38.0.0",
@@ -2876,15 +2876,17 @@ dependencies = [
 
 [[package]]
 name = "object_store"
-version = "0.5.6"
+version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec9cd6ca25e796a49fa242876d1c4de36a24a6da5258e9f0bc062dbf5e81c53b"
+checksum = "27c776db4f332b571958444982ff641d2531417a326ca368995073b639205d58"
 dependencies = [
  "async-trait",
  "base64 0.21.0",
  "bytes 1.4.0",
  "chrono",
  "futures",
+ "humantime",
+ "hyper",
  "itertools",
  "parking_lot",
  "percent-encoding",

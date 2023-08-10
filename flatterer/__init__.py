@@ -95,6 +95,7 @@ def flatten(
     low_disk=False,
     gzip_input=False,
     json_path="",
+    arrays_new_table=False,
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -142,7 +143,7 @@ def flatten(
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, path, json_stream, ndjson, 
                        sqlite_path, threads, log_error, postgres, postgres_schema, 
-                       drop, pushdown, sql_scripts, evolve, no_link, stats, low_disk, gzip_input, json_path)
+                       drop, pushdown, sql_scripts, evolve, no_link, stats, low_disk, gzip_input, json_path, arrays_new_table)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
@@ -155,7 +156,7 @@ def flatten(
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, sqlite_path, threads, log_error, 
                        postgres, postgres_schema, drop, pushdown, sql_scripts, evolve, 
-                       no_link, stats, low_disk, gzip_input, json_path)
+                       no_link, stats, low_disk, gzip_input, json_path, arrays_new_table)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 
@@ -220,6 +221,8 @@ def iterator_flatten(*args, **kw):
 @click.option('--only-tables', '-l', is_flag=True, default=False, help='Only output tables in tables.csv file')
 @click.option('--inline-one-to-one', '-i', is_flag=True, default=False,
               help='If array only has single item for all objects treat as one-to-one')
+@click.option('--arrays-new-table', '-y', is_flag=True, default=False,
+              help='Always treat arrays as new tables, even when they contain items that are not objects')
 @click.option('--schema', '-s', default="",
               help='JSONSchema file or URL to determine field order')
 @click.option('--table-prefix', '-t', default="",
@@ -275,6 +278,7 @@ def cli(
     no_link=False,
     stats=False,
     json_path="",
+    arrays_new_table=False,
 ):
     if web:
         import pathlib
@@ -340,6 +344,8 @@ def cli(
                 no_link=no_link,
                 files=True,
                 stats=stats,
-                json_path=json_path)
+                json_path=json_path,
+                arrays_new_table=arrays_new_table,
+                )
     except IOError:
         pass

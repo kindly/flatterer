@@ -75,7 +75,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         stats: bool,
         low_disk:bool,
         gzip_input:bool,
-        json_path_selector: String
+        json_path_selector: String,
+        arrays_new_table: bool
     ) -> Result<()> {
 
         let mut op = Options::default();
@@ -114,6 +115,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.low_disk = low_disk;
         op.gzip_input = gzip_input;
         op.json_path_selector = json_path_selector;
+        op.arrays_new_table = arrays_new_table;
 
 
         if let Err(err) = flatten_all(input_files, output_dir, op) {
@@ -163,7 +165,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         stats: bool,
         low_disk:bool,
         gzip_input:bool,
-        json_path_selector: String
+        json_path_selector: String,
+        arrays_new_table: bool
     ) -> Result<()> {
         let mut options = Options::default();
 
@@ -198,6 +201,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         options.low_disk = low_disk;
         options.gzip_input = gzip_input;
         options.json_path_selector = json_path_selector;
+        options.arrays_new_table = arrays_new_table;
 
         let final_output_path = PathBuf::from(output_dir);
         let parts_path = final_output_path.join("parts");
