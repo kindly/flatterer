@@ -235,6 +235,8 @@ Options:
   -l, --only-tables           Only output tables in tables.csv file
   -i, --inline-one-to-one     If array only has single item for all objects
                               treat as one-to-one
+  -y, --arrays-new-table      Always treat arrays as a new tables, even when
+                              they contain items that are not objects
   -s, --schema TEXT           JSONSchema file or URL to determine field order
   -t, --table-prefix TEXT     Prefix to add to all table names
   -a, --path-separator TEXT   Seperator to denote new path within the input
@@ -836,7 +838,26 @@ Without this set any array of objects will be treated like a one-to-many relatio
 <h3>Python Usage<a class="headerlink" href="#id32" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
-<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.jl&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">inline_one_to_one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">inline_one_to_one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
+</section>
+<section id="arrays-as-table">
+<h2>Arrays as Table<a class="headerlink" href="#arrays-as-table" title="Permalink to this heading">#</a></h2>
+<p>Always create a new table for all arrays, even if they do not contain objects.  A new table is created with just the <code class="docutils literal notranslate"><span class="pre">_link</span></code> fields and a column named <code class="docutils literal notranslate"><span class="pre">value</span></code> which contains the value of the item in the array.  If the array item is a string that value will go in the output, for all other types the JSON encoded version of that type is included.</p>
+<section id="id33">
+<h3>CLI Usage<a class="headerlink" href="#id33" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--arrays-as-table
+</pre></div>
+</div>
+</section>
+<section id="id34">
+<h3>Python Usage<a class="headerlink" href="#id34" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">arrays_as_table</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -845,8 +866,8 @@ Without this set any array of objects will be treated like a one-to-many relatio
 <section id="schema">
 <h2>Schema<a class="headerlink" href="#schema" title="Permalink to this heading">#</a></h2>
 <p>Supply a JSONSchema file to help determine field ordering of the output.  If the schema supplied starts with <code class="docutils literal notranslate"><span class="pre">http</span></code> will try and download the schema from a remote server, otherwise it is assumed to be a file-system path.</p>
-<section id="id33">
-<h3>CLI Usage<a class="headerlink" href="#id33" title="Permalink to this heading">#</a></h3>
+<section id="id35">
+<h3>CLI Usage<a class="headerlink" href="#id35" title="Permalink to this heading">#</a></h3>
 <p>For remote url:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--schema<span class="w"> </span>https://example.com/schema.json
 </pre></div>
@@ -856,8 +877,8 @@ Without this set any array of objects will be treated like a one-to-many relatio
 </pre></div>
 </div>
 </section>
-<section id="id34">
-<h3>Python Usage<a class="headerlink" href="#id34" title="Permalink to this heading">#</a></h3>
+<section id="id36">
+<h3>Python Usage<a class="headerlink" href="#id36" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s1">&#39;https://example.com/schema.json&#39;</span><span class="p">)</span>
@@ -869,14 +890,14 @@ Without this set any array of objects will be treated like a one-to-many relatio
 <h2>Table Prefix<a class="headerlink" href="#table-prefix" title="Permalink to this heading">#</a></h2>
 <p>Prefix to add to all table names. So if the output has a table called <code class="docutils literal notranslate"><span class="pre">mytable</span></code> and the “table prefix” is specified as <code class="docutils literal notranslate"><span class="pre">myprefix_</span></code> then the table (therefore csv file or excel sheet name) will be called <code class="docutils literal notranslate"><span class="pre">myprefix_mytable</span></code>.<br />
 This can be useful if you are trying to namespace the output when inserting into an exiting database.</p>
-<section id="id35">
-<h3>CLI Usage<a class="headerlink" href="#id35" title="Permalink to this heading">#</a></h3>
+<section id="id37">
+<h3>CLI Usage<a class="headerlink" href="#id37" title="Permalink to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--table-prefix<span class="w"> </span>myprefix_
 </pre></div>
 </div>
 </section>
-<section id="id36">
-<h3>Python Usage<a class="headerlink" href="#id36" title="Permalink to this heading">#</a></h3>
+<section id="id38">
+<h3>Python Usage<a class="headerlink" href="#id38" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.jl&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">table_prefix</span><span class="o">=</span><span class="s1">&#39;myprefix_&#39;</span><span class="p">)</span>
@@ -889,14 +910,14 @@ This can be useful if you are trying to namespace the output when inserting into
 <p>By default all table and field names have <code class="docutils literal notranslate"><span class="pre">_</span></code> as the seperator which denotes a that the field after the <code class="docutils literal notranslate"><span class="pre">_</span></code> is a sub-property. For example <code class="docutils literal notranslate"><span class="pre">myObject_myField</span></code> says that <code class="docutils literal notranslate"><span class="pre">myField</span></code> exists as a property of <code class="docutils literal notranslate"><span class="pre">myObject</span></code>.</p>
 <p>However some data already has <code class="docutils literal notranslate"><span class="pre">_</span></code> in the property names.  For example if in the input data theres was an object called <code class="docutils literal notranslate"><span class="pre">my_object</span></code> and the property called <code class="docutils literal notranslate"><span class="pre">my_field</span></code> then by default the field name would be <code class="docutils literal notranslate"><span class="pre">my_object_my_field</span></code>.  This is confusing as you might expect <code class="docutils literal notranslate"><span class="pre">object</span></code> to be a property of <code class="docutils literal notranslate"><span class="pre">my</span></code> and it might cause some name clashes.</p>
 <p>To fix this you can change the path separator to whatever you like. You could choose <code class="docutils literal notranslate"><span class="pre">___</span></code> as a separator, so in the example above, the field would be called <code class="docutils literal notranslate"><span class="pre">my_object__my_field</span></code>.</p>
-<section id="id37">
-<h3>CLI Usage<a class="headerlink" href="#id37" title="Permalink to this heading">#</a></h3>
+<section id="id39">
+<h3>CLI Usage<a class="headerlink" href="#id39" title="Permalink to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--path-separator<span class="w"> </span>__
 </pre></div>
 </div>
 </section>
-<section id="id38">
-<h3>Python Usage<a class="headerlink" href="#id38" title="Permalink to this heading">#</a></h3>
+<section id="id40">
+<h3>Python Usage<a class="headerlink" href="#id40" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.jl&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">path_separoator</span><span class="o">=</span><span class="s1">&#39;__&#39;</span><span class="p">)</span>
@@ -913,14 +934,14 @@ This can be useful if you are trying to namespace the output when inserting into
 <li><p><code class="docutils literal notranslate"><span class="pre">underscore_slug</span></code> same as slug but uses <code class="docutils literal notranslate"><span class="pre">_</span></code> instead of <code class="docutils literal notranslate"><span class="pre">-</span></code>. The previous example the output would be <code class="docutils literal notranslate"><span class="pre">my_strange_title</span></code></p></li>
 </ul>
 <p>If this option is left out or is the empty string then it will not take the heading from JSONSchema.</p>
-<section id="id39">
-<h3>CLI Usage<a class="headerlink" href="#id39" title="Permalink to this heading">#</a></h3>
+<section id="id41">
+<h3>CLI Usage<a class="headerlink" href="#id41" title="Permalink to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--schema-titles<span class="w"> </span>underscore_slug
 </pre></div>
 </div>
 </section>
-<section id="id40">
-<h3>Python Usage<a class="headerlink" href="#id40" title="Permalink to this heading">#</a></h3>
+<section id="id42">
+<h3>Python Usage<a class="headerlink" href="#id42" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.jl&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">schema_titles</span><span class="o">=</span><span class="s1">&#39;underscore_slug_&#39;</span><span class="p">)</span>
@@ -931,14 +952,14 @@ This can be useful if you are trying to namespace the output when inserting into
 <section id="stats">
 <h2>Stats<a class="headerlink" href="#stats" title="Permalink to this heading">#</a></h2>
 <p>Adds additional statistics about the output files in the <code class="docutils literal notranslate"><span class="pre">datapackage.json</span></code> output.</p>
-<section id="id41">
-<h3>CLI Usage<a class="headerlink" href="#id41" title="Permalink to this heading">#</a></h3>
+<section id="id43">
+<h3>CLI Usage<a class="headerlink" href="#id43" title="Permalink to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--stats
 </pre></div>
 </div>
 </section>
-<section id="id42">
-<h3>Python Usage<a class="headerlink" href="#id42" title="Permalink to this heading">#</a></h3>
+<section id="id44">
+<h3>Python Usage<a class="headerlink" href="#id44" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -949,15 +970,15 @@ This can be useful if you are trying to namespace the output when inserting into
 <section id="preview">
 <h2>Preview<a class="headerlink" href="#preview" title="Permalink to this heading">#</a></h2>
 <p>The number of rows written in final files. All statistics in <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">datapackage.json</span></code> will show counts related to <em>all</em> the data.</p>
-<section id="id43">
-<h3>CLI Usage<a class="headerlink" href="#id43" title="Permalink to this heading">#</a></h3>
+<section id="id45">
+<h3>CLI Usage<a class="headerlink" href="#id45" title="Permalink to this heading">#</a></h3>
 <p>Only output first 10 lines of all the tables.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--preview<span class="w"> </span><span class="m">10</span>
 </pre></div>
 </div>
 </section>
-<section id="id44">
-<h3>Python Usage<a class="headerlink" href="#id44" title="Permalink to this heading">#</a></h3>
+<section id="id46">
+<h3>Python Usage<a class="headerlink" href="#id46" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">preview</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -971,14 +992,14 @@ This can be useful if you are trying to namespace the output when inserting into
 <p>Works best with new line delimited JSON <code class="docutils literal notranslate"><span class="pre">--ndjson</span></code> as JSON parsing can then be done by each thread. This can about a x3 times improvement with 6 threads if you have that many CPU cores. Without <code class="docutils literal notranslate"><span class="pre">--ndjson</span></code> makes only about x1.24 improvement on 2 threads and not worth going over 2 as it will not lead to performance improvement. For very small datasets (less than 100 object) using threads will most likely be slower.</p>
 <p><strong>Warning:</strong> Will fail for small inputs where the amount of objects is less that the amount of threads specified.</p>
 <p><strong>Warning:</strong> May have issues with inline-one-to-one as each thread will determine what should be inlined.</p>
-<section id="id45">
-<h3>CLI Usage<a class="headerlink" href="#id45" title="Permalink to this heading">#</a></h3>
+<section id="id47">
+<h3>CLI Usage<a class="headerlink" href="#id47" title="Permalink to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--threads<span class="w"> </span><span class="m">0</span>
 </pre></div>
 </div>
 </section>
-<section id="id46">
-<h3>Python Usage<a class="headerlink" href="#id46" title="Permalink to this heading">#</a></h3>
+<section id="id48">
+<h3>Python Usage<a class="headerlink" href="#id48" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -989,8 +1010,8 @@ This can be useful if you are trying to namespace the output when inserting into
 <section id="sql-scripts">
 <h2>Sql Scripts<a class="headerlink" href="#sql-scripts" title="Permalink to this heading">#</a></h2>
 <p>Python only. Export scripts for importing data into the database.</p>
-<section id="id47">
-<h3>Python Usage<a class="headerlink" href="#id47" title="Permalink to this heading">#</a></h3>
+<section id="id49">
+<h3>Python Usage<a class="headerlink" href="#id49" title="Permalink to this heading">#</a></h3>
 <p>flatterer.flatten(‘inputfile.json’, ‘ouput_dir’, sql_scripts=True)</p>
 </section>
 </section>
@@ -1138,43 +1159,48 @@ This can be useful if you are trying to namespace the output when inserting into
 <li><a class="reference internal" href="#id32">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#schema">Schema</a><ul>
+<li><a class="reference internal" href="#arrays-as-table">Arrays as Table</a><ul>
 <li><a class="reference internal" href="#id33">CLI Usage</a></li>
 <li><a class="reference internal" href="#id34">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#table-prefix">Table Prefix</a><ul>
+<li><a class="reference internal" href="#schema">Schema</a><ul>
 <li><a class="reference internal" href="#id35">CLI Usage</a></li>
 <li><a class="reference internal" href="#id36">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#path-separator">Path Separator</a><ul>
+<li><a class="reference internal" href="#table-prefix">Table Prefix</a><ul>
 <li><a class="reference internal" href="#id37">CLI Usage</a></li>
 <li><a class="reference internal" href="#id38">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#schema-titles">Schema Titles</a><ul>
+<li><a class="reference internal" href="#path-separator">Path Separator</a><ul>
 <li><a class="reference internal" href="#id39">CLI Usage</a></li>
 <li><a class="reference internal" href="#id40">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#stats">Stats</a><ul>
+<li><a class="reference internal" href="#schema-titles">Schema Titles</a><ul>
 <li><a class="reference internal" href="#id41">CLI Usage</a></li>
 <li><a class="reference internal" href="#id42">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#preview">Preview</a><ul>
+<li><a class="reference internal" href="#stats">Stats</a><ul>
 <li><a class="reference internal" href="#id43">CLI Usage</a></li>
 <li><a class="reference internal" href="#id44">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#threads">Threads</a><ul>
+<li><a class="reference internal" href="#preview">Preview</a><ul>
 <li><a class="reference internal" href="#id45">CLI Usage</a></li>
 <li><a class="reference internal" href="#id46">Python Usage</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#threads">Threads</a><ul>
+<li><a class="reference internal" href="#id47">CLI Usage</a></li>
+<li><a class="reference internal" href="#id48">Python Usage</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#sql-scripts">Sql Scripts</a><ul>
-<li><a class="reference internal" href="#id47">Python Usage</a></li>
+<li><a class="reference internal" href="#id49">Python Usage</a></li>
 </ul>
 </li>
 </ul>

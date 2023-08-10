@@ -39,6 +39,8 @@ Options:
   -l, --only-tables           Only output tables in tables.csv file
   -i, --inline-one-to-one     If array only has single item for all objects
                               treat as one-to-one
+  -y, --arrays-new-table      Always treat arrays as a new tables, even when
+                              they contain items that are not objects
   -s, --schema TEXT           JSONSchema file or URL to determine field order
   -t, --table-prefix TEXT     Prefix to add to all table names
   -a, --path-separator TEXT   Seperator to denote new path within the input
@@ -613,7 +615,26 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --inline-one-to-one
 ```python
 import flatterer
 
-flatterer.flatten('inputfile.jl', 'ouput_dir', inline_one_to_one=True)
+flatterer.flatten('inputfile.json', 'ouput_dir', inline_one_to_one=True)
+
+```
+
+## Arrays as Table
+
+Always create a new table for all arrays, even if they do not contain objects.  A new table is created with just the `_link` fields and a column named `value` which contains the value of the item in the array.  If the array item is a string that value will go in the output, for all other types the JSON encoded version of that type is included.
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --arrays-as-table
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', arrays_as_table=True)
 
 ```
 
