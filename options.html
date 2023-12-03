@@ -1015,6 +1015,18 @@ This can be useful if you are trying to namespace the output when inserting into
 <p>flatterer.flatten(‘inputfile.json’, ‘ouput_dir’, sql_scripts=True)</p>
 </section>
 </section>
+<section id="low-memory-api-only">
+<h2>Low Memory (api only)<a class="headerlink" href="#low-memory-api-only" title="Permalink to this heading">#</a></h2>
+<p>Reduces memory usage, sacrificing some speed.  Use this if JSON contains very large JSON objects.</p>
+<section id="id50">
+<h3>Python Usage<a class="headerlink" href="#id50" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 
         </article>
@@ -1201,6 +1213,10 @@ This can be useful if you are trying to namespace the output when inserting into
 </li>
 <li><a class="reference internal" href="#sql-scripts">Sql Scripts</a><ul>
 <li><a class="reference internal" href="#id49">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#low-memory-api-only">Low Memory (api only)</a><ul>
+<li><a class="reference internal" href="#id50">Python Usage</a></li>
 </ul>
 </li>
 </ul>

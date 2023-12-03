@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.19.8] - 2023-10-02
+## [0.19.10] - 2023-12-03
+
+### New
+- Upgrade deps, low_memory option for API
+
+## [0.19.10] - 2023-10-02
 
 ### New
 - Upgrade deps, better build times due to latest duckdb
