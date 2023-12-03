@@ -78,7 +78,7 @@ jobs:
     - name: Make wheel
       run: |
         sudo docker build -t flatterer-anylinux .
-        sudo docker run  -v $(pwd):/io flatterer-anylinux build --no-sdist --release --out dist
+        sudo docker run  -v $(pwd):/io flatterer-anylinux build --release --out dist
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:

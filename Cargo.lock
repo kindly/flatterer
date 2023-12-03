@@ -1613,7 +1613,7 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.19.11"
+version = "0.19.12"
 dependencies = [
  "clap",
  "crossbeam-channel",
