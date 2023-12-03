@@ -802,3 +802,16 @@ Python only. Export scripts for importing data into the database.
 ### Python Usage
 
 flatterer.flatten('inputfile.json', 'ouput_dir', sql_scripts=True)
+
+
+## Low Memory (api only)
+
+Reduces memory usage, sacrificing some speed.  Use this if JSON contains very large JSON objects.
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', low_memory=True)
+```

@@ -93,6 +93,7 @@ def flatten(
     no_link=False,
     stats=False,
     low_disk=False,
+    low_memory=False,
     gzip_input=False,
     json_path="",
     arrays_new_table=False,
@@ -143,7 +144,7 @@ def flatten(
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, path, json_stream, ndjson, 
                        sqlite_path, threads, log_error, postgres, postgres_schema, 
-                       drop, pushdown, sql_scripts, evolve, no_link, stats, low_disk, gzip_input, json_path, arrays_new_table)
+                       drop, pushdown, sql_scripts, evolve, no_link, stats, low_disk, low_memory, gzip_input, json_path, arrays_new_table)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
@@ -156,7 +157,7 @@ def flatten(
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, sqlite_path, threads, log_error, 
                        postgres, postgres_schema, drop, pushdown, sql_scripts, evolve, 
-                       no_link, stats, low_disk, gzip_input, json_path, arrays_new_table)
+                       no_link, stats, low_disk, low_memory, gzip_input, json_path, arrays_new_table)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 

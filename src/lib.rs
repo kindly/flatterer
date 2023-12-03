@@ -74,6 +74,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         no_link: bool,
         stats: bool,
         low_disk:bool,
+        low_memory:bool,
         gzip_input:bool,
         json_path_selector: String,
         arrays_new_table: bool
@@ -113,6 +114,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.no_link = no_link;
         op.stats = stats;
         op.low_disk = low_disk;
+        op.low_memory = low_memory;
         op.gzip_input = gzip_input;
         op.json_path_selector = json_path_selector;
         op.arrays_new_table = arrays_new_table;
@@ -164,6 +166,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         no_link: bool,
         stats: bool,
         low_disk:bool,
+        low_memory:bool,
         gzip_input:bool,
         json_path_selector: String,
         arrays_new_table: bool
@@ -199,6 +202,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         options.no_link = no_link;
         options.stats = stats;
         options.low_disk = low_disk;
+        options.low_memory = low_memory;
         options.gzip_input = gzip_input;
         options.json_path_selector = json_path_selector;
         options.arrays_new_table = arrays_new_table;
