@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.19.13] - 2024-01-26
+
+### Fixed
+- Large xlsx cell values being truncated causing panic if in unicode char.
+
 ## [0.19.12] - 2023-12-03
 
 ### New
