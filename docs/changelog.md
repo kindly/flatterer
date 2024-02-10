@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.19.14] - 2024-02-10
+
+### Fixed
+- Large xlsx cell values being truncated panic when multi threading.
+
 ## [0.19.13] - 2024-01-26
 
 ### Fixed
