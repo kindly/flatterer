@@ -100,8 +100,8 @@ def flatten(
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
-        setup_logging("warning")
         LOGGING_SETUP = True
+        setup_logging("warning")
     
     using_tmp = False
     
@@ -299,8 +299,8 @@ def cli(
 
     global LOGGING_SETUP
     if not LOGGING_SETUP:
-        setup_logging("info")
         LOGGING_SETUP = True
+        setup_logging("info")
         setup_ctrlc()
     
 
