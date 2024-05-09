@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.19.15] - 2024-05-09
+
+### Fixed
+- nan/inf ignored for xlsx as causing crash
+
 ## [0.19.14] - 2024-02-10
 
 ### Fixed
