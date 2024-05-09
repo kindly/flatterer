@@ -14,9 +14,9 @@ serde_json = { version = "1.0.83", features = ["preserve_order"] }
 pyo3 = { version = "0.18.3", features = ["extension-module", "eyre"] }
 eyre = "0.6.8"
 #libflatterer={path = "../libflatterer"}
-libflatterer = "0.19.12"
+libflatterer = "0.19.14"
 
-flatterer-web = "0.19.12"
+flatterer-web = "0.19.14"
 #flatterer-web={path = "../flatterer-web"}
 
 env_logger = "0.10.1"
