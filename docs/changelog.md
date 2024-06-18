@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.19.17] - 2024-06-18
+
+### New
+- truncate postgres
+
+### Fixed
+- timezone date types now accepted in postgres
+
 ## [0.19.15] - 2024-05-09
 
 ### Fixed

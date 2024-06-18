@@ -97,6 +97,7 @@ def flatten(
     gzip_input=False,
     json_path="",
     arrays_new_table=False,
+    truncate=False,
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -144,7 +145,8 @@ def flatten(
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, path, json_stream, ndjson, 
                        sqlite_path, threads, log_error, postgres, postgres_schema, 
-                       drop, pushdown, sql_scripts, evolve, no_link, stats, low_disk, low_memory, gzip_input, json_path, arrays_new_table)
+                       drop, pushdown, sql_scripts, evolve, no_link, stats, low_disk, low_memory, 
+                       gzip_input, json_path, arrays_new_table, truncate)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
@@ -157,7 +159,7 @@ def flatten(
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, sqlite_path, threads, log_error, 
                        postgres, postgres_schema, drop, pushdown, sql_scripts, evolve, 
-                       no_link, stats, low_disk, low_memory, gzip_input, json_path, arrays_new_table)
+                       no_link, stats, low_disk, low_memory, gzip_input, json_path, arrays_new_table, truncate)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 
@@ -241,6 +243,7 @@ def iterator_flatten(*args, **kw):
 @click.option('--postgres-schema', default="", help='When loading to postgres, put all tables into this schema.')
 @click.option('--evolve', is_flag=True, default=False, help='When loading to postgres or sqlite, evolve tables to fit data')
 @click.option('--drop', is_flag=True, default=False, help='When loading to postgres or sqlite, drop table if already exists.')
+@click.option('--truncate', is_flag=True, default=False, help='When loading to postgres or sqlite, truncate the table if it alraedy exists.')
 @click.option('--id-prefix', default="", help='Prefix for all `_link` id fields')
 @click.option('--stats', is_flag=True, default=False, help='Produce stats about the data in the datapackage.json file')
 @click.argument('inputs', required=False, nargs=-1)
@@ -280,6 +283,7 @@ def cli(
     stats=False,
     json_path="",
     arrays_new_table=False,
+    truncate=False
 ):
     if web:
         import pathlib
@@ -347,6 +351,7 @@ def cli(
                 stats=stats,
                 json_path=json_path,
                 arrays_new_table=arrays_new_table,
+                truncate=truncate,
                 )
     except IOError:
         pass

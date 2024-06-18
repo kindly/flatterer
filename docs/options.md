@@ -60,6 +60,8 @@ Options:
                               tables to fit data
   --drop                      When loading to postgres or sqlite, drop table
                               if already exists.
+  --truncate                  When loading to postgres or sqlite, truncate table
+                              if already exists.
   --id-prefix TEXT            Prefix for all `_link` id fields
   --stats                     Produce stats about the data in the
                               datapackage.json file
@@ -473,6 +475,26 @@ flatterer --postgres='postgres://user:pass@host/dbname' --sqlite-path=sqlite.db 
 import flatterer
 
 flatterer.flatten('inputfile.json', 'ouput_dir', postgres='postgres://user:pass@host/dbname', drop=True)
+```
+
+## Truncate Tables
+
+**Warning: this could mean you loose data**
+
+For postgres and sqlite. Truncate the existing table if it exists. This is useful if you want to load the data into a databse with the schema pre-defined.
+
+### CLI Usage
+
+```bash 
+flatterer --postgres='postgres://user:pass@host/dbname' --sqlite-path=sqlite.db INPUT_FILE OUTPUT_DIRECTORY --truncate
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', postgres='postgres://user:pass@host/dbname', truncate=True)
 ```
 
 ## Fields File
