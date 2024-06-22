@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.19.18] - 2024-06-22
+
+### Fixed
+- Intermediate tables excluded using fields.csv or tables.csv with fields_only and tables_only will not cause error.
+
 ## [0.19.17] - 2024-06-18
 
 ### New
