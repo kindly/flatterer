@@ -174,12 +174,16 @@ def flatten(
         )
 
         if csv:
-            for table in output['tables']['table_title']:
-                csv_path = os.path.join(output_dir, 'csv', str(table) + '.csv')
+            for name, title in output['tables'].values:
+                csv_path = os.path.join(output_dir, 'csv', str(title) + '.csv')
                 if dataframe:
-                    output['data'][table] = pandas.read_csv(csv_path)
+                    types = {}
+                    for table_name, field_name, field_type, field_title, count in output['fields'].values:
+                        if table_name == name and field_type == 'text':
+                            types[field_title] = str
+                    output['data'][title] = pandas.read_csv(csv_path, dtype=types)
                 else:
-                    output['data'][table] = csv_path
+                    output['data'][title] = csv_path
         
         if sqlite:
             output['sqlite'] = os.path.join(output_dir, 'sqlite.db')

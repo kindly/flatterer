@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.19.19] - 2024-07-07
+
+### Fixed
+- Parquet headings now from fields.csv
+- text fields are kept as text in dataframe
+
 ## [0.19.18] - 2024-06-22
 
 ### Fixed
