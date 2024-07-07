@@ -12,6 +12,11 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
     && mkdir /io
 
 RUN yum install centos-release-scl -y \
+    && sed -i \
+            -e 's/^mirrorlist/#mirrorlist/' \
+            -e 's/^#baseurl/baseurl/' \
+            -e 's/mirror\.centos\.org/vault.centos.org/' \
+            /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo \
     && yum-config-manager --enable rhel-server-rhscl-7-rpms \
     && yum install llvm-toolset-7.0 -y \
     && yum install openssl-devel -y
