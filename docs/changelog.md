@@ -1,8 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
- 
+
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [0.20.0] - 2024-10-19
+
+### New
+- Use rust_xlsxwriter to write xlsx files.
 
 ## [0.19.19] - 2024-07-07
 

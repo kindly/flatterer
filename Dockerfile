@@ -2,7 +2,7 @@ FROM quay.io/pypa/manylinux_2_28_x86_64
 
 ENV PATH /root/.cargo/bin:$PATH
 # Add all supported python versions
-ENV PATH /opt/python/cp312-cp312/bin/:/opt/python/cp311-cp311/bin/:/opt/python/cp310-cp310/bin/:/opt/python/cp309-cp309/bin/:/opt/python/cp308-cp308/bin/:$PATH
+ENV PATH /opt/python/cp313-cp313/bin/:/opt/python/cp312-cp312/bin/:/opt/python/cp311-cp311/bin/:/opt/python/cp310-cp310/bin/:/opt/python/cp309-cp309/bin/:/opt/python/cp308-cp308/bin/:$PATH
 # Otherwise `cargo new` errors
 ENV USER root
 
