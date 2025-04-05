@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.21.1] - 2024-04-5
+
+### Changed
+- UI backend changed to actix-web
+- Few small improvements to UI
+- Use arrow parquet instead of duckdb, making compile time faster
+- XLSX output now uses output directory for temp files
+
 ## [0.20.0] - 2024-10-19
 
 ### New
