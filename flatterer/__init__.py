@@ -60,6 +60,7 @@ def flatten(
     output_dir='',
     csv=True,
     xlsx=False,
+    ods=False,
     sqlite=False,
     parquet=False,
     dataframe=False,
@@ -139,7 +140,7 @@ def flatten(
         s3 = True if output_dir.startswith("s3://") else False
         
         if method == 'flatten':
-            flatten_rs(input, output_dir, csv, xlsx, sqlite, parquet,
+            flatten_rs(input, output_dir, csv, xlsx, ods, sqlite, parquet,
                        main_table_name, tables_csv, only_tables, fields_csv, only_fields,
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
@@ -153,7 +154,7 @@ def flatten(
             if s3:
                 raise AttributeError("s3 output not available when supplying an iterator")
                 
-            iterator_flatten_rs(bytes_generator(input), output_dir, csv, xlsx, sqlite, parquet,
+            iterator_flatten_rs(bytes_generator(input), output_dir, csv, xlsx, ods, sqlite, parquet,
                        main_table_name, tables_csv, only_tables, fields_csv, only_fields,
                        inline_one_to_one, path_separator, preview, 
                        table_prefix, id_prefix, emit_obj, force,  
@@ -191,6 +192,9 @@ def flatten(
         if xlsx:
             output['xlsx'] = os.path.join(output_dir, 'output.xlsx')
 
+        if ods:
+            output['ods'] = os.path.join(output_dir, 'output.ods')
+
         return output
 
     finally:
@@ -207,6 +211,7 @@ def iterator_flatten(*args, **kw):
 @click.option('--web', default=False, is_flag=True ,help='Load web based version')
 @click.option('--csv/--nocsv', default=True, help='Output CSV files, default true')
 @click.option('--xlsx/--noxlsx', default=False, help='Output XLSX file, default false')
+@click.option('--ods/--noods', default=False, help='Output ODS file, default false')
 @click.option('--sqlite/--nosqlite', default=False, help='Output sqlite.db file, default false')
 @click.option('--parquet/--noparquet', default=False, help='Output directory of parquet files, default false')
 @click.option('--postgres', default="", help='Connection string to postgres. If supplied will load data into postgres')
@@ -258,6 +263,7 @@ def cli(
     web=False,
     csv=True,
     xlsx=False,
+    ods=False,
     sqlite=False,
     sqlite_path='',
     parquet=False,
@@ -328,6 +334,7 @@ def cli(
                 output_directory,
                 csv=csv,
                 xlsx=xlsx,
+                ods=ods,
                 sqlite=sqlite,
                 parquet=parquet,
                 postgres=postgres,

@@ -43,6 +43,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         output_dir: String,
         csv: bool,
         xlsx: bool,
+        ods: bool,
         sqlite: bool,
         parquet: bool,
         main_table_name: String,
@@ -85,6 +86,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         op.csv = csv;
         op.xlsx = xlsx;
+        op.ods = ods;
         op.sqlite = sqlite;
         op.parquet = parquet;
         op.main_table_name = main_table_name;
@@ -140,6 +142,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         output_dir: String,
         csv: bool,
         xlsx: bool,
+        ods: bool,
         sqlite: bool,
         parquet: bool,
         main_table_name: String,
@@ -178,6 +181,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         options.csv = csv;
         options.xlsx = xlsx;
+        options.ods = ods;
         options.sqlite = sqlite;
         options.parquet = parquet;
         options.main_table_name = main_table_name;
@@ -222,6 +226,10 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
             if options.xlsx {
                 log::warn!("XLSX output not supported in multi threaded mode");
                 options.xlsx = false;
+            }
+            if options.ods {
+                log::warn!("ODS output not supported in multi threaded mode");
+                options.ods = false;
             }
             if final_output_path.is_dir() {
                 if options.force {

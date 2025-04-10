@@ -15,6 +15,7 @@ Options:
   --web                       Load web based version
   --csv / --nocsv             Output CSV files, default true
   --xlsx / --noxlsx           Output XLSX file, default false
+  --ods / --noods             Output ODS file, default false
   --sqlite / --nosqlite       Output sqlite.db file, default false
   --parquet / --noparquet     Output directory of parquet files, default false
   --postgres TEXT             Connection string to postgres. If supplied will
@@ -74,6 +75,8 @@ Options:
 
 **XLSX:**  Output xlsx file to `<OUTPUT_DIRECTORY>/output.xlsx`.
 
+**ODS:**  Output xlsx file to `<OUTPUT_DIRECTORY>/output.ods`.
+
 **SQLITE:**  Output sqlite file to  `<OUTPUT_DIRECTORY>/sqlite.db`.
 
 **PARQUET:**  Output parquet files in `<OUTPUT_DIRECTORY>/parquet/`.
@@ -90,6 +93,11 @@ flatterer --nocsv INPUT_FILE OUTPUT_DIRECTORY
 **xlsx output:**
 ```bash 
 flatterer --xlsx INPUT_FILE OUTPUT_DIRECTORY
+```
+
+**ods output:**
+```bash 
+flatterer --ods INPUT_FILE OUTPUT_DIRECTORY
 ```
 
 **sqlite output:**
@@ -129,7 +137,7 @@ flatterer.flatten('inputfile.json', 'ouput_dir', csv=False, sqlite=True, xlsx=Tr
 
 Name of the table that represents data at the root of the JSON object.  
 
-For CSV will create `<OUTPUT_DIRECTORY>/csv/<main_table_name>.csv` and for XLSX will be the first tab name.
+For CSV will create `<OUTPUT_DIRECTORY>/csv/<main_table_name>.csv` and for XLSX/ODS will be the first tab name.
 
 For CLI defaults to name of input file without the file ending and for python defaults to `main`.
 
@@ -567,8 +575,8 @@ flatterer.flatten('inputfile.jl', 'ouput_dir', fields='fields.csv', only_fields=
 
 Path to tables CSV file.  The file can be used for:
 
-* Changing the sheet order in xlsx output. 
-* Giving the tables (and xlsx sheets) a new name by using `table_title`
+* Changing the sheet order in xlsx/ods output. 
+* Giving the tables (and xlsx/ods sheets) a new name by using `table_title`
 * Removing unwanted tables when using the [](#only-tables) option.
 
 The CSV file needs the following headers: 
