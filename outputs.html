@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="S3" href="s3.html" /><link rel="prev" title="Input Sources" href="inputs.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>Outputs - flatterer 0.19 documentation</title>
+        <title>Outputs - flatterer 0.22.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">flatterer 0.19 documentation</div></a>
+      <a href="index.html"><div class="brand">flatterer 0.22.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">flatterer 0.19 documentation</span>
+  <span class="sidebar-brand-text">flatterer 0.22.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -199,8 +199,8 @@
         <article role="main">
           <section id="outputs">
 <h1>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading">#</a></h1>
-<p>All of CSV, XLSX, PARQUET and SQLITE data can be produced with the following.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>games.json<span class="w"> </span>games_dir<span class="w"> </span>--xlsx<span class="w"> </span>--csv<span class="w"> </span>--sqlite<span class="w"> </span>--parquet
+<p>All of CSV, XLSX, ODS, PARQUET and SQLITE data can be produced with the following.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>games.json<span class="w"> </span>games_dir<span class="w"> </span>--xlsx<span class="w"> </span>--ods<span class="w"> </span>--csv<span class="w"> </span>--sqlite<span class="w"> </span>--parquet
 </pre></div>
 </div>
 <p>This will create the directory structure:</p>
@@ -216,6 +216,7 @@
 ├──<span class="w"> </span>tables.csv
 ├──<span class="w"> </span>sqlite.db
 ├──<span class="w"> </span>output.xlsx
+├──<span class="w"> </span>output.ods
 ├──<span class="w"> </span>postgresql
 │<span class="w">   </span>├──<span class="w"> </span>postgresql_load.sql
 │<span class="w">   </span>└──<span class="w"> </span>postgresql_schema.sql
@@ -231,6 +232,10 @@
 <section id="xlsx">
 <h2>XLSX<a class="headerlink" href="#xlsx" title="Permalink to this heading">#</a></h2>
 <p>The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a sheet per table.  Sheet names are truncated to not go over the allowed limit.</p>
+</section>
+<section id="ods">
+<h2>ODS<a class="headerlink" href="#ods" title="Permalink to this heading">#</a></h2>
+<p>The ODS output can be found in the output.ods file. File is loaded into memory, this could cause issues for large files. Sheet names are truncated to not go over the allowed limit.</p>
 </section>
 <section id="sqlite">
 <h2>SQLITE<a class="headerlink" href="#sqlite" title="Permalink to this heading">#</a></h2>
@@ -518,7 +523,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2021-2022, David Raznick
+                Copyright &#169; 2021-2025, David Raznick
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -547,6 +552,7 @@
 <li><a class="reference internal" href="#">Outputs</a><ul>
 <li><a class="reference internal" href="#csv">CSV</a></li>
 <li><a class="reference internal" href="#xlsx">XLSX</a></li>
+<li><a class="reference internal" href="#ods">ODS</a></li>
 <li><a class="reference internal" href="#sqlite">SQLITE</a></li>
 <li><a class="reference internal" href="#postgres">POSTGRES</a></li>
 <li><a class="reference internal" href="#parquet">PARQUET</a></li>

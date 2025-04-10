@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.21.1] - 2024-04-5
+## [0.22.0] - 2024-04-10
+
+### New
+- ODS output
+
+
+## [0.21.1] - 2024-04-05
 
 ### Changed
 - UI backend changed to actix-web

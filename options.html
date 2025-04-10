@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Python Library" href="library.html" /><link rel="prev" title="Flatterer. Making JSON flatterer" href="index.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>Option Reference - flatterer 0.19 documentation</title>
+        <title>Option Reference - flatterer 0.22.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">flatterer 0.19 documentation</div></a>
+      <a href="index.html"><div class="brand">flatterer 0.22.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">flatterer 0.19 documentation</span>
+  <span class="sidebar-brand-text">flatterer 0.22.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -211,6 +211,7 @@ Options:
   --web                       Load web based version
   --csv / --nocsv             Output CSV files, default true
   --xlsx / --noxlsx           Output XLSX file, default false
+  --ods / --noods             Output ODS file, default false
   --sqlite / --nosqlite       Output sqlite.db file, default false
   --parquet / --noparquet     Output directory of parquet files, default false
   --postgres TEXT             Connection string to postgres. If supplied will
@@ -269,6 +270,7 @@ Options:
 <h2>Output Formats<a class="headerlink" href="#output-formats" title="Permalink to this heading">#</a></h2>
 <p><strong>CSV:</strong>  Defaults to outputing CSV in output directory <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/csv/</span></code>.</p>
 <p><strong>XLSX:</strong>  Output xlsx file to <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/output.xlsx</span></code>.</p>
+<p><strong>ODS:</strong>  Output xlsx file to <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/output.ods</span></code>.</p>
 <p><strong>SQLITE:</strong>  Output sqlite file to  <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/sqlite.db</span></code>.</p>
 <p><strong>PARQUET:</strong>  Output parquet files in <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/parquet/</span></code>.</p>
 <p><strong>POSTGRES:</strong>  Output in database.</p>
@@ -280,6 +282,10 @@ Options:
 </div>
 <p><strong>xlsx output:</strong></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>--xlsx<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY
+</pre></div>
+</div>
+<p><strong>ods output:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>--ods<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY
 </pre></div>
 </div>
 <p><strong>sqlite output:</strong></p>
@@ -314,7 +320,7 @@ flatterer.flatten<span class="o">(</span><span class="s1">&#39;inputfile.json&#3
 <section id="main-table-name">
 <h2>Main Table Name<a class="headerlink" href="#main-table-name" title="Permalink to this heading">#</a></h2>
 <p>Name of the table that represents data at the root of the JSON object.</p>
-<p>For CSV will create <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/csv/&lt;main_table_name&gt;.csv</span></code> and for XLSX will be the first tab name.</p>
+<p>For CSV will create <code class="docutils literal notranslate"><span class="pre">&lt;OUTPUT_DIRECTORY&gt;/csv/&lt;main_table_name&gt;.csv</span></code> and for XLSX/ODS will be the first tab name.</p>
 <p>For CLI defaults to name of input file without the file ending and for python defaults to <code class="docutils literal notranslate"><span class="pre">main</span></code>.</p>
 <section id="id1">
 <h3>CLI Usage<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
@@ -782,8 +788,8 @@ You can generate just the fields.csv file by <span class="xref myst">not outputt
 <h2>Tables File<a class="headerlink" href="#tables-file" title="Permalink to this heading">#</a></h2>
 <p>Path to tables CSV file.  The file can be used for:</p>
 <ul class="simple">
-<li><p>Changing the sheet order in xlsx output.</p></li>
-<li><p>Giving the tables (and xlsx sheets) a new name by using <code class="docutils literal notranslate"><span class="pre">table_title</span></code></p></li>
+<li><p>Changing the sheet order in xlsx/ods output.</p></li>
+<li><p>Giving the tables (and xlsx/ods sheets) a new name by using <code class="docutils literal notranslate"><span class="pre">table_title</span></code></p></li>
 <li><p>Removing unwanted tables when using the <a class="reference internal" href="#only-tables"><span class="std std-doc">Only Tables</span></a> option.</p></li>
 </ul>
 <p>The CSV file needs the following headers:</p>
@@ -1079,7 +1085,7 @@ This can be useful if you are trying to namespace the output when inserting into
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2021-2022, David Raznick
+                Copyright &#169; 2021-2025, David Raznick
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             

@@ -1,9 +1,9 @@
 # Outputs
 
-All of CSV, XLSX, PARQUET and SQLITE data can be produced with the following.
+All of CSV, XLSX, ODS, PARQUET and SQLITE data can be produced with the following.
 
 ```bash
-flatterer games.json games_dir --xlsx --csv --sqlite --parquet
+flatterer games.json games_dir --xlsx --ods --csv --sqlite --parquet
 ```
 
 This will create the directory structure:
@@ -21,6 +21,7 @@ games_dir/
 ├── tables.csv
 ├── sqlite.db
 ├── output.xlsx
+├── output.ods
 ├── postgresql
 │   ├── postgresql_load.sql
 │   └── postgresql_schema.sql
@@ -36,6 +37,10 @@ The `csv` directory contains a CSV file representing a relational table.  A new 
 ## XLSX
 
 The XLSX output can be found in the output.xlsx file. It contains the same data as the CSV files with a sheet per table.  Sheet names are truncated to not go over the allowed limit.
+
+## ODS
+
+The ODS output can be found in the output.ods file. File is loaded into memory, this could cause issues for large files. Sheet names are truncated to not go over the allowed limit.
 
 ## SQLITE
 
