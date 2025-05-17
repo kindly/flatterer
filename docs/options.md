@@ -66,6 +66,7 @@ Options:
   --id-prefix TEXT            Prefix for all `_link` id fields
   --stats                     Produce stats about the data in the
                               datapackage.json file
+  --all-strings               Convert all fields to strings
   --help                      Show this message and exit.
 ```
 
@@ -520,6 +521,8 @@ The CSV file needs the following headers:
 
 It has the optional heading of `field_title` which will default to the `field_name` if missing.
 
+If `field_type` is `text` then the field will be converted to a string in all outputs. No other type will be considered when processing the data and type guessing will be used.
+
 For example:
 
 |table_name |field_name|field_type|count|field_title|
@@ -530,7 +533,7 @@ For example:
 |games      |_link     |text     |2    | _link     |
 |games      |id        |number   |2    | id        |
 
-It can have additional headers in the file but they will not be used. This is true of columns `count` and `field_type` in the above example.
+It can have additional headers but they will not be used. This is true of columns `count` in the above example.
 
 Field order in the output will the same as the row order in the file.
 
@@ -845,3 +848,22 @@ import flatterer
 
 flatterer.flatten('inputfile.json', 'ouput_dir', low_memory=True)
 ```
+
+## All Strings
+
+Convert all fields to strings. This will speed up processing as it will avoid having to guess the type of the field.
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --all-strings
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', all_strings=True)
+```
+  

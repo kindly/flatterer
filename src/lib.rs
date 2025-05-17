@@ -80,6 +80,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         json_path_selector: String,
         arrays_new_table: bool,
         truncate: bool,
+        all_strings: bool
     ) -> Result<()> {
 
         let mut op = Options::default();
@@ -122,7 +123,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         op.json_path_selector = json_path_selector;
         op.arrays_new_table = arrays_new_table;
         op.truncate = truncate;
-
+        op.all_strings = all_strings;
 
         if let Err(err) = flatten_all(input_files, output_dir, op) {
             if log_error {
@@ -176,6 +177,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         json_path_selector: String,
         arrays_new_table: bool,
         truncate: bool,
+        all_strings: bool
     ) -> Result<()> {
         let mut options = Options::default();
 
@@ -214,6 +216,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         options.json_path_selector = json_path_selector;
         options.arrays_new_table = arrays_new_table;
         options.truncate = truncate;
+        options.all_strings = all_strings;
 
         let final_output_path = PathBuf::from(output_dir);
         let parts_path = final_output_path.join("parts");

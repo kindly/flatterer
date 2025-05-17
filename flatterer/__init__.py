@@ -99,6 +99,7 @@ def flatten(
     json_path="",
     arrays_new_table=False,
     truncate=False,
+    all_strings=False
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -147,7 +148,7 @@ def flatten(
                        schema, schema_titles, path, json_stream, ndjson, 
                        sqlite_path, threads, log_error, postgres, postgres_schema, 
                        drop, pushdown, sql_scripts, evolve, no_link, stats, low_disk, low_memory, 
-                       gzip_input, json_path, arrays_new_table, truncate)
+                       gzip_input, json_path, arrays_new_table, truncate, all_strings)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
@@ -160,7 +161,7 @@ def flatten(
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, sqlite_path, threads, log_error, 
                        postgres, postgres_schema, drop, pushdown, sql_scripts, evolve, 
-                       no_link, stats, low_disk, low_memory, gzip_input, json_path, arrays_new_table, truncate)
+                       no_link, stats, low_disk, low_memory, gzip_input, json_path, arrays_new_table, truncate, all_strings)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 
@@ -255,6 +256,7 @@ def iterator_flatten(*args, **kw):
 @click.option('--truncate', is_flag=True, default=False, help='When loading to postgres or sqlite, truncate the table if it alraedy exists.')
 @click.option('--id-prefix', default="", help='Prefix for all `_link` id fields')
 @click.option('--stats', is_flag=True, default=False, help='Produce stats about the data in the datapackage.json file')
+@click.option('--all-strings', is_flag=True, default=False, help='Convert all fields to strings')
 @click.argument('inputs', required=False, nargs=-1)
 @click.argument('output_directory', required=False)
 def cli(
@@ -293,7 +295,8 @@ def cli(
     stats=False,
     json_path="",
     arrays_new_table=False,
-    truncate=False
+    truncate=False,
+    all_strings=False
 ):
     if web:
         import pathlib
@@ -367,6 +370,6 @@ def cli(
                 json_path=json_path,
                 arrays_new_table=arrays_new_table,
                 truncate=truncate,
-                )
+                all_strings=all_strings)
     except IOError:
         pass

@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.23.0] - 2024-05-17
+
+### New
+- all_strings option to convert all fields to strings.
+
+### Changed
+- If fields.csv declares a field as text then type will be guessed as text and will be converted to string in all outputs.
+
 ## [0.22.0] - 2024-04-10
 
 ### New
