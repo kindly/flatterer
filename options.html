@@ -262,6 +262,7 @@ Options:
   --id-prefix TEXT            Prefix for all `_link` id fields
   --stats                     Produce stats about the data in the
                               datapackage.json file
+  --all-strings               Convert all fields to strings
   --help                      Show this message and exit.
 </pre></div>
 </div>
@@ -701,6 +702,7 @@ flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECT
 <li><p>field_name</p></li>
 </ul>
 <p>It has the optional heading of <code class="docutils literal notranslate"><span class="pre">field_title</span></code> which will default to the <code class="docutils literal notranslate"><span class="pre">field_name</span></code> if missing.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">field_type</span></code> is <code class="docutils literal notranslate"><span class="pre">text</span></code> then the field will be converted to a string in all outputs. No other type will be considered when processing the data and type guessing will be used.</p>
 <p>For example:</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
@@ -746,7 +748,7 @@ flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECT
 </tbody>
 </table>
 </div>
-<p>It can have additional headers in the file but they will not be used. This is true of columns <code class="docutils literal notranslate"><span class="pre">count</span></code> and <code class="docutils literal notranslate"><span class="pre">field_type</span></code> in the above example.</p>
+<p>It can have additional headers but they will not be used. This is true of columns <code class="docutils literal notranslate"><span class="pre">count</span></code> in the above example.</p>
 <p>Field order in the output will the same as the row order in the file.</p>
 <p><code class="docutils literal notranslate"><span class="pre">table_name</span></code> and <code class="docutils literal notranslate"><span class="pre">field_name</span></code> need to match up with the eventual structure of output. The easiest make sure of this is to edit the <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> that is in an output directory.<br />
 You can generate just the fields.csv file by <span class="xref myst">not outputting the CSV files</span>.</p>
@@ -1054,6 +1056,24 @@ This can be useful if you are trying to namespace the output when inserting into
 </div>
 </section>
 </section>
+<section id="all-strings">
+<h2>All Strings<a class="headerlink" href="#all-strings" title="Permalink to this heading">#</a></h2>
+<p>Convert all fields to strings. This will speed up processing as it will avoid having to guess the type of the field.</p>
+<section id="id53">
+<h3>CLI Usage<a class="headerlink" href="#id53" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--all-strings
+</pre></div>
+</div>
+</section>
+<section id="id54">
+<h3>Python Usage<a class="headerlink" href="#id54" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">all_strings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 
         </article>
@@ -1249,6 +1269,11 @@ This can be useful if you are trying to namespace the output when inserting into
 </li>
 <li><a class="reference internal" href="#low-memory-api-only">Low Memory (api only)</a><ul>
 <li><a class="reference internal" href="#id52">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#all-strings">All Strings</a><ul>
+<li><a class="reference internal" href="#id53">CLI Usage</a></li>
+<li><a class="reference internal" href="#id54">Python Usage</a></li>
 </ul>
 </li>
 </ul>
