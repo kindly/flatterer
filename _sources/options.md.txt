@@ -766,6 +766,24 @@ import flatterer
 flatterer.flatten('inputfile.jl', 'ouput_dir', schema_titles='underscore_slug_')
 ```
 
+## ID Prefix
+
+Add a string to the start of all `_link` ids. For example if this is set to `myprefix_` then all `_link` ids will be `myprefix_<id>` eg `myprefix_0`, `myprefix_1` etc.
+
+### CLI Usage
+
+```bash 
+flatterer INPUT_FILE OUTPUT_DIRECTORY --id-prefix myprefix_
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', id_prefix='myprefix_')
+```
+
 ## Stats
 
 Adds additional statistics about the output files in the `datapackage.json` output.
@@ -834,7 +852,11 @@ Python only. Export scripts for importing data into the database.
 
 ### Python Usage
 
+```python
+import flatterer
+
 flatterer.flatten('inputfile.json', 'ouput_dir', sql_scripts=True)
+```
 
 
 ## Low Memory (api only)

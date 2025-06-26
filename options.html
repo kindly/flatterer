@@ -978,17 +978,35 @@ This can be useful if you are trying to namespace the output when inserting into
 </div>
 </section>
 </section>
-<section id="stats">
-<h2>Stats<a class="headerlink" href="#stats" title="Permalink to this heading">#</a></h2>
-<p>Adds additional statistics about the output files in the <code class="docutils literal notranslate"><span class="pre">datapackage.json</span></code> output.</p>
+<section id="id-prefix">
+<h2>ID Prefix<a class="headerlink" href="#id-prefix" title="Permalink to this heading">#</a></h2>
+<p>Add a string to the start of all <code class="docutils literal notranslate"><span class="pre">_link</span></code> ids. For example if this is set to <code class="docutils literal notranslate"><span class="pre">myprefix_</span></code> then all <code class="docutils literal notranslate"><span class="pre">_link</span></code> ids will be <code class="docutils literal notranslate"><span class="pre">myprefix_&lt;id&gt;</span></code> eg <code class="docutils literal notranslate"><span class="pre">myprefix_0</span></code>, <code class="docutils literal notranslate"><span class="pre">myprefix_1</span></code> etc.</p>
 <section id="id45">
 <h3>CLI Usage<a class="headerlink" href="#id45" title="Permalink to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--stats
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--id-prefix<span class="w"> </span>myprefix_
 </pre></div>
 </div>
 </section>
 <section id="id46">
 <h3>Python Usage<a class="headerlink" href="#id46" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">id_prefix</span><span class="o">=</span><span class="s1">&#39;myprefix_&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="stats">
+<h2>Stats<a class="headerlink" href="#stats" title="Permalink to this heading">#</a></h2>
+<p>Adds additional statistics about the output files in the <code class="docutils literal notranslate"><span class="pre">datapackage.json</span></code> output.</p>
+<section id="id47">
+<h3>CLI Usage<a class="headerlink" href="#id47" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--stats
+</pre></div>
+</div>
+</section>
+<section id="id48">
+<h3>Python Usage<a class="headerlink" href="#id48" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -999,15 +1017,15 @@ This can be useful if you are trying to namespace the output when inserting into
 <section id="preview">
 <h2>Preview<a class="headerlink" href="#preview" title="Permalink to this heading">#</a></h2>
 <p>The number of rows written in final files. All statistics in <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">datapackage.json</span></code> will show counts related to <em>all</em> the data.</p>
-<section id="id47">
-<h3>CLI Usage<a class="headerlink" href="#id47" title="Permalink to this heading">#</a></h3>
+<section id="id49">
+<h3>CLI Usage<a class="headerlink" href="#id49" title="Permalink to this heading">#</a></h3>
 <p>Only output first 10 lines of all the tables.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--preview<span class="w"> </span><span class="m">10</span>
 </pre></div>
 </div>
 </section>
-<section id="id48">
-<h3>Python Usage<a class="headerlink" href="#id48" title="Permalink to this heading">#</a></h3>
+<section id="id50">
+<h3>Python Usage<a class="headerlink" href="#id50" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">preview</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -1021,14 +1039,14 @@ This can be useful if you are trying to namespace the output when inserting into
 <p>Works best with new line delimited JSON <code class="docutils literal notranslate"><span class="pre">--ndjson</span></code> as JSON parsing can then be done by each thread. This can about a x3 times improvement with 6 threads if you have that many CPU cores. Without <code class="docutils literal notranslate"><span class="pre">--ndjson</span></code> makes only about x1.24 improvement on 2 threads and not worth going over 2 as it will not lead to performance improvement. For very small datasets (less than 100 object) using threads will most likely be slower.</p>
 <p><strong>Warning:</strong> When using this mode, not checks will be done to ensure an array of objects exists in the data. So in some circumstances, if the wrong options are chosen, no error will be raised.</p>
 <p><strong>Warning:</strong> May have issues with inline-one-to-one as each thread will determine what should be inlined.</p>
-<section id="id49">
-<h3>CLI Usage<a class="headerlink" href="#id49" title="Permalink to this heading">#</a></h3>
+<section id="id51">
+<h3>CLI Usage<a class="headerlink" href="#id51" title="Permalink to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--threads<span class="w"> </span><span class="m">0</span>
 </pre></div>
 </div>
 </section>
-<section id="id50">
-<h3>Python Usage<a class="headerlink" href="#id50" title="Permalink to this heading">#</a></h3>
+<section id="id52">
+<h3>Python Usage<a class="headerlink" href="#id52" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -1039,16 +1057,20 @@ This can be useful if you are trying to namespace the output when inserting into
 <section id="sql-scripts">
 <h2>Sql Scripts<a class="headerlink" href="#sql-scripts" title="Permalink to this heading">#</a></h2>
 <p>Python only. Export scripts for importing data into the database.</p>
-<section id="id51">
-<h3>Python Usage<a class="headerlink" href="#id51" title="Permalink to this heading">#</a></h3>
-<p>flatterer.flatten(‘inputfile.json’, ‘ouput_dir’, sql_scripts=True)</p>
+<section id="id53">
+<h3>Python Usage<a class="headerlink" href="#id53" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">sql_scripts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="low-memory-api-only">
 <h2>Low Memory (api only)<a class="headerlink" href="#low-memory-api-only" title="Permalink to this heading">#</a></h2>
 <p>Reduces memory usage, sacrificing some speed.  Use this if JSON contains very large JSON objects.</p>
-<section id="id52">
-<h3>Python Usage<a class="headerlink" href="#id52" title="Permalink to this heading">#</a></h3>
+<section id="id54">
+<h3>Python Usage<a class="headerlink" href="#id54" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1059,14 +1081,14 @@ This can be useful if you are trying to namespace the output when inserting into
 <section id="all-strings">
 <h2>All Strings<a class="headerlink" href="#all-strings" title="Permalink to this heading">#</a></h2>
 <p>Convert all fields to strings. This will speed up processing as it will avoid having to guess the type of the field.</p>
-<section id="id53">
-<h3>CLI Usage<a class="headerlink" href="#id53" title="Permalink to this heading">#</a></h3>
+<section id="id55">
+<h3>CLI Usage<a class="headerlink" href="#id55" title="Permalink to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--all-strings
 </pre></div>
 </div>
 </section>
-<section id="id54">
-<h3>Python Usage<a class="headerlink" href="#id54" title="Permalink to this heading">#</a></h3>
+<section id="id56">
+<h3>Python Usage<a class="headerlink" href="#id56" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
 
 <span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">all_strings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1248,32 +1270,37 @@ This can be useful if you are trying to namespace the output when inserting into
 <li><a class="reference internal" href="#id44">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#stats">Stats</a><ul>
+<li><a class="reference internal" href="#id-prefix">ID Prefix</a><ul>
 <li><a class="reference internal" href="#id45">CLI Usage</a></li>
 <li><a class="reference internal" href="#id46">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#preview">Preview</a><ul>
+<li><a class="reference internal" href="#stats">Stats</a><ul>
 <li><a class="reference internal" href="#id47">CLI Usage</a></li>
 <li><a class="reference internal" href="#id48">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#threads">Threads</a><ul>
+<li><a class="reference internal" href="#preview">Preview</a><ul>
 <li><a class="reference internal" href="#id49">CLI Usage</a></li>
 <li><a class="reference internal" href="#id50">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sql-scripts">Sql Scripts</a><ul>
-<li><a class="reference internal" href="#id51">Python Usage</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#low-memory-api-only">Low Memory (api only)</a><ul>
+<li><a class="reference internal" href="#threads">Threads</a><ul>
+<li><a class="reference internal" href="#id51">CLI Usage</a></li>
 <li><a class="reference internal" href="#id52">Python Usage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#all-strings">All Strings</a><ul>
-<li><a class="reference internal" href="#id53">CLI Usage</a></li>
+<li><a class="reference internal" href="#sql-scripts">Sql Scripts</a><ul>
+<li><a class="reference internal" href="#id53">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#low-memory-api-only">Low Memory (api only)</a><ul>
 <li><a class="reference internal" href="#id54">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#all-strings">All Strings</a><ul>
+<li><a class="reference internal" href="#id55">CLI Usage</a></li>
+<li><a class="reference internal" href="#id56">Python Usage</a></li>
 </ul>
 </li>
 </ul>
