@@ -28,7 +28,21 @@ jobs:
         architecture: x64
     - name: Make wheel
       run: |
-        sudo docker build -t flatterer-anylinux .
+        # quay.io can be flaky, so retry the build (which pulls the base image) a few times
+        for attempt in 1 2 3 4 5; do
+          echo "::group::docker build (attempt $attempt)"
+          if sudo docker build -t flatterer-anylinux .; then
+            echo "::endgroup::"
+            break
+          fi
+          echo "::endgroup::"
+          if [ "$attempt" -eq 5 ]; then
+            echo "docker build failed after $attempt attempts" >&2
+            exit 1
+          fi
+          echo "docker build failed (attempt $attempt), retrying in $((attempt * 5))s..."
+          sleep $((attempt * 5))
+        done
         sudo docker run  -v $(pwd):/io flatterer-anylinux build -f --release --out dist
     - name: Upload wheels
       uses: actions/upload-artifact@v4
