@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.24.1] - 2026-06-02
+
+### Fixed
+- Integral float values (e.g. `1.0`) are now written as `1` in the iterator/in-memory path, matching the file path. Previously these numbers were emitted as `1.0`, producing float columns instead of integers.
+
 ## [0.23.0] - 2025-05-17
 
 ### New
