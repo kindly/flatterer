@@ -1,4 +1,4 @@
-use clap::{arg, Command};
+use clap::{arg, ArgAction, Command};
 use env_logger::Env;
 use eyre::Result;
 use libflatterer::{flatten_all, Options, TERMINATE};
@@ -10,6 +10,9 @@ fn main() -> Result<()> {
         .version("0.14")
         .author("David Raznick")
         .about("Make JSON flatterer")
+        // `-h` is used by --schema-titles below, so expose help as `--help` only.
+        .disable_help_flag(true)
+        .arg(arg!(--help "Print help").action(ArgAction::Help).required(false))
         .args(&[
             arg!(<INPUT>                               "Sets the input file to use"),
             arg!(<OUT_DIR>                             "Sets the output directory"),
@@ -46,72 +49,72 @@ fn main() -> Result<()> {
     })
     .expect("Error setting Ctrl-C handler");
 
-    let input = matches.value_of("INPUT").unwrap(); //ok as parser will detect
+    let input = matches.get_one::<String>("INPUT").unwrap(); //ok as parser will detect
     let input_path = PathBuf::from(input);
     if !input_path.exists() {
         eprintln!("Can not find file {}", input);
         return Ok(());
     }
 
-    let output_dir = matches.value_of("OUT_DIR").unwrap(); //ok as parser will detect
+    let output_dir = matches.get_one::<String>("OUT_DIR").unwrap(); //ok as parser will detect
 
     let mut options = Options::builder().build();
 
     let mut selectors = vec![];
 
-    if let Some(path) = matches.value_of("path") {
+    if let Some(path) = matches.get_one::<String>("path") {
         selectors.push(path.to_string());
     }
     options.path = selectors;
 
-    options.main_table_name = if let Some(main) = matches.value_of("main") {
+    options.main_table_name = if let Some(main) = matches.get_one::<String>("main") {
         main.to_string()
     } else {
         "main".to_string()
     };
 
-    options.schema = if let Some(schema_path) = matches.value_of("schema") {
+    options.schema = if let Some(schema_path) = matches.get_one::<String>("schema") {
         schema_path.into()
     } else {
         "".into()
     };
 
-    options.table_prefix = if let Some(table_prefix) = matches.value_of("table-prefix") {
+    options.table_prefix = if let Some(table_prefix) = matches.get_one::<String>("table-prefix") {
         table_prefix.into()
     } else {
         "".into()
     };
 
-    options.path_separator = if let Some(path_seperator) = matches.value_of("path-separator") {
+    options.path_separator = if let Some(path_seperator) = matches.get_one::<String>("path-separator") {
         path_seperator.into()
     } else {
         "_".into()
     };
 
-    options.schema_titles = if let Some(schema_titles) = matches.value_of("schema-titles") {
+    options.schema_titles = if let Some(schema_titles) = matches.get_one::<String>("schema-titles") {
         schema_titles.into()
     } else {
         "".into()
     };
 
-    options.csv = !matches.is_present("nocsv");
-    options.xlsx = matches.is_present("xlsx");
-    options.sqlite = matches.is_present("sqlite");
-    options.parquet = matches.is_present("parquet");
-    options.force = matches.is_present("force");
-    options.ndjson = matches.is_present("ndjson");
-    options.json_stream = matches.is_present("json-stream");
-    options.inline_one_to_one = matches.is_present("inline-one-to-one");
+    options.csv = !matches.get_flag("nocsv");
+    options.xlsx = matches.get_flag("xlsx");
+    options.sqlite = matches.get_flag("sqlite");
+    options.parquet = matches.get_flag("parquet");
+    options.force = matches.get_flag("force");
+    options.ndjson = matches.get_flag("ndjson");
+    options.json_stream = matches.get_flag("json-stream");
+    options.inline_one_to_one = matches.get_flag("inline-one-to-one");
 
-    if let Ok(threads) = matches.value_of_t("threads") {
-        options.threads =  threads;
+    if let Some(threads) = matches.get_one::<String>("threads").and_then(|t| t.parse().ok()) {
+        options.threads = threads;
     };
 
-    if let Some(fields) = matches.value_of("fields") {
+    if let Some(fields) = matches.get_one::<String>("fields") {
         options.fields_csv = fields.into();
     };
 
-    if let Some(tables) = matches.value_of("tables") {
+    if let Some(tables) = matches.get_one::<String>("tables") {
         options.tables_csv = tables.into();
     };
 

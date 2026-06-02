@@ -13,9 +13,9 @@ use std::fs::remove_dir_all;
 use std::sync::atomic::Ordering;
 
 #[pymodule]
-fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
+fn flatterer(m: &Bound<'_, PyModule>) -> PyResult<()> {
     #[pyfn(m)]
-    fn setup_ctrlc(_py: Python) {
+    fn setup_ctrlc(_py: Python<'_>) {
         log::debug!("ctrlc setup");
         ctrlc::set_handler(|| {
             log::debug!("ctrlc pressed");
@@ -25,20 +25,20 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
         .expect("Error setting Ctrl-C handler");
     }
     #[pyfn(m)]
-    fn setup_logging(_py: Python, default_log_level: String) {
+    fn setup_logging(_py: Python<'_>, default_log_level: String) {
         env_logger::Builder::from_env(Env::new().filter_or("FLATTERER_LOG", &default_log_level))
             .format_timestamp_millis()
             .format_target(false)
             .init();
     }
     #[pyfn(m)]
-    fn web_rs(_py: Python) {
+    fn web_rs(_py: Python<'_>) {
         flatterer_web::main().unwrap();
     }
 
     #[pyfn(m)]
     fn flatten_rs(
-        _py: Python,
+        _py: Python<'_>,
         input_files: Vec<String>,
         output_dir: String,
         csv: bool,
@@ -138,8 +138,7 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
     #[pyfn(m)]
     fn iterator_flatten_rs(
-        py: Python,
-        mut objs: &PyIterator,
+        objs: &Bound<'_, PyIterator>,
         output_dir: String,
         csv: bool,
         xlsx: bool,
@@ -295,21 +294,8 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
 
         drop(initial_receiver);
 
-        let mut gilpool;
-
-        loop {
-            unsafe {
-                gilpool = py.new_pool();
-            }
-
-            let obj = objs.next();
-            if obj.is_none() {
-                break;
-            }
-
-            let result = obj.unwrap(); //checked for none
-
-            let json_bytes = PyAny::extract::<&[u8]>(result?)?.to_owned();
+        for obj in objs.clone() {
+            let json_bytes: Vec<u8> = obj?.extract()?;
 
             if let Err(err) = sender.send(json_bytes) {
                 if log_error {
@@ -317,9 +303,6 @@ fn flatterer(_py: Python, m: &PyModule) -> PyResult<()> {
                 };
                 return Err(err.into());
             }
-
-
-            drop(gilpool)
         }
 
         drop(sender);

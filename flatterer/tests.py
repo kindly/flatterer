@@ -29,9 +29,19 @@ class TestBasic(unittest.TestCase):
             'tables',
         ):
             self.assertEqual(
-                output[field].to_dict('records'), 
-                pandas.read_csv(f'{directory}/{field}.csv').to_dict('records'), 
+                output[field].to_dict('records'),
+                pandas.read_csv(f'{directory}/{field}.csv').to_dict('records'),
             )
+
+        # Build the same per-table dtype mapping that flatterer.flatten applies
+        # to the in-memory dataframes (text fields forced to str), so the
+        # expected CSVs are read with identical types and the comparison is
+        # symmetric.
+        expected_fields = pandas.read_csv(f'{directory}/fields.csv')
+        types_by_table = {}
+        for table_name, field_name, field_type, field_title, count in expected_fields.values:
+            if field_type == 'text':
+                types_by_table.setdefault(table_name, {})[field_title] = str
 
         for table in (
             'main',
@@ -39,8 +49,11 @@ class TestBasic(unittest.TestCase):
             'developer',
         ):
             self.assertEqual(
-                output['data'][table].to_dict('records'), 
-                pandas.read_csv(f'{directory}/csv/{table}.csv').to_dict('records'), 
+                output['data'][table].to_dict('records'),
+                pandas.read_csv(
+                    f'{directory}/csv/{table}.csv',
+                    dtype=types_by_table.get(table, {}),
+                ).to_dict('records'),
             )
 
 
