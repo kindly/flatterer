@@ -1,7 +1,7 @@
-use clap::{arg, ArgAction, Command};
+use clap::{ArgAction, Command, arg};
 use env_logger::Env;
 use eyre::Result;
-use libflatterer::{flatten_all, Options, TERMINATE};
+use libflatterer::{Options, TERMINATE, flatten_all};
 use std::path::PathBuf;
 use std::sync::atomic::Ordering;
 
@@ -85,13 +85,15 @@ fn main() -> Result<()> {
         "".into()
     };
 
-    options.path_separator = if let Some(path_seperator) = matches.get_one::<String>("path-separator") {
-        path_seperator.into()
-    } else {
-        "_".into()
-    };
+    options.path_separator =
+        if let Some(path_seperator) = matches.get_one::<String>("path-separator") {
+            path_seperator.into()
+        } else {
+            "_".into()
+        };
 
-    options.schema_titles = if let Some(schema_titles) = matches.get_one::<String>("schema-titles") {
+    options.schema_titles = if let Some(schema_titles) = matches.get_one::<String>("schema-titles")
+    {
         schema_titles.into()
     } else {
         "".into()
@@ -106,7 +108,10 @@ fn main() -> Result<()> {
     options.json_stream = matches.get_flag("json-stream");
     options.inline_one_to_one = matches.get_flag("inline-one-to-one");
 
-    if let Some(threads) = matches.get_one::<String>("threads").and_then(|t| t.parse().ok()) {
+    if let Some(threads) = matches
+        .get_one::<String>("threads")
+        .and_then(|t| t.parse().ok())
+    {
         options.threads = threads;
     };
 

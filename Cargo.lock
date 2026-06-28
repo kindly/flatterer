@@ -1398,6 +1398,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "crossbeam-deque"
+version = "0.8.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9dd111b7b7f7d55b72c0a6ae361660ee5853c9af73f70c3c2ef6858b950e2e51"
+dependencies = [
+ "crossbeam-epoch",
+ "crossbeam-utils",
+]
+
+[[package]]
+name = "crossbeam-epoch"
+version = "0.9.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5b82ac4a3c2ca9c3460964f020e1402edd5753411d7737aa39c3714ad1b5420e"
+dependencies = [
+ "crossbeam-utils",
+]
+
+[[package]]
 name = "crossbeam-utils"
 version = "0.8.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1487,9 +1506,9 @@ dependencies = [
 
 [[package]]
 name = "csvs_convert"
-version = "0.13.1"
+version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7e3d3d3a718d61c67e88f20574afec39948845ce386041ce59a11cdff7d6bc0"
+checksum = "1c3f26b3209ea8a666bd57478ee49db72832b98f6a77aec551ff990c2cf319db"
 dependencies = [
  "arrow",
  "chrono",
@@ -1506,6 +1525,7 @@ dependencies = [
  "petgraph",
  "postgres",
  "rand 0.10.1",
+ "rayon",
  "regex",
  "rusqlite",
  "rust_xlsxwriter",
@@ -1908,7 +1928,7 @@ dependencies = [
 
 [[package]]
 name = "flatterer"
-version = "0.24.1"
+version = "0.25.0"
 dependencies = [
  "clap",
  "crossbeam-channel",
@@ -1917,7 +1937,7 @@ dependencies = [
  "env_logger",
  "eyre",
  "flatterer-web",
- "libflatterer",
+ "libflatterer 0.25.0",
  "log",
  "multi_reader",
  "num_cpus",
@@ -1942,7 +1962,7 @@ dependencies = [
  "futures-core",
  "futures-util",
  "http-types",
- "libflatterer",
+ "libflatterer 0.24.1",
  "log",
  "open",
  "pin-project-lite",
@@ -2814,6 +2834,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "jiter"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7866f284df68dbc242796251ed9768bde2b58ebc4d7d32cc07cc7fd993e3ed6c"
+dependencies = [
+ "ahash 0.8.12",
+ "bitvec",
+ "lexical-parse-float",
+ "num-bigint",
+ "num-traits",
+ "pyo3",
+ "smallvec",
+]
+
+[[package]]
 name = "jobserver"
 version = "0.1.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3018,6 +3053,52 @@ dependencies = [
  "umya-spreadsheet",
  "url",
  "yajlish",
+]
+
+[[package]]
+name = "libflatterer"
+version = "0.25.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1a623cf737307a028cd045d28a9bf5f1d0faf263bd128df7a8257eb7ad79d27"
+dependencies = [
+ "arrow-array",
+ "arrow-schema",
+ "async-compression",
+ "bytes",
+ "crossbeam-channel",
+ "csv",
+ "csv-async",
+ "csvs_convert",
+ "env_logger",
+ "flate2",
+ "futures",
+ "futures-util",
+ "indexmap",
+ "itertools",
+ "jiter",
+ "jsonpath-rust",
+ "jsonref",
+ "lazy_static",
+ "log",
+ "nanoid",
+ "num_cpus",
+ "object_store",
+ "parquet",
+ "regex",
+ "rust_xlsxwriter",
+ "rustc-hash",
+ "serde",
+ "serde_json",
+ "slug",
+ "smallvec",
+ "smartstring",
+ "snafu 0.9.1",
+ "tempfile",
+ "tokio",
+ "tokio-util",
+ "typed-builder",
+ "umya-spreadsheet",
+ "url",
 ]
 
 [[package]]
@@ -3853,6 +3934,8 @@ checksum = "91fd8e38a3b50ed1167fb981cd6fd60147e091784c427b8f7183a7ee32c31c12"
 dependencies = [
  "eyre",
  "libc",
+ "num-bigint",
+ "num-traits",
  "once_cell",
  "portable-atomic",
  "pyo3-build-config",
@@ -4153,6 +4236,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca3129af7b92a17112d59ad498c6f81eaf463253766b90396d39ea7a39d6613c"
 dependencies = [
  "rand_core 0.5.1",
+]
+
+[[package]]
+name = "rayon"
+version = "1.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fb39b166781f92d482534ef4b4b1b2568f42613b53e5b6c160e24cfbfa30926d"
+dependencies = [
+ "either",
+ "rayon-core",
+]
+
+[[package]]
+name = "rayon-core"
+version = "1.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "22e18b0f0062d30d4230b2e85ff77fdfe4326feb054b9783a3460d8435c8ab91"
+dependencies = [
+ "crossbeam-deque",
+ "crossbeam-utils",
 ]
 
 [[package]]

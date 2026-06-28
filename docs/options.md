@@ -67,6 +67,9 @@ Options:
   --stats                     Produce stats about the data in the
                               datapackage.json file
   --all-strings               Convert all fields to strings
+  --schema-only               Only output schema files, not data files
+  --stream-wrapped / --no-stream-wrapped
+                              Stream wrapped JSON objects, default true
   --help                      Show this message and exit.
 ```
 
@@ -887,5 +890,41 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --all-strings
 import flatterer
 
 flatterer.flatten('inputfile.json', 'ouput_dir', all_strings=True)
+```
+
+## Schema Only
+
+Only output schema files (`datapackage.json`, `fields.csv`, and `tables.csv`) and skip data files.
+
+### CLI Usage
+
+```bash
+flatterer INPUT_FILE OUTPUT_DIRECTORY --schema-only
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', schema_only=True)
+```
+
+## Stream Wrapped
+
+Stream arrays of objects inside wrapped JSON objects without buffering the whole document. This is enabled by default.
+
+### CLI Usage
+
+```bash
+flatterer INPUT_FILE OUTPUT_DIRECTORY --no-stream-wrapped
+```
+
+### Python Usage
+
+```python
+import flatterer
+
+flatterer.flatten('inputfile.json', 'ouput_dir', stream_wrapped=False)
 ```
   

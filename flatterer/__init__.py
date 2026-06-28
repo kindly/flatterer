@@ -99,7 +99,9 @@ def flatten(
     json_path="",
     arrays_new_table=False,
     truncate=False,
-    all_strings=False
+    all_strings=False,
+    schema_only=False,
+    stream_wrapped=True
 ):
     global LOGGING_SETUP
     if not LOGGING_SETUP:
@@ -148,7 +150,7 @@ def flatten(
                        schema, schema_titles, path, json_stream, ndjson, 
                        sqlite_path, threads, log_error, postgres, postgres_schema, 
                        drop, pushdown, sql_scripts, evolve, no_link, stats, low_disk, low_memory, 
-                       gzip_input, json_path, arrays_new_table, truncate, all_strings)
+                       gzip_input, json_path, arrays_new_table, truncate, all_strings, schema_only, stream_wrapped)
         elif method == 'iter':
             if path:
                 raise AttributeError("path not allowed when supplying an iterator")
@@ -161,7 +163,8 @@ def flatten(
                        table_prefix, id_prefix, emit_obj, force,  
                        schema, schema_titles, sqlite_path, threads, log_error, 
                        postgres, postgres_schema, drop, pushdown, sql_scripts, evolve, 
-                       no_link, stats, low_disk, low_memory, gzip_input, json_path, arrays_new_table, truncate, all_strings)
+                       no_link, stats, low_disk, low_memory, gzip_input, json_path, arrays_new_table, truncate, all_strings,
+                       schema_only, stream_wrapped)
         else:
             raise AttributeError("input needs to be a string or a generator of strings, dicts or bytes")
 
@@ -175,7 +178,7 @@ def flatten(
             data=PrettyDict()
         )
 
-        if csv:
+        if csv and not schema_only:
             for name, title in output['tables'].values:
                 csv_path = os.path.join(output_dir, 'csv', str(title) + '.csv')
                 if dataframe:
@@ -187,13 +190,13 @@ def flatten(
                 else:
                     output['data'][title] = csv_path
         
-        if sqlite:
+        if sqlite and not schema_only:
             output['sqlite'] = os.path.join(output_dir, 'sqlite.db')
 
-        if xlsx:
+        if xlsx and not schema_only:
             output['xlsx'] = os.path.join(output_dir, 'output.xlsx')
 
-        if ods:
+        if ods and not schema_only:
             output['ods'] = os.path.join(output_dir, 'output.ods')
 
         return output
@@ -257,6 +260,8 @@ def iterator_flatten(*args, **kw):
 @click.option('--id-prefix', default="", help='Prefix for all `_link` id fields')
 @click.option('--stats', is_flag=True, default=False, help='Produce stats about the data in the datapackage.json file')
 @click.option('--all-strings', is_flag=True, default=False, help='Convert all fields to strings')
+@click.option('--schema-only', is_flag=True, default=False, help='Only output schema files, not data files')
+@click.option('--stream-wrapped/--no-stream-wrapped', default=True, help='Stream wrapped JSON objects, default true')
 @click.argument('inputs', required=False, nargs=-1)
 @click.argument('output_directory', required=False)
 def cli(
@@ -296,7 +301,9 @@ def cli(
     json_path="",
     arrays_new_table=False,
     truncate=False,
-    all_strings=False
+    all_strings=False,
+    schema_only=False,
+    stream_wrapped=True
 ):
     if web:
         import pathlib
@@ -370,6 +377,8 @@ def cli(
                 json_path=json_path,
                 arrays_new_table=arrays_new_table,
                 truncate=truncate,
-                all_strings=all_strings)
+                all_strings=all_strings,
+                schema_only=schema_only,
+                stream_wrapped=stream_wrapped)
     except IOError:
         pass

@@ -1,10 +1,13 @@
-use crossbeam_channel::{bounded, Sender, Receiver};
-use csvs_convert::{merge_datapackage_with_options, datapackage_to_parquet_with_options, datapackage_to_sqlite_with_options};
+use crossbeam_channel::{Receiver, Sender, bounded};
+use csvs_convert::{
+    datapackage_to_parquet_with_options, datapackage_to_sqlite_with_options,
+    merge_datapackage_with_options,
+};
 use eyre::{Result, eyre};
-use libflatterer::{flatten_all, Options, TERMINATE, FlatFiles};
+use libflatterer::{FlatFiles, Options, TERMINATE, flatten_all};
 use serde_json::Value;
-use std::thread;
 use std::path::PathBuf;
+use std::thread;
 
 use env_logger::Env;
 use pyo3::prelude::*;
@@ -74,15 +77,16 @@ fn flatterer(m: &Bound<'_, PyModule>) -> PyResult<()> {
         evolve: bool,
         no_link: bool,
         stats: bool,
-        low_disk:bool,
-        low_memory:bool,
-        gzip_input:bool,
+        low_disk: bool,
+        low_memory: bool,
+        gzip_input: bool,
         json_path_selector: String,
         arrays_new_table: bool,
         truncate: bool,
-        all_strings: bool
+        all_strings: bool,
+        schema_only: bool,
+        stream_wrapped: bool,
     ) -> Result<()> {
-
         let mut op = Options::default();
 
         op.csv = csv;
@@ -124,6 +128,8 @@ fn flatterer(m: &Bound<'_, PyModule>) -> PyResult<()> {
         op.arrays_new_table = arrays_new_table;
         op.truncate = truncate;
         op.all_strings = all_strings;
+        op.schema_only = schema_only;
+        op.stream_wrapped = stream_wrapped;
 
         if let Err(err) = flatten_all(input_files, output_dir, op) {
             if log_error {
@@ -170,13 +176,15 @@ fn flatterer(m: &Bound<'_, PyModule>) -> PyResult<()> {
         evolve: bool,
         no_link: bool,
         stats: bool,
-        low_disk:bool,
-        low_memory:bool,
-        gzip_input:bool,
+        low_disk: bool,
+        low_memory: bool,
+        gzip_input: bool,
         json_path_selector: String,
         arrays_new_table: bool,
         truncate: bool,
-        all_strings: bool
+        all_strings: bool,
+        schema_only: bool,
+        stream_wrapped: bool,
     ) -> Result<()> {
         let mut options = Options::default();
 
@@ -216,6 +224,8 @@ fn flatterer(m: &Bound<'_, PyModule>) -> PyResult<()> {
         options.arrays_new_table = arrays_new_table;
         options.truncate = truncate;
         options.all_strings = all_strings;
+        options.schema_only = schema_only;
+        options.stream_wrapped = stream_wrapped;
 
         let final_output_path = PathBuf::from(output_dir);
         let parts_path = final_output_path.join("parts");
@@ -237,11 +247,14 @@ fn flatterer(m: &Bound<'_, PyModule>) -> PyResult<()> {
                 if options.force {
                     remove_dir_all(&final_output_path)?;
                 } else {
-                    return Err(eyre!("Output directory {} already exists", final_output_path.to_string_lossy()));
+                    return Err(eyre!(
+                        "Output directory {} already exists",
+                        final_output_path.to_string_lossy()
+                    ));
                 }
             }
 
-            std::fs::create_dir_all(&parts_path)?        
+            std::fs::create_dir_all(&parts_path)?
         }
 
         let (sender, initial_receiver): (Sender<Vec<u8>>, Receiver<Vec<u8>>) = bounded(1000);
@@ -346,7 +359,8 @@ fn flatterer(m: &Bound<'_, PyModule>) -> PyResult<()> {
             if options.sqlite {
                 let op = csvs_convert::Options::builder().build();
                 if options.sqlite_path.is_empty() {
-                    options.sqlite_path = final_output_path.join("sqlite.db").to_string_lossy().into();
+                    options.sqlite_path =
+                        final_output_path.join("sqlite.db").to_string_lossy().into();
                 }
                 datapackage_to_sqlite_with_options(
                     options.sqlite_path,
@@ -356,7 +370,8 @@ fn flatterer(m: &Bound<'_, PyModule>) -> PyResult<()> {
             }
 
             if !options.csv {
-                remove_dir_all(final_output_path.join("csv"))?        }
+                remove_dir_all(final_output_path.join("csv"))?
+            }
 
             libflatterer::write_metadata_csvs_from_datapackage(final_output_path)?;
         }
