@@ -263,6 +263,9 @@ Options:
   --stats                     Produce stats about the data in the
                               datapackage.json file
   --all-strings               Convert all fields to strings
+  --schema-only               Only output schema files, not data files
+  --stream-wrapped / --no-stream-wrapped
+                              Stream wrapped JSON objects, default true
   --help                      Show this message and exit.
 </pre></div>
 </div>
@@ -1096,6 +1099,42 @@ This can be useful if you are trying to namespace the output when inserting into
 </div>
 </section>
 </section>
+<section id="schema-only">
+<h2>Schema Only<a class="headerlink" href="#schema-only" title="Permalink to this heading">#</a></h2>
+<p>Only output schema files (<code class="docutils literal notranslate"><span class="pre">datapackage.json</span></code>, <code class="docutils literal notranslate"><span class="pre">fields.csv</span></code>, and <code class="docutils literal notranslate"><span class="pre">tables.csv</span></code>) and skip data files.</p>
+<section id="id57">
+<h3>CLI Usage<a class="headerlink" href="#id57" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--schema-only
+</pre></div>
+</div>
+</section>
+<section id="id58">
+<h3>Python Usage<a class="headerlink" href="#id58" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">schema_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="stream-wrapped">
+<h2>Stream Wrapped<a class="headerlink" href="#stream-wrapped" title="Permalink to this heading">#</a></h2>
+<p>Stream arrays of objects inside wrapped JSON objects without buffering the whole document. This is enabled by default.</p>
+<section id="id59">
+<h3>CLI Usage<a class="headerlink" href="#id59" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatterer<span class="w"> </span>INPUT_FILE<span class="w"> </span>OUTPUT_DIRECTORY<span class="w"> </span>--no-stream-wrapped
+</pre></div>
+</div>
+</section>
+<section id="id60">
+<h3>Python Usage<a class="headerlink" href="#id60" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">flatterer</span>
+
+<span class="n">flatterer</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;inputfile.json&#39;</span><span class="p">,</span> <span class="s1">&#39;ouput_dir&#39;</span><span class="p">,</span> <span class="n">stream_wrapped</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 
         </article>
@@ -1301,6 +1340,16 @@ This can be useful if you are trying to namespace the output when inserting into
 <li><a class="reference internal" href="#all-strings">All Strings</a><ul>
 <li><a class="reference internal" href="#id55">CLI Usage</a></li>
 <li><a class="reference internal" href="#id56">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#schema-only">Schema Only</a><ul>
+<li><a class="reference internal" href="#id57">CLI Usage</a></li>
+<li><a class="reference internal" href="#id58">Python Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#stream-wrapped">Stream Wrapped</a><ul>
+<li><a class="reference internal" href="#id59">CLI Usage</a></li>
+<li><a class="reference internal" href="#id60">Python Usage</a></li>
 </ul>
 </li>
 </ul>

@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.25.0] - 2026-06-28
+
+### Changed
+- Upgrade `libflatterer` to 0.25.0.
+- Python API and CLI now expose `schema_only`/`--schema-only` and `stream_wrapped`/`--stream-wrapped`.
+- JSON flattening now uses the new jiter streaming parser from `libflatterer`, replacing the previous YAJL parser path.
+- Expect 1.5-2x speed improvements for most JSON shapes in both single-threaded and multithreaded modes.
+- For nested lists of dictionaries, multithreaded runs can be 3-4x faster because the jiter parser is much faster.
+- Wrapped JSON objects now stream arrays of objects by default, reducing memory use for large wrapped inputs.
+- JSON stream input now uses the jiter streaming parser, improving streaming behavior while preserving NDJSON-compatible output.
+- Schema-only output now uses the new structural scan path where supported, avoiding full row materialization.
+- Output cell handling now keeps short strings in `SmartString`, reducing allocation overhead in the hot flattening path.
+- One-to-many link level handling has been simplified in `libflatterer`.
+
+### Fixed
+- Mixed arrays whose first item is an object are now handled consistently, including non-object elements as `value` rows instead of regressing in multicore processing.
+
 ## [0.24.1] - 2026-06-02
 
 ### Fixed
@@ -430,4 +447,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - [Inline One to One option](https://flatterer.opendata.coop/options.html#inline-one-to-one) to mean that if an array only has one item in for all the data then treat it as sub-object.
-
