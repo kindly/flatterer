@@ -556,7 +556,7 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --fields fields.csv
 ```python
 import flatterer
 
-flatterer.flatten('inputfile.jl', 'ouput_dir', fields='fields.csv')
+flatterer.flatten('inputfile.jl', 'ouput_dir', fields_csv='fields.csv')
 ```
 
 ## Only Fields
@@ -574,7 +574,7 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --fields fields.csv --only-fields
 ```python
 import flatterer
 
-flatterer.flatten('inputfile.jl', 'ouput_dir', fields='fields.csv', only_fields=True)
+flatterer.flatten('inputfile.jl', 'ouput_dir', fields='fields_csv.csv', only_fields=True)
 ```
 
 ## Tables File
@@ -614,7 +614,7 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --tables tables.csv
 ```python
 import flatterer
 
-flatterer.flatten('inputfile.jl', 'ouput_dir', tables='tables.csv')
+flatterer.flatten('inputfile.jl', 'ouput_dir', tables_csv='tables.csv')
 ```
 
 ## Only Tables
@@ -632,7 +632,7 @@ flatterer INPUT_FILE OUTPUT_DIRECTORY --tables tables.csv --only-tables
 ```python
 import flatterer
 
-flatterer.flatten('inputfile.jl', 'ouput_dir', tables='tables.csv', only_tables=True)
+flatterer.flatten('inputfile.jl', 'ouput_dir', tables='tables_csv.csv', only_tables=True)
 ```
 
 ## Inline One To One
