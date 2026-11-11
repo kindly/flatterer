@@ -1,6 +1,8 @@
 import unittest
 import json
 
+from click.testing import CliRunner
+
 import flatterer
 import ijson
 import pandas
@@ -111,3 +113,21 @@ class TestBasic(unittest.TestCase):
             output['fields'].to_dict('records'), 
             df.to_dict('records'), 
         )
+
+
+class TestMissingInputFile(unittest.TestCase):
+
+    def test_missing_input_file_reports_clean_error(self):
+        # A missing input file must be reported as a clean CLI error
+        # (nonzero exit, no raw traceback), not a RuntimeError traceback
+        # from the backend.
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            result = runner.invoke(
+                flatterer.cli, ['missing-input.json', 'outdir']
+            )
+        # The backend RuntimeError must be converted into a clean CLI
+        # error, not escape to the caller.
+        self.assertFalse(isinstance(result.exception, RuntimeError))
+        self.assertNotEqual(result.exit_code, 0)
+        self.assertIn('Error', result.output)

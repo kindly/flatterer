@@ -380,5 +380,9 @@ def cli(
                 all_strings=all_strings,
                 schema_only=schema_only,
                 stream_wrapped=stream_wrapped)
-    except IOError:
-        pass
+    except (IOError, RuntimeError) as e:
+        # A missing/unreadable input file surfaces as RuntimeError from the
+        # Rust backend (not IOError), so catch it too and report a clean
+        # CLI error instead of a raw traceback.
+        click.echo(f"Error: {e}", err=True)
+        raise click.Abort
